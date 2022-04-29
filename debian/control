@@ -1,0 +1,18 @@
+Source: pardus-mycomputer
+Section: utils
+Priority: optional
+Maintainer: Pardus Altyapı <altyapi@pardus.org.tr>
+Build-Depends: debhelper (>= 10), dh-python, python3-all, python3-setuptools
+Standards-Version: 4.3.0
+Homepage: https://www.pardus.org.tr
+
+Package: pardus-mycomputer
+Architecture: amd64
+Depends: ${misc:Depends},
+         ${python3:Depends},
+         python3 (>=3.5),
+         python3-gi,
+         gir1.2-gtk-3.0
+Description: My Computer, shows general information about your computer.
+ My Computer, shows general information about your computer.
+
