@@ -4,6 +4,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GLib, Gio, Gtk
 
+import DiskManager
+
 import locale
 from locale import gettext as tr
 
@@ -36,15 +38,15 @@ class MainWindow:
         self.window.set_application(application)
         self.window.connect("destroy", self.onDestroy)
 
+        # Set application:
+        self.application = application
+
         # Global Definings
         self.defineComponents()
         self.defineVariables()
 
         # Add Disks to GUI
         self.addDisksToGUI()
-        
-        # Set application:
-        self.application = application
 
         # Show Screen:
         self.window.show_all()
@@ -64,44 +66,62 @@ class MainWindow:
         self.lbl_root_free = UI("lbl_root_free")
         self.lbl_root_total = UI("lbl_root_total")
 
-        
         # Drives
         self.box_drives = UI("box_drives")
         # Removables
         self.box_removables = UI("box_removables")
 
         # Popover
-        self.drive_popover = UI("drive_popover")
+        self.popover_volume = UI("popover_volume")
+        self.popover_removable = UI("popover_removable")
+        self.cb_mount_on_startup = UI("cb_mount_on_startup")
+
+        # Detail Dialog
+        self.dialog_disk_details = UI("dialog_disk_details")
+        self.dlg_lbl_name = UI("dlg_lbl_name")
+        self.dlg_lbl_model = UI("dlg_lbl_model")
+        self.dlg_lbl_dev = UI("dlg_lbl_dev")
+        self.dlg_lbl_mountpoint = UI("dlg_lbl_mountpoint")
+        self.dlg_lbl_used_gb = UI("dlg_lbl_used_gb")
+        self.dlg_lbl_free_gb = UI("dlg_lbl_free_gb")
+        self.dlg_lbl_total_gb = UI("dlg_lbl_total_gb")
+        self.dlg_lbl_disk_health = UI("dlg_lbl_disk_health")
+        #self.dlg_lbl_ = UI("dlg_lbl_")
+
     
     def defineVariables(self):
         self.mount_operation = Gio.MountOperation.new()
+        self.selected_volume = None
+        self.selected_volume_info = None
 
+    
+    def showDiskDetailsDialog(self, vl):
+        dr = vl.get_drive()
+        mount_point = vl.get_mount().get_root().get_parse_name()
+        file_info = DiskManager.get_file_info(mount_point)
 
-    def get_file_info(self, file):
-        process = subprocess.run(f"df {file} --block-size=1000 | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$6; exit}}'", shell=True, capture_output=True)
+        self.dlg_lbl_name.set_label(vl.get_name())
+        self.dlg_lbl_model.set_label(dr.get_name())
 
-        keys = ["device", "total_kb", "usage_kb", "free_kb", "mountpoint"]
-        obj = dict(zip(keys, process.stdout.decode("utf-8").strip().split(" ")))
-        obj["usage_percent"] = int(obj['usage_kb']) / int(obj['total_kb'])
+        self.dlg_lbl_dev.set_label(file_info["device"])
+        self.dlg_lbl_mountpoint.set_label(mount_point)
 
-        return obj
+        self.dlg_lbl_used_gb.set_label(f"{int(file_info['usage_kb'])/1024/1024:.2f} GB (%{file_info['usage_percent']*100:.2f})")
+        self.dlg_lbl_free_gb.set_label(f"{int(file_info['free_kb'])/1024/1024:.2f} GB (%{file_info['free_percent']*100:.2f})")
+        self.dlg_lbl_total_gb.set_label(f"{int(file_info['total_kb'])/1024/1024:.2f} GB")
+
+        self.dlg_lbl_disk_health.set_label("...")
     
 
     def showVolumeSizes(self, vl, lbl_volume_name, lbl_volume_size_info, pb_volume_size, lbl_volume_dev_directory):
-        fs_root = vl.get_mount().get_root()
-
-        filesystem_size = fs_root.query_filesystem_info(Gio.FILE_ATTRIBUTE_FILESYSTEM_SIZE).get_attribute_uint64(Gio.FILE_ATTRIBUTE_FILESYSTEM_SIZE)
-        filesystem_size_gb = filesystem_size/1000/1000/1000
-
-        filesystem_size_free = fs_root.query_filesystem_info(Gio.FILE_ATTRIBUTE_FILESYSTEM_FREE).get_attribute_uint64(Gio.FILE_ATTRIBUTE_FILESYSTEM_FREE)
-        filesystem_size_free_gb = filesystem_size_free/1000/1000/1000
+        mount_point = vl.get_mount().get_root().get_parse_name()
+        file_info = DiskManager.get_file_info(mount_point)
 
         # Show values on UI
-        lbl_volume_name.set_markup(
-            f'<b>{vl.get_name()}</b> <span size="small" alpha="75%">{ vl.get_mount().get_root().get_parse_name() }</span>')
-        pb_volume_size.set_fraction((filesystem_size - filesystem_size_free)/filesystem_size)
-        lbl_volume_size_info.set_markup(f'<span size="small"><b>{filesystem_size_free_gb:.2f} GB</b> is free of {filesystem_size_gb:.2f} GB</span>')
-        lbl_volume_dev_directory.set_markup(f'<span size="small" alpha="75%">{ vl.get_identifier(Gio.VOLUME_IDENTIFIER_KIND_UNIX_DEVICE) }</span>')
+        lbl_volume_name.set_markup(f'<b>{vl.get_name()}</b> <span size="small" alpha="75%">{ mount_point }</span>')
+        lbl_volume_size_info.set_markup(f'<span size="small"><b>{int(file_info["free_kb"])/1024/1024:.2f} GB</b> is free of {int(file_info["total_kb"])/1024/1024:.2f} GB</span>')
+        lbl_volume_dev_directory.set_markup(f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
+        pb_volume_size.set_fraction(file_info["usage_percent"])
 
     
     def tryMountVolume(self, vl, lbl_volume_name, lbl_volume_size_info, pb_volume_size, lbl_volume_dev_directory):
@@ -162,17 +182,19 @@ class MainWindow:
         box_volume_info.add(lbl_volume_size_info)
 
         # Add Disk settings button
-        btn_settings = Gtk.Button.new_from_icon_name(
-            "view-more-symbolic", Gtk.IconSize.BUTTON)
-        btn_settings.set_relief(Gtk.ReliefStyle.NONE)
-        btn_settings.set_valign(Gtk.Align.START)
-        btn_settings.connect(
-            "clicked", self.on_volume_btn_settings_clicked)
-        btn_settings._volume = vl
+        btn_volume_settings = Gtk.MenuButton.new()
+        btn_volume_settings.set_relief(Gtk.ReliefStyle.NONE)
+        btn_volume_settings.set_valign(Gtk.Align.START)
+        btn_volume_settings._volume = vl
+        btn_volume_settings.connect("released", self.on_btn_volume_settings_clicked)
+        if is_removable:
+            btn_volume_settings.set_popover(self.popover_removable)
+        else:
+            btn_volume_settings.set_popover(self.popover_volume)
 
         box_volume.add(img_volume)
         box_volume.pack_start(box_volume_info, True, True, 0)
-        box_volume.add(btn_settings)
+        box_volume.add(btn_volume_settings)
         box_volume.props.margin = 7
 
         # Add to listbox
@@ -187,22 +209,23 @@ class MainWindow:
 
     def addDisksToGUI(self):
         # Home:
-        home_info = self.get_file_info(GLib.get_home_dir())
+        home_info = DiskManager.get_file_info(GLib.get_home_dir())
         self.lbl_home_path.set_label(GLib.get_home_dir())
         self.lbl_home_dev.set_label(home_info["device"])
 
         # Root:
-        root_info = self.get_file_info("/")
+        root_info = DiskManager.get_file_info("/")
         self.lbl_root_dev.set_label(root_info["device"])
-        self.lbl_root_free.set_label(f"{int(root_info['free_kb'])/1000/1000:.2f} GB")
-        self.lbl_root_total.set_label(f"{int(root_info['total_kb'])/1000/1000:.2f} GB")
+        self.lbl_root_free.set_label(f"{int(root_info['free_kb'])/1024/1024:.2f} GB")
+        self.lbl_root_total.set_label(f"{int(root_info['total_kb'])/1024/1024:.2f} GB")
         self.pb_root_usage.set_fraction( root_info["usage_percent"] )
 
         # VolumeMonitor
         self.vm = Gio.VolumeMonitor.get()
-        self.vm.connect('volume-added', lambda vm,vl: print("Volume Added:", vm, vl))
-        self.vm.connect('mount-added', lambda vm,mnt: print("Mount Added:", vm, mnt))
-        self.vm.connect('drive-connected', lambda vm,dr: print("Drive Added:", vm, dr))
+        #self.vm.connect('volume-added', lambda vm,vl: print("Volume Added:", vm, vl))
+        #self.vm.connect('mount-added', lambda vm,mnt: print("Mount Added:", vm, mnt))
+        self.vm.connect('drive-connected', lambda vm,dr: print("Drive Connected:", dr.get_name()))
+        self.vm.connect('drive-disconnected', lambda vm,dr: print("Drive Disconnected:",dr.get_name()))
 
 
         # Hard Drives
@@ -266,7 +289,7 @@ class MainWindow:
     def onDestroy(self, action):
         self.window.get_application().quit()
 
-        
+
 
     # SIGNALS:
     def on_lb_home_row_activated(self, listbox, row):
@@ -276,16 +299,26 @@ class MainWindow:
         subprocess.run(["xdg-open", "/"])
     
     def on_volume_row_activated(self, listbox, row):
-        # print("row._volume: ", row._volume.get_name())
-        # self.tryMountVolume(row._volume, row._lbl_volume_size_info, row._pb_volume_size, row._lbl_volume_dev_directory)
         subprocess.run(["xdg-open", row._volume.get_mount().get_root().get_parse_name()])
     
-    def on_volume_btn_settings_clicked(self, btn):
+    def on_btn_volume_settings_clicked(self, btn):
         self.selected_volume = btn._volume
-        
-        self.drive_popover.set_relative_to(btn)
-        self.drive_popover.show_all()
-        self.drive_popover.popup()
+
+        mount_point = self.selected_volume.get_mount().get_root().get_parse_name()
+        self.selected_volume_info = DiskManager.get_file_info(mount_point)
+
+        # print("is_automounted", DiskManager.is_drive_automounted(self.selected_volume_info["device"]), self.selected_volume_info["device"])
+        self.cb_mount_on_startup.set_active(DiskManager.is_drive_automounted(self.selected_volume_info["device"]))
     
-    def on_cb_mount_on_startup_toggled(self, cb):
-        print(cb)
+    # Popover Menu Buttons:
+    def on_cb_mount_on_startup_released(self, cb):
+        #print("Released", self.selected_volume_info["device"], cb.get_active())
+        DiskManager.set_automounted(self.selected_volume_info["device"], cb.get_active())
+    
+    def on_btn_volume_details_clicked(self, btn):
+        vl = self.selected_volume
+
+        self.showDiskDetailsDialog(vl)
+
+        self.dialog_disk_details.run()
+        self.dialog_disk_details.hide()
