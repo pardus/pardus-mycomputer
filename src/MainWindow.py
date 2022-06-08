@@ -122,6 +122,8 @@ class MainWindow:
         lbl_volume_dev_directory.set_markup(f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
         pb_volume_size.set_fraction(file_info["usage_percent"])
 
+        self.window.show_all()
+
     
     def tryMountVolume(self, vl, lbl_volume_name, lbl_volume_size_info, pb_volume_size, lbl_volume_dev_directory):
         if not vl.can_mount() and vl.get_mount() == None:
@@ -223,7 +225,10 @@ class MainWindow:
         self.vm = Gio.VolumeMonitor.get()
         self.vm.connect('mount-added', self.on_mount_added)
         self.vm.connect('mount-removed', self.on_mount_removed)
-
+        self.vm.connect('volume-added', self.on_mount_added)
+        self.vm.connect('volume-removed', self.on_mount_removed)
+        self.vm.connect('drive-connected', self.on_mount_added)
+        self.vm.connect('drive-disconnected', self.on_mount_removed)
 
         # Hard Drives
         drives = self.vm.get_connected_drives()
@@ -246,10 +251,8 @@ class MainWindow:
                 
                 # Add Volumes to the ListBox:
                 for vl in dr.get_volumes():
-                    #print(vl.get_name(), vl.can_mount(), vl.can_eject(), vl.get_drive())
                     self.addVolumeToGUI(vl, listbox, False)
-                    #print(vl.get_name(), vl.can_mount(), vl.can_eject(), vl.get_drive())
-                
+
                 #self.box_drives.add(lbl_drive_name)
                 self.box_drives.add(frame)
         
@@ -279,9 +282,7 @@ class MainWindow:
                 
                 # Add Volumes to the ListBox:
                 for vl in dr.get_volumes():
-                    # print(vl.get_name(), vl.can_mount(), vl.can_eject(), vl.get_drive())
                     self.addVolumeToGUI(vl, listbox, True)
-                    #print(vl.get_name(), vl.can_mount(), vl.can_eject(), vl.get_drive())
                 
                 #self.box_removables.add(lbl_drive_name)
                 self.box_removables.add(frame)
@@ -310,12 +311,10 @@ class MainWindow:
         mount_point = self.selected_volume.get_mount().get_root().get_parse_name()
         self.selected_volume_info = DiskManager.get_file_info(mount_point)
 
-        # print("is_automounted", DiskManager.is_drive_automounted(self.selected_volume_info["device"]), self.selected_volume_info["device"])
         self.cb_mount_on_startup.set_active(DiskManager.is_drive_automounted(self.selected_volume_info["device"]))
     
     # Popover Menu Buttons:
     def on_cb_mount_on_startup_released(self, cb):
-        #print("Released", self.selected_volume_info["device"], cb.get_active())
         DiskManager.set_automounted(self.selected_volume_info["device"], cb.get_active())
     
     def on_btn_volume_details_clicked(self, btn):
@@ -325,6 +324,14 @@ class MainWindow:
 
         self.dialog_disk_details.run()
         self.dialog_disk_details.hide()
+    
+    def on_btn_format_removable_clicked(self, btn):
+        vl = self.selected_volume
+
+        mount_point = vl.get_mount().get_root().get_parse_name()
+        file_info = DiskManager.get_file_info(mount_point)
+
+        subprocess.Popen(["pardus-usb-formatter", file_info["device"]])
 
     def on_mount_added(self, volumemonitor, mount):
         self.updateRemovableDevicesList()

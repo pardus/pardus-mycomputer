@@ -15,6 +15,20 @@
         <property name="orientation">vertical</property>
         <property name="homogeneous">True</property>
         <child>
+          <object class="GtkModelButton" id="btn_format_removable">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="text" translatable="yes">Format Device</property>
+            <signal name="clicked" handler="on_btn_format_removable_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkModelButton" id="btn_removable_details">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
