@@ -1,7 +1,7 @@
 import os,subprocess
 
 def get_file_info(file):
-    process = subprocess.run(f"df {file} --block-size=1000 | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$6; exit}}'", shell=True, capture_output=True)
+    process = subprocess.run(f"df '{file}' --block-size=1000 | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$6; exit}}'", shell=True, capture_output=True)
 
     keys = ["device", "total_kb", "usage_kb", "free_kb", "mountpoint"]
     obj = dict(zip(keys, process.stdout.decode("utf-8").strip().split(" ")))
