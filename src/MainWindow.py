@@ -85,8 +85,7 @@ class MainWindow:
         self.dlg_lbl_used_gb = UI("dlg_lbl_used_gb")
         self.dlg_lbl_free_gb = UI("dlg_lbl_free_gb")
         self.dlg_lbl_total_gb = UI("dlg_lbl_total_gb")
-        self.dlg_lbl_disk_health = UI("dlg_lbl_disk_health")
-        #self.dlg_lbl_ = UI("dlg_lbl_")
+        self.dlg_lbl_filesystem_type = UI("dlg_lbl_filesystem_type")
 
     
     def defineVariables(self):
@@ -110,7 +109,7 @@ class MainWindow:
         self.dlg_lbl_free_gb.set_label(f"{int(file_info['free_kb'])/1024/1024:.2f} GB (%{file_info['free_percent']*100:.2f})")
         self.dlg_lbl_total_gb.set_label(f"{int(file_info['total_kb'])/1024/1024:.2f} GB")
 
-        self.dlg_lbl_disk_health.set_label("...")
+        self.dlg_lbl_filesystem_type.set_label(DiskManager.get_filesystem_of_partition(file_info["device"])) 
     
 
     def showVolumeSizes(self, vl, lbl_volume_name, lbl_volume_size_info, pb_volume_size, lbl_volume_dev_directory):
@@ -179,7 +178,7 @@ class MainWindow:
         box_volume_info.add(lbl_volume_name)
         box_volume_info.add(lbl_volume_dev_directory)
         box_volume_info.add(pb_volume_size)
-        box_volume_info.add(lbl_volume_size_info)
+        box_volume_info.add(lbl_volume_size_info)        
 
         # Add Disk settings button
         btn_volume_settings = Gtk.MenuButton.new()
@@ -222,10 +221,8 @@ class MainWindow:
 
         # VolumeMonitor
         self.vm = Gio.VolumeMonitor.get()
-        #self.vm.connect('volume-added', lambda vm,vl: print("Volume Added:", vm, vl))
-        #self.vm.connect('mount-added', lambda vm,mnt: print("Mount Added:", vm, mnt))
-        self.vm.connect('drive-connected', lambda vm,dr: print("Drive Connected:", dr.get_name()))
-        self.vm.connect('drive-disconnected', lambda vm,dr: print("Drive Disconnected:",dr.get_name()))
+        self.vm.connect('mount-added', self.on_mount_added)
+        self.vm.connect('mount-removed', self.on_mount_removed)
 
 
         # Hard Drives
@@ -257,6 +254,12 @@ class MainWindow:
                 self.box_drives.add(frame)
         
         # Removable Devices
+        self.updateRemovableDevicesList()
+        
+    def updateRemovableDevicesList(self):
+        self.box_removables.foreach(lambda child: self.box_removables.remove(child))
+        
+        drives = self.vm.get_connected_drives()
         for dr in drives:
             if dr.has_volumes() and dr.is_removable():
                 # Drive Label
@@ -283,7 +286,7 @@ class MainWindow:
                 #self.box_removables.add(lbl_drive_name)
                 self.box_removables.add(frame)
         
-
+        self.box_removables.show_all()
     
     # Window methods:
     def onDestroy(self, action):
@@ -322,3 +325,10 @@ class MainWindow:
 
         self.dialog_disk_details.run()
         self.dialog_disk_details.hide()
+
+    def on_mount_added(self, volumemonitor, mount):
+        self.updateRemovableDevicesList()
+
+    
+    def on_mount_removed(self, volumemonitor, mount):
+        self.updateRemovableDevicesList()
