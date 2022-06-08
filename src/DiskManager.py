@@ -35,7 +35,6 @@ def set_automounted(dev_path, value):
         fstab_string = f"{dev_path} /mnt/{partition} auto nosuid,nodev,nofail,x-gvfs-show 0 0"
 
         process = subprocess.run(f'echo "{fstab_string}" | pkexec tee -a /etc/fstab', shell=True)
-        print(process.returncode)
 
     elif not value and is_drive_automounted(dev_path):
         partition = dev_path.split("/")[:-1] # /dev/sda1 -> sda1
@@ -43,10 +42,12 @@ def set_automounted(dev_path, value):
 
         dev_path_backslashes = dev_path.replace("/","\/")
         cmd = f"pkexec sed -ri 's/.*({dev_path_backslashes}|{uuid}).*//g' /etc/fstab"
-        print(cmd)
         process = subprocess.run(cmd, shell=True)
-        print(process.returncode)
         
-        
+def get_filesystem_of_partition(partition_path):
+    process = subprocess.run(f'lsblk -o TYPE,PATH,FSTYPE -r | grep part | grep "{partition_path}"', shell=True, capture_output=True)
+
+    output = process.stdout.decode("utf-8").strip()
+    return output.split(" ")[2]
 
 #print(is_drive_automounted("/dev/nvme0n1p3"))
