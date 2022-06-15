@@ -127,7 +127,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Pardus</property>
+                <property name="label">Pardus</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                   <attribute name="scale" value="1.2"/>
@@ -782,7 +782,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="opacity">0.80</property>
-                <property name="label" translatable="yes">Yerel Disk</property>
+                <property name="label">Disk Adı</property>
                 <attributes>
                   <attribute name="weight" value="thin"/>
                   <attribute name="scale" value="1.2"/>

@@ -1,14 +1,14 @@
 [Desktop Entry]
-Name=About Pardus
-Name[tr]=Pardus Hakkında
-GenericName=About
-GenericName[tr]=Hakkında
-Comment=Get info about your Pardus system.
-Comment[tr]=Pardus sisteminiz hakkında bilgi edinin.
-Exec=pardus-about
-Icon=pardus-about
+Name=My Computer
+Name[tr]=Bilgisayarım
+GenericName=My Computer
+GenericName[tr]=Bilgisayarım
+Comment=General information and management UI for your computer.
+Comment[tr]=Bilgisayarınız hakkında genel bilgi ve yönetim arayüzü.
+Exec=pardus-mycomputer
+Icon=pardus-mycomputer
 Terminal=false
 Type=Application
 Categories=Settings;
 StartupNotify=true
-Keywords=about
+Keywords=computer,mycomputer,pardus
