@@ -6,7 +6,11 @@ data_files = [
     ("/usr/share/applications/", ["tr.org.pardus.mycomputer.desktop"]),
     ("/usr/share/locale/tr/LC_MESSAGES/", ["translations/tr/LC_MESSAGES/pardus-mycomputer.mo"]),
     ("/usr/share/pardus/pardus-mycomputer/", ["pardus-mycomputer.svg"]),
-    ("/usr/share/pardus/pardus-mycomputer/src", ["src/pardus-mycomputer", "src/MainWindow.py", "src/DiskManager.py"]),
+    ("/usr/share/pardus/pardus-mycomputer/src", [
+        "src/pardus-mycomputer",
+        "src/MainWindow.py",
+        "src/DiskManager.py"
+    ]),
     ("/usr/share/pardus/pardus-mycomputer/ui", ["ui/MainWindow.glade"]),
     ("/usr/bin/", ["pardus-mycomputer"]),
     ("/usr/share/icons/hicolor/scalable/apps/", ["pardus-mycomputer.svg"])
@@ -21,7 +25,7 @@ setup(
     data_files=data_files,
     author="Pardus Altyapı",
     author_email="altyapi@pardus.org.tr",
-    description="My Computer, shows general information about your computer.",
+    description="My Computer, UI for information and management of disks on your computer.",
     license="GPLv3",
     keywords="",
     url="https://www.pardus.org.tr",
