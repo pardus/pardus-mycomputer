@@ -45,9 +45,11 @@ def set_automounted(dev_path, value):
         process = subprocess.run(cmd, shell=True)
         
 def get_filesystem_of_partition(partition_path):
-    process = subprocess.run(f'lsblk -o TYPE,PATH,FSTYPE -r | grep part | grep "{partition_path}"', shell=True, capture_output=True)
+    process = subprocess.run(f'lsblk -o TYPE,PATH,FSTYPE -r | grep " {partition_path} "', shell=True, capture_output=True)
 
     output = process.stdout.decode("utf-8").strip()
+    if output == "":
+        return "-"
     return output.split(" ")[2]
 
 #print(is_drive_automounted("/dev/nvme0n1p3"))
