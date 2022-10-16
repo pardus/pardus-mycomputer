@@ -123,20 +123,24 @@ class MainWindow:
 
 
     def showVolumeSizes(self, row_volume):
-        mount_point = row_volume._volume.get_mount().get_root().get_parse_name()
-        file_info = DiskManager.get_file_info(mount_point)
+        vl = row_volume._volume
+        if vl.get_mount() != None:
+            mount_point = row_volume._volume.get_mount().get_root().get_parse_name()
+            file_info = DiskManager.get_file_info(mount_point)
 
-        # Show values on UI
-        row_volume._lbl_volume_name.set_markup(
-            f'<b>{row_volume._volume.get_name()}</b> <span size="small">( { mount_point } )</span>')
-        row_volume._lbl_volume_size_info.set_markup(
-            f'<span size="small"><b>{int(file_info["free_kb"])/1024/1024:.2f} GB</b> {tr("is free of")} {int(file_info["total_kb"])/1024/1024:.2f} GB</span>')
-        # row_volume._lbl_volume_dev_directory.set_markup(
-        #     f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
-        row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
+            # Show values on UI
+            row_volume._lbl_volume_name.set_markup(
+                f'<b>{row_volume._volume.get_name()}</b> <span size="small">( { mount_point } )</span>')
+            row_volume._lbl_volume_size_info.set_markup(
+                f'<span size="small"><b>{int(file_info["free_kb"])/1024/1024:.2f} GB</b> {tr("is free of")} {int(file_info["total_kb"])/1024/1024:.2f} GB</span>')
+            # row_volume._lbl_volume_dev_directory.set_markup(
+            #     f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
+            row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
 
-        row_volume._btn_volume_settings.set_sensitive(True)
-        row_volume.show_all()
+            row_volume._btn_volume_settings.set_sensitive(True)
+            row_volume.show_all()
+        else:
+            print(f"can't mount the volume: {vl.get_name()}")
 
     
     def tryMountVolume(self, row_volume):
@@ -227,9 +231,10 @@ class MainWindow:
         row._lbl_volume_size_info = lbl_volume_size_info
         row._pb_volume_size = pb_volume_size
         # row._lbl_volume_dev_directory = lbl_volume_dev_directory
-        
-        self.tryMountVolume(row)
 
+        # Disable asking mount on app startup
+        # self.tryMountVolume(row)
+        self.showVolumeSizes(row)
 
     def addDisksToGUI(self):
         # Home:
