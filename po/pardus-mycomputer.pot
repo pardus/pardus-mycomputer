@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-17 20:08+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ui/MainWindow.glade:58
+msgid "Device Model"
+msgstr ""
+
+#: ui/MainWindow.glade:85
+msgid "Device Path"
+msgstr ""
+
+#: ui/MainWindow.glade:101
+msgid "Mountpoint"
+msgstr ""
+
+#: ui/MainWindow.glade:117
+msgid "Filesystem"
+msgstr ""
+
+#: ui/MainWindow.glade:144
+msgid "Used GB"
+msgstr ""
+
+#: ui/MainWindow.glade:160
+msgid "Free GB"
+msgstr ""
+
+#: ui/MainWindow.glade:176
+msgid "Total GB"
+msgstr ""
+
+#: ui/MainWindow.glade:478
+msgid "Mount on Startup"
+msgstr ""
+
+#: ui/MainWindow.glade:497
+msgid "Format"
+msgstr ""
+
+#: ui/MainWindow.glade:511
+msgid "Unmount"
+msgstr ""
+
+#: ui/MainWindow.glade:660
+msgid "Home"
+msgstr ""
+
+#: ui/MainWindow.glade:698
+msgid "57.35 GB"
+msgstr ""
+
+#: ui/MainWindow.glade:789
+msgid "Root"
+msgstr ""
+
+#: ui/MainWindow.glade:861
+msgid "is free of"
+msgstr ""
+
+#: ui/MainWindow.glade:943
+msgid "Hard Drives"
+msgstr ""
+
+#: ui/MainWindow.glade:1021
+msgid "Removable Drives"
+msgstr ""
+
+#: ui/MainWindow.glade:1063
+msgid "My Computer"
+msgstr ""
+
+#: ui/MainWindow.glade:1096
+msgid "Ok"
+msgstr ""
+
+#: src/MainWindow.py:425
+msgid "Sync done"
+msgstr ""
+
+#: src/MainWindow.py:425
+msgid "You can eject the USB disk."
+msgstr ""
