@@ -7,7 +7,7 @@ Standards-Version: 4.3.0
 Homepage: https://www.pardus.org.tr
 
 Package: pardus-mycomputer
-Architecture: amd64
+Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
          python3 (>=3.5),
