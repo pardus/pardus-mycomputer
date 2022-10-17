@@ -7,17 +7,17 @@ from gi.repository import GLib, Gio, Gtk
 import DiskManager
 
 import locale
-from locale import gettext as tr
+from locale import gettext as _
 
 # Translation Constants:
 APPNAME = "pardus-mycomputer"
 TRANSLATIONS_PATH = "/usr/share/locale"
-SYSTEM_LANGUAGE = os.environ.get("LANG")
+# SYSTEM_LANGUAGE = os.environ.get("LANG")
 
 # Translation functions:
 locale.bindtextdomain(APPNAME, TRANSLATIONS_PATH)
 locale.textdomain(APPNAME)
-locale.setlocale(locale.LC_ALL, SYSTEM_LANGUAGE)
+# locale.setlocale(locale.LC_ALL, SYSTEM_LANGUAGE)
         
 
 class MainWindow:
@@ -132,7 +132,7 @@ class MainWindow:
             row_volume._lbl_volume_name.set_markup(
                 f'<b>{row_volume._volume.get_name()}</b> <span size="small">( { mount_point } )</span>')
             row_volume._lbl_volume_size_info.set_markup(
-                f'<span size="small"><b>{int(file_info["free_kb"])/1024/1024:.2f} GB</b> {tr("is free of")} {int(file_info["total_kb"])/1024/1024:.2f} GB</span>')
+                f'<span size="small"><b>{int(file_info["free_kb"])/1024/1024:.2f} GB</b> {_("is free of")} {int(file_info["total_kb"])/1024/1024:.2f} GB</span>')
             # row_volume._lbl_volume_dev_directory.set_markup(
             #     f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
             row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
@@ -176,7 +176,7 @@ class MainWindow:
 
         # Volume infos
         lbl_volume_name = Gtk.Label.new()
-        lbl_volume_name.set_markup(f'<b>{vl.get_name()}</b>')
+        lbl_volume_name.set_markup(f'<b>{vl.get_name()}</b><small> ( {_("Disk is usable, click to mount.")} )</small>')
         lbl_volume_name.set_halign(Gtk.Align.START)
 
         # lbl_volume_dev_directory = Gtk.Label.new()
