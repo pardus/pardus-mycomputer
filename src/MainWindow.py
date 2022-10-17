@@ -1,8 +1,9 @@
 import os, subprocess
 
 import gi
+gi.require_version("Notify", "0.7")
 gi.require_version('Gtk', '3.0')
-from gi.repository import GLib, Gio, Gtk
+from gi.repository import GLib, Gio, Gtk, Notify
 
 import DiskManager
 
@@ -87,6 +88,9 @@ class MainWindow:
 
         # Device Type Stack
         self.popover_dt_stack = UI("popover_dt_stack")
+
+        # Buttons
+        self.btn_unmount_removable = UI("btn_unmount_removable")
 
     
     def defineVariables(self):
@@ -373,6 +377,13 @@ class MainWindow:
 
         subprocess.Popen(["pardus-usb-formatter", file_info["device"]])
 
+    def on_btn_unmount_removable_clicked(self, btn):
+        mount_point = self.selected_volume.get_mount().get_root().get_parse_name()
+
+        command = [os.path.dirname(os.path.abspath(__file__)) + "/Unmount.py", "unmount", mount_point]
+        print(command)
+        self.startProcess(command)
+
     def on_mount_added(self, volumemonitor, mount):
         self.addHardDisksToList()
         self.addRemovableDevicesToList()
@@ -385,3 +396,41 @@ class MainWindow:
 
         self.dialog_disk_details.run()
         self.dialog_disk_details.hide()
+
+    def startProcess(self, params):
+        pid, stdin, stdout, stderr = GLib.spawn_async(params, flags=GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+                                                      standard_output=True, standard_error=True)
+        GLib.io_add_watch(GLib.IOChannel(stdout), GLib.IO_IN | GLib.IO_HUP, self.onProcessStdout)
+        GLib.io_add_watch(GLib.IOChannel(stderr), GLib.IO_IN | GLib.IO_HUP, self.onProcessStderr)
+        GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, self.onProcessExit)
+
+        return pid
+
+    def onProcessStdout(self, source, condition):
+        if condition == GLib.IO_HUP:
+            return False
+        line = source.readline()
+        print(line)
+        return True
+
+    def onProcessStderr(self, source, condition):
+        if condition == GLib.IO_HUP:
+            return False
+        line = source.readline()
+        print(line)
+        return True
+
+    def onProcessExit(self, pid, status):
+        print(f'pid, status: {pid, status}')
+        self.notify(_("Sync done"), _("You can eject the USB disk."))
+
+    def notify(self, message_summary="", message_body=""):
+        try:
+            if Notify.is_initted():
+                Notify.uninit()
+
+            Notify.init(message_summary)
+            notification = Notify.Notification.new(message_summary, message_body, "emblem-ok-symbolic")
+            notification.show()
+        except Exception as e:
+            print("{}".format(e))
