@@ -381,6 +381,8 @@ class MainWindow:
         mount_point = self.selected_volume.get_mount().get_root().get_parse_name()
         file_info = DiskManager.get_file_info(mount_point)
 
+        self.popover_volume.popdown()
+
         subprocess.Popen(["pardus-usb-formatter", file_info["device"]])
 
     def on_btn_unmount_removable_clicked(self, btn):
