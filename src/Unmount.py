@@ -14,7 +14,7 @@ def main():
     def unmount(path):
         p1 = subprocess.Popen(["/usr/bin/sync", "-f", path])
         p1.wait()
-        subprocess.call(["/usr/bin/umount", path])
+        # subprocess.call(["/usr/bin/umount", path])
 
     if len(sys.argv) > 1:
         if sys.argv[1] == "unmount":

@@ -99,6 +99,7 @@ class MainWindow:
         self.mount_operation = Gio.MountOperation.new()
         self.selected_volume = None
         self.selected_volume_info = None
+        self.actioned_volume = None
 
         # VolumeMonitor
         self.vm = Gio.VolumeMonitor.get()
@@ -185,7 +186,7 @@ class MainWindow:
         # Volume infos
         lbl_volume_name = Gtk.Label.new()
         lbl_volume_name.set_markup("<b>{}</b><small> ( {} )</small>".format(
-            vl.get_name(),_("Disk is usable, click to mount.")))
+            vl.get_name(),_("Disk is available, click to mount.")))
         lbl_volume_name.set_halign(Gtk.Align.START)
 
         # lbl_volume_dev_directory = Gtk.Label.new()
@@ -383,7 +384,9 @@ class MainWindow:
         subprocess.Popen(["pardus-usb-formatter", file_info["device"]])
 
     def on_btn_unmount_removable_clicked(self, btn):
-        mount_point = self.selected_volume.get_mount().get_root().get_parse_name()
+        self.actioned_volume = self.selected_volume
+
+        mount_point = self.actioned_volume.get_mount().get_root().get_parse_name()
 
         command = [os.path.dirname(os.path.abspath(__file__)) + "/Unmount.py", "unmount", mount_point]
 
@@ -430,8 +433,20 @@ class MainWindow:
 
     def onProcessExit(self, pid, status):
         # print(f'pid, status: {pid, status}')
+
+        vl = self.actioned_volume.get_mount()
+
+        def on_unmounted(vl, task):
+            try:
+                vl.unmount_finish(task)
+                return True
+            except GLib.Error:
+                return False
+
+        vl.unmount(Gio.MountUnmountFlags.FORCE , None, on_unmounted)
+
         self.stack_unmount.set_visible_child_name("unmount")
-        self.notify(_("Sync done"), _("You can eject the USB disk."), "emblem-ok-symbolic")
+        self.notify(_("Unmounting process is done"), _("You can eject the USB disk."), "emblem-ok-symbolic")
 
     def notify(self, message_summary="", message_body="", icon="pardus-mycomputer"):
         try:
