@@ -119,9 +119,9 @@ class MainWindow:
         self.dlg_lbl_dev.set_label(file_info["device"])
         self.dlg_lbl_mountpoint.set_label(mount_point)
 
-        self.dlg_lbl_used_gb.set_label(f"{int(file_info['usage_kb'])/1024/1024:.2f} GB (%{file_info['usage_percent']*100:.2f})")
-        self.dlg_lbl_free_gb.set_label(f"{int(file_info['free_kb'])/1024/1024:.2f} GB (%{file_info['free_percent']*100:.2f})")
-        self.dlg_lbl_total_gb.set_label(f"{int(file_info['total_kb'])/1024/1024:.2f} GB")
+        self.dlg_lbl_used_gb.set_label(f"{int(file_info['usage_kb'])/1000/1000:.2f} GB (%{file_info['usage_percent']*100:.2f})")
+        self.dlg_lbl_free_gb.set_label(f"{int(file_info['free_kb'])/1000/1000:.2f} GB (%{file_info['free_percent']*100:.2f})")
+        self.dlg_lbl_total_gb.set_label(f"{int(file_info['total_kb'])/1000/1000:.2f} GB")
 
         self.dlg_lbl_filesystem_type.set_label(DiskManager.get_filesystem_of_partition(file_info["device"]))
 
@@ -135,8 +135,10 @@ class MainWindow:
             # Show values on UI
             row_volume._lbl_volume_name.set_markup(
                 f'<b>{row_volume._volume.get_name()}</b> <span size="small">( { mount_point } )</span>')
-            row_volume._lbl_volume_size_info.set_markup(
-                f'<span size="small"><b>{int(file_info["free_kb"])/1024/1024:.2f} GB</b> {_("is free of")} {int(file_info["total_kb"])/1024/1024:.2f} GB</span>')
+            # row_volume._lbl_volume_size_info.set_markup(
+            #     f'<span size="small"><b>{int(file_info["free_kb"])/1000/1000:.2f} GB</b> {_("is free of")} {int(file_info["total_kb"])/1000/1000:.2f} GB</span>')
+            row_volume._lbl_volume_size_info.set_markup("<span size='small'><b>{:.2f} GB</b> {} {:.2f} GB</span>".format(
+                int(file_info['free_kb'])/1000/1000, _("is free of"),int(file_info["total_kb"])/1000/1000))
             # row_volume._lbl_volume_dev_directory.set_markup(
             #     f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
             row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
@@ -180,7 +182,8 @@ class MainWindow:
 
         # Volume infos
         lbl_volume_name = Gtk.Label.new()
-        lbl_volume_name.set_markup(f'<b>{vl.get_name()}</b><small> ( {_("Disk is usable, click to mount.")} )</small>')
+        lbl_volume_name.set_markup("<b>{}</b><small> ( {} )</small>".format(
+            vl.get_name(),_("Disk is usable, click to mount.")))
         lbl_volume_name.set_halign(Gtk.Align.START)
 
         # lbl_volume_dev_directory = Gtk.Label.new()
@@ -247,8 +250,8 @@ class MainWindow:
 
         # Root:
         root_info = DiskManager.get_file_info("/")
-        self.lbl_root_free.set_label(f"{int(root_info['free_kb'])/1024/1024:.2f} GB")
-        self.lbl_root_total.set_label(f"{int(root_info['total_kb'])/1024/1024:.2f} GB")
+        self.lbl_root_free.set_label(f"{int(root_info['free_kb'])/1000/1000:.2f} GB")
+        self.lbl_root_total.set_label(f"{int(root_info['total_kb'])/1000/1000:.2f} GB")
         self.pb_root_usage.set_fraction( root_info["usage_percent"] )
 
         # Hard Drives
