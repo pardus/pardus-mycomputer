@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-18 18:55+0300\n"
-"PO-Revision-Date: 2022-10-18 18:56+0300\n"
+"PO-Revision-Date: 2022-10-18 18:59+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -63,7 +63,7 @@ msgstr "Ev"
 
 #: ui/MainWindow.glade:809
 msgid "Root"
-msgstr "Kök Dizini"
+msgstr "Kök Dizin"
 
 #: ui/MainWindow.glade:881 src/MainWindow.py:144
 msgid "is free of"
