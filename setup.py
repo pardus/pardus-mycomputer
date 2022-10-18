@@ -38,7 +38,8 @@ data_files = [
     ("/usr/share/pardus/pardus-mycomputer/src", [
         "src/pardus-mycomputer",
         "src/MainWindow.py",
-        "src/DiskManager.py"
+        "src/DiskManager.py",
+        "src/Unmount.py"
     ]),
     ("/usr/share/pardus/pardus-mycomputer/ui", ["ui/MainWindow.glade"]),
     ("/usr/bin/", ["pardus-mycomputer"]),
