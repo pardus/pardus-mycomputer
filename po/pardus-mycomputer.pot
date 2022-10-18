@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-17 20:08+0300\n"
+"POT-Creation-Date: 2022-10-18 18:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,46 +53,54 @@ msgstr ""
 msgid "Format"
 msgstr ""
 
-#: ui/MainWindow.glade:511
+#: ui/MainWindow.glade:515
 msgid "Unmount"
 msgstr ""
 
-#: ui/MainWindow.glade:660
+#: ui/MainWindow.glade:680
 msgid "Home"
 msgstr ""
 
-#: ui/MainWindow.glade:698
-msgid "57.35 GB"
-msgstr ""
-
-#: ui/MainWindow.glade:789
+#: ui/MainWindow.glade:809
 msgid "Root"
 msgstr ""
 
-#: ui/MainWindow.glade:861
+#: ui/MainWindow.glade:881 src/MainWindow.py:144
 msgid "is free of"
 msgstr ""
 
-#: ui/MainWindow.glade:943
+#: ui/MainWindow.glade:963
 msgid "Hard Drives"
 msgstr ""
 
-#: ui/MainWindow.glade:1021
+#: ui/MainWindow.glade:1041
 msgid "Removable Drives"
 msgstr ""
 
-#: ui/MainWindow.glade:1063
+#: ui/MainWindow.glade:1083
 msgid "My Computer"
 msgstr ""
 
-#: ui/MainWindow.glade:1096
+#: ui/MainWindow.glade:1116
 msgid "Ok"
 msgstr ""
 
-#: src/MainWindow.py:425
-msgid "Sync done"
+#: src/MainWindow.py:189
+msgid "Disk is available, click to mount."
 msgstr ""
 
-#: src/MainWindow.py:425
+#: src/MainWindow.py:393
+msgid "Please wait"
+msgstr ""
+
+#: src/MainWindow.py:393
+msgid "USB disk is unmounting."
+msgstr ""
+
+#: src/MainWindow.py:449
+msgid "Unmounting process is done"
+msgstr ""
+
+#: src/MainWindow.py:449
 msgid "You can eject the USB disk."
 msgstr ""
