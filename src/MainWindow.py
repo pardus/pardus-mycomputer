@@ -92,6 +92,8 @@ class MainWindow:
         # Buttons
         self.btn_unmount_removable = UI("btn_unmount_removable")
 
+        # Unmount progress Stack
+        self.stack_unmount = UI("stack_unmount")
     
     def defineVariables(self):
         self.mount_operation = Gio.MountOperation.new()
@@ -384,7 +386,10 @@ class MainWindow:
         mount_point = self.selected_volume.get_mount().get_root().get_parse_name()
 
         command = [os.path.dirname(os.path.abspath(__file__)) + "/Unmount.py", "unmount", mount_point]
-        print(command)
+
+        self.notify(_("Please wait"), _("USB disk is unmounting."), "emblem-synchronizing-symbolic")
+
+        self.stack_unmount.set_visible_child_name("spinner")
         self.startProcess(command)
 
     def on_mount_added(self, volumemonitor, mount):
@@ -424,16 +429,17 @@ class MainWindow:
         return True
 
     def onProcessExit(self, pid, status):
-        print(f'pid, status: {pid, status}')
-        self.notify(_("Sync done"), _("You can eject the USB disk."))
+        # print(f'pid, status: {pid, status}')
+        self.stack_unmount.set_visible_child_name("unmount")
+        self.notify(_("Sync done"), _("You can eject the USB disk."), "emblem-ok-symbolic")
 
-    def notify(self, message_summary="", message_body=""):
+    def notify(self, message_summary="", message_body="", icon="pardus-mycomputer"):
         try:
             if Notify.is_initted():
                 Notify.uninit()
 
             Notify.init(message_summary)
-            notification = Notify.Notification.new(message_summary, message_body, "emblem-ok-symbolic")
+            notification = Notify.Notification.new(message_summary, message_body, icon)
             notification.show()
         except Exception as e:
             print("{}".format(e))
