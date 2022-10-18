@@ -42,6 +42,8 @@ data_files = [
         "src/Unmount.py"
     ]),
     ("/usr/share/pardus/pardus-mycomputer/ui", ["ui/MainWindow.glade"]),
+    ("/usr/share/pardus/pardus-mycomputer/autostart/", ["autostart/pardus-mycomputer-add-to-desktop"]),
+    ("/etc/xdg/autostart", ["autostart/pardus-mycomputer-add-to-desktop.desktop"]),
     ("/usr/bin/", ["pardus-mycomputer"]),
     ("/usr/share/icons/hicolor/scalable/apps/", ["pardus-mycomputer.svg"])
 ] + create_mo_files()
