@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-18 18:55+0300\n"
-"PO-Revision-Date: 2022-10-18 18:59+0300\n"
+"POT-Creation-Date: 2022-10-19 17:34+0300\n"
+"PO-Revision-Date: 2022-10-19 16:48+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -17,91 +17,115 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Gtranslator 3.38.0\n"
 
-#: ui/MainWindow.glade:58
-msgid "Device Model"
-msgstr "Cihaz Modeli"
+#: ui/MainWindow.glade:7
+msgid "About Pardus My Computer"
+msgstr "Pardus Bilgisayarım Hakkında"
+
+#: ui/MainWindow.glade:13
+msgid "UI for information and management of disks on your computer."
+msgstr "Diskleriniz için bilgi ve yönetim arayüzü."
+
+#: ui/MainWindow.glade:15
+msgid "Website"
+msgstr "Website"
 
 #: ui/MainWindow.glade:85
-msgid "Device Path"
-msgstr "Cihaz Yolu"
+msgid "About Pardus"
+msgstr "Pardus Hakkında"
 
-#: ui/MainWindow.glade:101
-msgid "Mountpoint"
-msgstr "Bağlanma Yolu"
+#: ui/MainWindow.glade:141
+msgid "About App"
+msgstr "Uygulama Hakkında"
 
-#: ui/MainWindow.glade:117
-msgid "Filesystem"
-msgstr "Dosya Sistemi"
-
-#: ui/MainWindow.glade:144
-msgid "Used GB"
-msgstr "Kullanılan GB"
-
-#: ui/MainWindow.glade:160
-msgid "Free GB"
-msgstr "Boş GB"
-
-#: ui/MainWindow.glade:176
-msgid "Total GB"
-msgstr "Toplam GB"
-
-#: ui/MainWindow.glade:478
-msgid "Mount on Startup"
-msgstr "Başlangıçta Bağlı Gelsin"
-
-#: ui/MainWindow.glade:497
-msgid "Format"
-msgstr "Biçimlendir"
-
-#: ui/MainWindow.glade:515
-msgid "Unmount"
-msgstr "Kaldır"
-
-#: ui/MainWindow.glade:680
+#: ui/MainWindow.glade:288
 msgid "Home"
 msgstr "Ev"
 
-#: ui/MainWindow.glade:809
+#: ui/MainWindow.glade:410
 msgid "Root"
 msgstr "Kök Dizin"
 
-#: ui/MainWindow.glade:881 src/MainWindow.py:144
+#: ui/MainWindow.glade:482 src/MainWindow.py:158
 msgid "is free of"
 msgstr "boş, toplam"
 
-#: ui/MainWindow.glade:963
+#: ui/MainWindow.glade:562
 msgid "Hard Drives"
 msgstr "Sabit Diskler"
 
-#: ui/MainWindow.glade:1041
+#: ui/MainWindow.glade:651
 msgid "Removable Drives"
 msgstr "Çıkarılabilir Diskler"
 
-#: ui/MainWindow.glade:1083
+#: ui/MainWindow.glade:704
 msgid "My Computer"
 msgstr "Bilgisayarım"
 
-#: ui/MainWindow.glade:1116
+#: ui/MainWindow.glade:752
 msgid "Ok"
 msgstr "Tamam"
 
-#: src/MainWindow.py:189
+#: ui/MainWindow.glade:837
+msgid "Device Model"
+msgstr "Cihaz Modeli"
+
+#: ui/MainWindow.glade:864
+msgid "Device Path"
+msgstr "Cihaz Yolu"
+
+#: ui/MainWindow.glade:880
+msgid "Mountpoint"
+msgstr "Bağlanma Yolu"
+
+#: ui/MainWindow.glade:896
+msgid "Filesystem"
+msgstr "Dosya Sistemi"
+
+#: ui/MainWindow.glade:923
+msgid "Used GB"
+msgstr "Kullanılan GB"
+
+#: ui/MainWindow.glade:939
+msgid "Free GB"
+msgstr "Boş GB"
+
+#: ui/MainWindow.glade:955
+msgid "Total GB"
+msgstr "Toplam GB"
+
+#: ui/MainWindow.glade:1257
+msgid "Mount on Startup"
+msgstr "Başlangıçta Bağlı Gelsin"
+
+#: ui/MainWindow.glade:1276
+msgid "Format"
+msgstr "Biçimlendir"
+
+#: ui/MainWindow.glade:1294
+msgid "Unmount"
+msgstr "Kaldır"
+
+#: src/MainWindow.py:110
+msgid "Pardus My Computer"
+msgstr "Pardus Bilgisayarım"
+
+#: src/MainWindow.py:203
 msgid "Disk is available, click to mount."
 msgstr "Disk kullanılabilir, bağlamak için tıklayın."
 
-#: src/MainWindow.py:393
+#: src/MainWindow.py:411
 msgid "Please wait"
 msgstr "Lütfen bekleyin"
 
-#: src/MainWindow.py:393
+#: src/MainWindow.py:411
 msgid "USB disk is unmounting."
 msgstr "USB disk kaldırılıyor."
 
-#: src/MainWindow.py:449
+#: src/MainWindow.py:480
 msgid "Unmounting process is done"
 msgstr "Kaldırma işlemi tamamlandı"
 
-#: src/MainWindow.py:449
+#: src/MainWindow.py:480
 msgid "You can eject the USB disk."
 msgstr "USB diski çıkarabilirsiniz."
 
