@@ -3,7 +3,7 @@ import os, subprocess
 import gi
 gi.require_version("Notify", "0.7")
 gi.require_version('Gtk', '3.0')
-from gi.repository import GLib, Gio, Gtk, Notify
+from gi.repository import GLib, Gio, Gtk, Notify, Gdk
 
 import DiskManager
 
@@ -48,6 +48,13 @@ class MainWindow:
 
         # Add Disks to GUI
         self.addDisksToGUI()
+
+        cssProvider = Gtk.CssProvider()
+        cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../css/style.css")
+        screen = Gdk.Screen.get_default()
+        styleContext = Gtk.StyleContext()
+        styleContext.add_provider_for_screen(screen, cssProvider,
+                                             Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
         # Show Screen:
         self.window.show_all()
@@ -94,7 +101,7 @@ class MainWindow:
 
         # Unmount progress Stack
         self.stack_unmount = UI("stack_unmount")
-    
+
     def defineVariables(self):
         self.mount_operation = Gio.MountOperation.new()
         self.selected_volume = None
@@ -276,21 +283,22 @@ class MainWindow:
                 lbl_drive_name.set_halign(Gtk.Align.START)
 
                 # Drive Frame
-                frame = Gtk.Frame.new()
-                frame.set_shadow_type(Gtk.ShadowType.IN)
+                # frame = Gtk.Frame.new()
+                # frame.set_shadow_type(Gtk.ShadowType.IN)
 
                 # Volume ListBox
                 listbox = Gtk.ListBox.new()
                 listbox.set_selection_mode(Gtk.SelectionMode.NONE)
                 listbox.connect("row-activated", self.on_volume_row_activated)
-                frame.add(listbox)
+                listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+                # frame.add(listbox)
                 
                 # Add Volumes to the ListBox:
                 for vl in dr.get_volumes():
                     self.addVolumeRow(vl, listbox, False)
 
                 #self.box_drives.add(lbl_drive_name)
-                self.box_drives.add(frame)
+                self.box_drives.add(listbox)
 
         self.box_drives.show_all()
         
@@ -306,21 +314,22 @@ class MainWindow:
                 lbl_drive_name.set_halign(Gtk.Align.START)
 
                 # Drive Frame
-                frame = Gtk.Frame.new()
-                frame.set_shadow_type(Gtk.ShadowType.IN)
+                # frame = Gtk.Frame.new()
+                # frame.set_shadow_type(Gtk.ShadowType.IN)
 
                 # Volume ListBox
                 listbox = Gtk.ListBox.new()
                 listbox.set_selection_mode(Gtk.SelectionMode.NONE)
                 listbox.connect("row-activated", self.on_volume_row_activated)
-                frame.add(listbox)
+                listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+                # frame.add(listbox)
                 
                 # Add Volumes to the ListBox:
                 for vl in dr.get_volumes():
                     self.addVolumeRow(vl, listbox, True)
                 
                 #self.box_removables.add(lbl_drive_name)
-                self.box_removables.add(frame)
+                self.box_removables.add(listbox)
         
         self.box_removables.show_all()
     
