@@ -43,6 +43,7 @@ data_files = [
     ]),
     ("/usr/share/pardus/pardus-mycomputer/ui", ["ui/MainWindow.glade"]),
     ("/usr/share/pardus/pardus-mycomputer/autostart/", ["autostart/pardus-mycomputer-add-to-desktop"]),
+    ("/usr/share/pardus/pardus-mycomputer/css/", ["css/style.css"]),
     ("/etc/xdg/autostart", ["autostart/pardus-mycomputer-add-to-desktop.desktop"]),
     ("/usr/bin/", ["pardus-mycomputer"]),
     ("/usr/share/icons/hicolor/scalable/apps/", ["pardus-mycomputer.svg"])
