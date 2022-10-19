@@ -102,6 +102,13 @@ class MainWindow:
         # Unmount progress Stack
         self.stack_unmount = UI("stack_unmount")
 
+        # Menu popover
+        self.popover_menu = UI("popover_menu")
+
+        # About dialog
+        self.dialog_about = UI("dialog_about")
+        self.dialog_about.set_program_name(_("Pardus My Computer"))
+
     def defineVariables(self):
         self.mount_operation = Gio.MountOperation.new()
         self.selected_volume = None
@@ -413,11 +420,24 @@ class MainWindow:
     def on_mount_removed(self, volumemonitor, mount):
         self.addHardDisksToList()
         self.addRemovableDevicesToList()
+
     def on_btn_volume_details_clicked(self, btn):
         self.showDiskDetailsDialog(self.selected_volume)
 
         self.dialog_disk_details.run()
         self.dialog_disk_details.hide()
+
+    def on_menu_aboutapp_clicked(self, button):
+        self.popover_menu.popdown()
+        self.dialog_about.run()
+        self.dialog_about.hide()
+
+    def on_menu_aboutpardus_clicked(self, button):
+        self.popover_menu.popdown()
+        try:
+            subprocess.Popen(["pardus-about"])
+        except Exception as e:
+            print("on_menu_aboutpardus_clicked Exception: {}".format(e))
 
     def startProcess(self, params):
         pid, stdin, stdout, stderr = GLib.spawn_async(params, flags=GLib.SpawnFlags.DO_NOT_REAP_CHILD,
