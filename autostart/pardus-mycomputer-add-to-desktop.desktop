@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Pardus My Computer Add to Desktop 
 Comment=Pardus My Computer Add to Desktop
-Exec=/usr/bin/bash /usr/share/pardus/pardus-mycomputer/data/pardus-mycomputer-add-to-desktop
+Exec=/usr/bin/bash /usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop
 Icon=pardus-mycomputer
 Type=Application
 X-GNOME-Autostart-enabled=true
