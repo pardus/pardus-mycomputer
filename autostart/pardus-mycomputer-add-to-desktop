@@ -15,8 +15,8 @@ if ! [[ -f "$config_file" ]]; then
 
 	if ! [[ -f "$user_desktop_file" ]]; then
 		if [[ -f "$root_desktop_file" ]]; then
-			if [[ -f "$user_desktop" ]]; then
-				cp "$root_desktop_file" "$user_desktop"
+			if [[ -d "$user_desktop" ]]; then
+				cp "$root_desktop_file" "$user_desktop_file"
 				chmod +x "$user_desktop_file"
 				gio set "$user_desktop_file" "metadata::trusted" true
 			fi
