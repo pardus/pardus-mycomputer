@@ -1,10 +1,10 @@
 Source: pardus-mycomputer
 Section: utils
 Priority: optional
-Maintainer: Pardus Altyapı <altyapi@pardus.org.tr>
+Maintainer: Fatih Altun <fatih.altun@pardus.org.tr>
 Build-Depends: debhelper (>= 10), dh-python, python3-all, python3-setuptools
 Standards-Version: 4.3.0
-Homepage: https://www.pardus.org.tr
+Homepage: https://github.com/pardus/pardus-mycomputer
 
 Package: pardus-mycomputer
 Architecture: all
