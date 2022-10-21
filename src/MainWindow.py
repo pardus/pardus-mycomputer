@@ -160,6 +160,13 @@ class MainWindow:
             #     f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
             row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
 
+            # if volume usage >= 0.9 then add destructive color
+            try:
+                if file_info["usage_percent"] >= 0.9:
+                    row_volume._pb_volume_size.get_style_context().add_class("pardus-mycomputer-progress-90")
+            except Exception as e:
+                print("progress css exception: {}".format(e))
+
             row_volume._btn_volume_settings.set_sensitive(True)
             row_volume.show_all()
         else:
