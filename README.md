@@ -33,7 +33,3 @@ It is currently a work in progress. Maintenance is done by <a href="https://www.
 ![Pardus My Computer 3](screenshots/pardus-mycomputer-3.png)
 
 ![Pardus My Computer 4](screenshots/pardus-mycomputer-4.png)
-
-![Pardus My Computer 5](screenshots/pardus-mycomputer-5.png)
-
-![Pardus My Computer 6](screenshots/pardus-mycomputer-6.png)
