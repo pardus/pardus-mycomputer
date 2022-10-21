@@ -219,6 +219,7 @@ class MainWindow:
 
         # Add widgets to box:
         box_volume_info.add(lbl_volume_name)
+        box_volume_info.add(lbl_volume_name)
         # box_volume_info.add(lbl_volume_dev_directory)
         box_volume_info.add(pb_volume_size)
         box_volume_info.add(lbl_volume_size_info)        
@@ -270,6 +271,13 @@ class MainWindow:
         self.lbl_root_free.set_label(f"{int(root_info['free_kb'])/1000/1000:.2f} GB")
         self.lbl_root_total.set_label(f"{int(root_info['total_kb'])/1000/1000:.2f} GB")
         self.pb_root_usage.set_fraction( root_info["usage_percent"] )
+
+        # if root usage >= 0.9 then add destructive color
+        try:
+            if root_info["usage_percent"] >= 0.9:
+                self.pb_root_usage.get_style_context().add_class("pardus-mycomputer-progress-90")
+        except Exception as e:
+            print("progress css exception: {}".format(e))
 
         # Hard Drives
         self.addHardDisksToList()

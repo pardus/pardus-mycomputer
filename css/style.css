@@ -6,3 +6,16 @@ border-radius:5px;
 .pardus-mycomputer-listbox row:hover, row:selected{
 border-radius:5px;
 }
+
+.pardus-mycomputer-progress-90 progress{
+
+color: #eeeeec;
+border-color: rgba(0, 0, 0, 0.7);
+background-color: transparent;
+background-image: image(rgba(224, 27, 36, 0.9));
+background-clip: padding-box; box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+text-shadow: 0 1px black;
+-gtk-icon-shadow: 0 1px black;
+outline-color: rgba(238, 238, 236, 0.3);
+
+}
