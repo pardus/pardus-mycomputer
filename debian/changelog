@@ -1,6 +1,57 @@
-pardus-mycomputer (0.1.0) unstable; urgency=optional
+pardus-mycomputer (0.1.0) unstable; urgency=medium
 
   [ Emin Fedar ]
-  * Initialize
+  * Initial commit
+  * Initialize project
+  * [Added] Home & Root directories [Improved] General UI & Code
+  * [Added] Mount on Startup functionality [Added] Details Page
+  * [Added] get_filesystem_of_partition()
+  * [Added] updateRemovableDevicesList(), removable devices now updated when new device connected or disconnected
+  * little quote bug
+  * Added Pardus-usb-formatter support.
+  * [Added] Translations [Updated] .desktop file.
+  * [Update] setup.py & .desktop file
+  * [Added] Gio.ApplicationFlags.NON_UNIQUE
+  * [Fixed] Bug fixes
 
- -- Emin Fedar <emin.fedar@pardus.org.tr>  Fri, 24 Jun 2022 11:09:29 +0300
+  [ Fatih Altun ]
+  * Update .gitignore
+  * Fix and major update ui, backend
+  * Disable asking mount on app startup
+  * Update translations structure
+  * Update app icon
+  * Add info text for mountable disks
+  * Add unmount with sync
+  * Update .gitignore
+  * Add MainWindow.py to po/files
+  * Add pot file
+  * Update Architecture as all
+  * Add +x to debian/rules
+  * Fix translatable labels and unit sizes
+  * Add spinner to unmount stack
+  * Fix untranslatable label
+  * Use Gio unmount and Update some messages
+  * Update pot file
+  * Update Turkish translations
+  * Add Unmount.py to setup.py
+  * Fix Turkish translation typo
+  * Add popdown action to format button
+  * Add autostart files for add launcher to desktop
+  * Add postinst script for add launcher to current user desktop
+  * Rm postinst due to gio not working as root
+  * Fix autostart desktop exec path
+  * Fix add-to-desktop script
+  * Add menu button with popover
+  * Add css
+  * Rm gtk frames and Update ui
+  * Add action to menu buttons
+  * Update ui icons and translatable labels
+  * Update pot file
+  * Update Turkish translations
+  * Update ui pardus icon
+  * Add missing gir1.2-glib-2.0 depend
+  * Add 0.9 usage control for root section
+  * Add progressbar 0.9 usage control for other volumes too
+  * Update maintainer, web
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 21 Oct 2022 16:18:41 +0300
