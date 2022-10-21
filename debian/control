@@ -12,6 +12,7 @@ Depends: ${misc:Depends},
          ${python3:Depends},
          python3 (>=3.5),
          python3-gi,
+         gir1.2-glib-2.0,
          gir1.2-gtk-3.0
 Description: My Computer, shows general information about your computer.
  My Computer, shows general information about your computer.
