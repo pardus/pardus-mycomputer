@@ -272,6 +272,8 @@ class MainWindow:
         # Home:
         home_info = DiskManager.get_file_info(GLib.get_home_dir())
         self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.get_home_dir()))
+        home_info = DiskManager.get_file_info(GLib.get_home_dir())
+        self.lbl_home_size.set_label(f"{int(home_info['usage_kb'])/1000/1000:.2f} GB")
 
         # Root:
         root_info = DiskManager.get_file_info("/")
