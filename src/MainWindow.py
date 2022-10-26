@@ -108,6 +108,13 @@ class MainWindow:
         # About dialog
         self.dialog_about = UI("dialog_about")
         self.dialog_about.set_program_name(_("Pardus My Computer"))
+        # Set version
+        # If not getted from __version__ file then accept version in MainWindow.glade file
+        try:
+            version = open(os.path.dirname(os.path.abspath(__file__)) + "/__version__").readline()
+            self.dialog_about.set_version(version)
+        except:
+            pass
 
     def defineVariables(self):
         self.mount_operation = Gio.MountOperation.new()

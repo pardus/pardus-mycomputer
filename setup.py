@@ -39,7 +39,8 @@ data_files = [
         "src/pardus-mycomputer",
         "src/MainWindow.py",
         "src/DiskManager.py",
-        "src/Unmount.py"
+        "src/Unmount.py",
+        "src/__version__"
     ]),
     ("/usr/share/pardus/pardus-mycomputer/ui", ["ui/MainWindow.glade"]),
     ("/usr/share/pardus/pardus-mycomputer/autostart/", ["autostart/pardus-mycomputer-add-to-desktop"]),
