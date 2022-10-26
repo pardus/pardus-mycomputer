@@ -97,7 +97,7 @@ class MainWindow:
         self.popover_dt_stack = UI("popover_dt_stack")
 
         # Buttons
-        self.btn_unmount_removable = UI("btn_unmount_removable")
+        self.btn_unmount = UI("btn_unmount")
 
         # Unmount progress Stack
         self.stack_unmount = UI("stack_unmount")
@@ -425,14 +425,20 @@ class MainWindow:
 
         subprocess.Popen(["pardus-usb-formatter", file_info["device"]])
 
-    def on_btn_unmount_removable_clicked(self, btn):
+    def on_btn_unmount_clicked(self, btn):
         self.actioned_volume = self.selected_volume
 
         mount_point = self.actioned_volume.get_mount().get_root().get_parse_name()
 
         command = [os.path.dirname(os.path.abspath(__file__)) + "/Unmount.py", "unmount", mount_point]
 
-        self.notify(_("Please wait"), _("USB disk is unmounting."), "emblem-synchronizing-symbolic")
+        summary = _("Please wait")
+        if self.actioned_volume.get_drive().is_removable():
+            body = _("USB disk is unmounting.")
+        else:
+            body = _("Disk is unmounting.")
+
+        self.notify(summary, body, "emblem-synchronizing-symbolic")
 
         self.stack_unmount.set_visible_child_name("spinner")
         self.startProcess(command)
@@ -490,18 +496,26 @@ class MainWindow:
         # print(f'pid, status: {pid, status}')
 
         vl = self.actioned_volume.get_mount()
+        dr = self.actioned_volume.get_drive()
+
+        summary = _("Unmounting process is done")
+        if dr.is_removable():
+            body = _("You can eject the USB disk.")
+        else:
+            body = _("You can eject the disk.")
 
         def on_unmounted(vl, task):
             try:
-                vl.unmount_finish(task)
+                vl.unmount_with_operation_finish(task)
+                self.notify(summary, body, "emblem-ok-symbolic")
                 return True
-            except GLib.Error:
+            except Exception as e:
+                print("{}".format(e))
                 return False
 
-        vl.unmount(Gio.MountUnmountFlags.FORCE , None, on_unmounted)
+        vl.unmount_with_operation(Gio.MountUnmountFlags.FORCE, self.mount_operation, None, on_unmounted)
 
         self.stack_unmount.set_visible_child_name("unmount")
-        self.notify(_("Unmounting process is done"), _("You can eject the USB disk."), "emblem-ok-symbolic")
 
     def notify(self, message_summary="", message_body="", icon="pardus-mycomputer"):
         try:
