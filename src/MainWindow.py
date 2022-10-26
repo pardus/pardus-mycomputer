@@ -457,6 +457,9 @@ class MainWindow:
         self.dialog_disk_details.run()
         self.dialog_disk_details.hide()
 
+    def on_btn_refresh_clicked(self, button):
+        self.addDisksToGUI()
+
     def on_menu_aboutapp_clicked(self, button):
         self.popover_menu.popdown()
         self.dialog_about.run()
