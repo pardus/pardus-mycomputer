@@ -70,7 +70,7 @@ Fatih Altun</property>
                   <object class="GtkImage">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">pardus-about</property>
+                    <property name="icon-name">emblem-pardus-symbolic</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
