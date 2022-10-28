@@ -7,6 +7,8 @@ from gi.repository import GLib, Gio, Gtk, Notify, Gdk
 
 import DiskManager
 
+from UserSettings import UserSettings
+
 import locale
 from locale import gettext as _
 
@@ -45,6 +47,9 @@ class MainWindow:
         # Global Definings
         self.defineComponents()
         self.defineVariables()
+
+        # load user settings
+        self.user_settings()
 
         # Add Disks to GUI
         self.addDisksToGUI()
@@ -105,8 +110,18 @@ class MainWindow:
         # Unmount progress Stack
         self.stack_unmount = UI("stack_unmount")
 
+        # Main Stack
+        self.stack_main = UI("stack_main")
+
         # Menu popover
         self.popover_menu = UI("popover_menu")
+
+        # Settings switch buttons
+        self.sw_closeapp_pardus = UI("sw_closeapp_pardus")
+        self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
+        self.sw_closeapp_usb = UI("sw_closeapp_usb")
+
+        self.img_settings = UI("img_settings")
 
         # About dialog
         self.dialog_about = UI("dialog_about")
@@ -137,8 +152,8 @@ class MainWindow:
     def add_to_desktop(self):
         # Copy app's desktop file to user's desktop path on first run
         user_home = GLib.get_home_dir()
-        user_config_file = os.path.join(user_home, ".config/pardus-mycomputer/desktop")
-        if not os.path.isfile(user_config_file):
+        user_desktopcontrol_file = os.path.join(user_home, ".config/pardus-mycomputer/desktop")
+        if not os.path.isfile(user_desktopcontrol_file):
             print("{} {}".format("Desktop file copying to",
                                  GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)))
             try:
@@ -152,7 +167,15 @@ class MainWindow:
                 except Exception as e:
                     print("{}".format(e))
 
-    
+    def user_settings(self):
+        self.UserSettings = UserSettings()
+        self.UserSettings.createDefaultConfig()
+        self.UserSettings.readConfig()
+
+        print("{} {}".format("config_closeapp_pardus", self.UserSettings.config_closeapp_pardus))
+        print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
+        print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
+
     def showDiskDetailsDialog(self, vl):
         dr = vl.get_drive()
         mount_point = vl.get_mount().get_root().get_parse_name()
@@ -394,16 +417,27 @@ class MainWindow:
     # SIGNALS:
     def on_lb_home_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", GLib.get_home_dir()])
+        if self.UserSettings.config_closeapp_pardus:
+            self.onDestroy(listbox)
 
     def on_lb_root_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", "/"])
-    
+        if self.UserSettings.config_closeapp_pardus:
+            self.onDestroy(listbox)
+
     def on_volume_row_activated(self, listbox, row):
         mount  = row._volume.get_mount()
         if mount == None:
             self.tryMountVolume(row)
         else:
             subprocess.run(["xdg-open", mount.get_root().get_parse_name()])
+
+            if row._volume.get_drive().is_removable():
+                if self.UserSettings.config_closeapp_usb:
+                    self.onDestroy(listbox)
+            else:
+                if self.UserSettings.config_closeapp_hdd:
+                    self.onDestroy(listbox)
     
     def on_btn_volume_settings_clicked(self, btn):
 
@@ -433,6 +467,44 @@ class MainWindow:
 
         self.showDiskDetailsDialog(self.selected_volume)
 
+    def on_sw_closeapp_pardus_state_set(self, switch, state):
+        user_config_closeapp_pardus = self.UserSettings.config_closeapp_pardus
+        if state != user_config_closeapp_pardus:
+            print("Updating close app pardus state")
+            try:
+                self.UserSettings.writeConfig(state,
+                                              self.UserSettings.config_closeapp_hdd,
+                                              self.UserSettings.config_closeapp_usb
+                                              )
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
+
+    def on_sw_closeapp_hdd_state_set(self, switch, state):
+        user_config_closeapp_hdd = self.UserSettings.config_closeapp_hdd
+        if state != user_config_closeapp_hdd:
+            print("Updating close app hdd state")
+            try:
+                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
+                                              state,
+                                              self.UserSettings.config_closeapp_usb
+                                              )
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
+
+    def on_sw_closeapp_usb_state_set(self, switch, state):
+        user_config_closeapp_usb = self.UserSettings.config_closeapp_usb
+        if state != user_config_closeapp_usb:
+            print("Updating close app usb state")
+            try:
+                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
+                                              self.UserSettings.config_closeapp_hdd,
+                                              state
+                                              )
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
     
     # Popover Menu Buttons:
     def on_cb_mount_on_startup_released(self, cb):
@@ -480,6 +552,17 @@ class MainWindow:
 
     def on_btn_refresh_clicked(self, button):
         self.addDisksToGUI()
+
+    def on_btn_settings_clicked(self, button):
+        if self.stack_main.get_visible_child_name() == "settings":
+            self.stack_main.set_visible_child_name("home")
+            self.img_settings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
+        elif self.stack_main.get_visible_child_name() == "home":
+            self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
+            self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
+            self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
+            self.stack_main.set_visible_child_name("settings")
+            self.img_settings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
 
     def on_menu_aboutapp_clicked(self, button):
         self.popover_menu.popdown()
