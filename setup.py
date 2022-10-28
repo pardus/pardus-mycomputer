@@ -40,6 +40,7 @@ data_files = [
         "src/MainWindow.py",
         "src/DiskManager.py",
         "src/Unmount.py",
+        "src/UserSettings.py",
         "src/__version__"
     ]),
     ("/usr/share/pardus/pardus-mycomputer/ui", ["ui/MainWindow.glade"]),
