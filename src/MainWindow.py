@@ -56,6 +56,9 @@ class MainWindow:
         styleContext.add_provider_for_screen(screen, cssProvider,
                                              Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
+        # Copy desktop file to user's desktop
+        self.add_to_desktop()
+
         # Show Screen:
         self.window.show_all()
 
@@ -130,6 +133,24 @@ class MainWindow:
         self.vm.connect('volume-removed', self.on_mount_removed)
         self.vm.connect('drive-connected', self.on_mount_added)
         self.vm.connect('drive-disconnected', self.on_mount_removed)
+
+    def add_to_desktop(self):
+        # Copy app's desktop file to user's desktop path on first run
+        user_home = GLib.get_home_dir()
+        user_config_file = os.path.join(user_home, ".config/pardus-mycomputer/desktop")
+        if not os.path.isfile(user_config_file):
+            print("{} {}".format("Desktop file copying to",
+                                 GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)))
+            try:
+                subprocess.Popen(["/usr/bin/bash",
+                                  "/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
+            except Exception as e:
+                print("{}".format(e))
+                try:
+                    subprocess.Popen(["/bin/bash",
+                                      "/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
+                except Exception as e:
+                    print("{}".format(e))
 
     
     def showDiskDetailsDialog(self, vl):
