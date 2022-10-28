@@ -64,6 +64,9 @@ class MainWindow:
         # Copy desktop file to user's desktop
         self.add_to_desktop()
 
+        # auto refresh control of disks
+        self.autorefresh()
+
         # Show Screen:
         self.window.show_all()
 
@@ -120,6 +123,9 @@ class MainWindow:
         self.sw_closeapp_pardus = UI("sw_closeapp_pardus")
         self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
         self.sw_closeapp_usb = UI("sw_closeapp_usb")
+        self.sw_autorefresh = UI("sw_autorefresh")
+        self.spinbutton_refreshtime = UI("spinbutton_refreshtime")
+        self.box_refreshtime = UI("box_refreshtime")
 
         self.img_settings = UI("img_settings")
 
@@ -175,6 +181,19 @@ class MainWindow:
         print("{} {}".format("config_closeapp_pardus", self.UserSettings.config_closeapp_pardus))
         print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
         print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
+        print("{} {}".format("config_autorefresh", self.UserSettings.config_autorefresh))
+        print("{} {}".format("config_autorefresh_time", self.UserSettings.config_autorefresh_time))
+
+    def autorefresh(self):
+        if self.UserSettings.config_autorefresh:
+            self.autorefresh_glibid = GLib.timeout_add(self.UserSettings.config_autorefresh_time * 1000,
+                                                       self.autorefresh_disks)
+
+    def autorefresh_disks(self):
+        self.addDisksToGUI()
+        print("auto refreshing disks on every {} seconds with glib id: {}".format(
+            self.UserSettings.config_autorefresh_time, self.autorefresh_glibid))
+        return self.UserSettings.config_autorefresh
 
     def showDiskDetailsDialog(self, vl):
         dr = vl.get_drive()
@@ -441,6 +460,9 @@ class MainWindow:
     
     def on_btn_volume_settings_clicked(self, btn):
 
+        # disable auto refreshing because the popover is closing when auto refresh while open
+        GLib.source_remove(self.autorefresh_glibid)
+
         self.popover_volume.set_relative_to(btn)
         self.popover_volume.set_position(Gtk.PositionType.LEFT)
 
@@ -467,6 +489,10 @@ class MainWindow:
 
         self.showDiskDetailsDialog(self.selected_volume)
 
+    def on_popover_volume_closed(self, popover):
+        # auto refresh control of disks
+        self.autorefresh()
+
     def on_sw_closeapp_pardus_state_set(self, switch, state):
         user_config_closeapp_pardus = self.UserSettings.config_closeapp_pardus
         if state != user_config_closeapp_pardus:
@@ -474,7 +500,9 @@ class MainWindow:
             try:
                 self.UserSettings.writeConfig(state,
                                               self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb
+                                              self.UserSettings.config_closeapp_usb,
+                                              self.UserSettings.config_autorefresh,
+                                              self.UserSettings.config_autorefresh_time
                                               )
                 self.user_settings()
             except Exception as e:
@@ -487,7 +515,9 @@ class MainWindow:
             try:
                 self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
                                               state,
-                                              self.UserSettings.config_closeapp_usb
+                                              self.UserSettings.config_closeapp_usb,
+                                              self.UserSettings.config_autorefresh,
+                                              self.UserSettings.config_autorefresh_time
                                               )
                 self.user_settings()
             except Exception as e:
@@ -500,12 +530,51 @@ class MainWindow:
             try:
                 self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
                                               self.UserSettings.config_closeapp_hdd,
-                                              state
+                                              state,
+                                              self.UserSettings.config_autorefresh,
+                                              self.UserSettings.config_autorefresh_time
                                               )
                 self.user_settings()
             except Exception as e:
                 print("{}".format(e))
-    
+
+    def on_sw_autorefresh_state_set(self, switch, state):
+        user_config_autorefresh = self.UserSettings.config_autorefresh
+        if state != user_config_autorefresh:
+            print("Updating autorefresh state")
+            try:
+                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
+                                              self.UserSettings.config_closeapp_hdd,
+                                              self.UserSettings.config_closeapp_usb,
+                                              state,
+                                              self.UserSettings.config_autorefresh_time
+                                              )
+                self.user_settings()
+                self.box_refreshtime.set_visible(state)
+                if state:
+                    self.autorefresh()
+                else:
+                    GLib.source_remove(self.autorefresh_glibid)
+            except Exception as e:
+                print("{}".format(e))
+
+    def on_spinbutton_refreshtime_value_changed(self, spinbutton):
+        user_config_autorefresh_time = self.UserSettings.config_autorefresh_time
+        if spinbutton.get_value() != user_config_autorefresh_time:
+            print("Updating autorefresh time")
+            try:
+                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
+                                              self.UserSettings.config_closeapp_hdd,
+                                              self.UserSettings.config_closeapp_usb,
+                                              self.UserSettings.config_autorefresh,
+                                              spinbutton.get_value()
+                                              )
+                self.user_settings()
+                GLib.source_remove(self.autorefresh_glibid)
+                self.autorefresh()
+            except Exception as e:
+                print("{}".format(e))
+
     # Popover Menu Buttons:
     def on_cb_mount_on_startup_released(self, cb):
         DiskManager.set_automounted(self.selected_volume_info["device"], cb.get_active())
@@ -561,6 +630,9 @@ class MainWindow:
             self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
+            self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
+            self.spinbutton_refreshtime.set_value(self.UserSettings.config_autorefresh_time)
+            self.box_refreshtime.set_visible(self.UserSettings.config_autorefresh)
             self.stack_main.set_visible_child_name("settings")
             self.img_settings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
 

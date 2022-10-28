@@ -20,13 +20,17 @@ class UserSettings(object):
         self.config_closeapp_pardus = None
         self.config_closeapp_hdd = None
         self.config_closeapp_usb = None
+        self.config_autorefresh = None
+        self.config_autorefresh_time = None
 
 
     def createDefaultConfig(self, force=False):
         self.config['MAIN'] = {
             'CloseAppPardus': 'no',
             'CloseAppHDD': 'no',
-            'CloseAppUSB': 'no'
+            'CloseAppUSB': 'no',
+            'AutoRefresh': 'no',
+            'AutoRefreshTime': 5
         }
 
         if not Path.is_file(self.user_config_file) or force:
@@ -40,23 +44,30 @@ class UserSettings(object):
             self.config_closeapp_pardus = self.config.getboolean('MAIN', 'CloseAppPardus')
             self.config_closeapp_hdd = self.config.getboolean('MAIN', 'CloseAppHDD')
             self.config_closeapp_usb = self.config.getboolean('MAIN', 'CloseAppUSB')
+            self.config_autorefresh = self.config.getboolean('MAIN', 'AutoRefresh')
+            self.config_autorefresh_time = self.config.getfloat('MAIN', 'AutoRefreshTime')
+
         except Exception as e:
             print("{}".format(e))
             print("user config read error ! Trying create defaults")
             # if not read; try to create defaults
-            self.config_closeapp_pardus = True
-            self.config_closeapp_hdd = True
-            self.config_closeapp_usb = True
+            self.config_closeapp_pardus = False
+            self.config_closeapp_hdd = False
+            self.config_closeapp_usb = False
+            self.config_autorefresh = False
+            self.config_autorefresh_time = 5.0
             try:
                 self.createDefaultConfig(force=True)
             except Exception as e:
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
-    def writeConfig(self, closeapppardus, closeapphdd, closeappusb):
+    def writeConfig(self, closeapppardus, closeapphdd, closeappusb, autorefresh, autorefreshtime):
         self.config['MAIN'] = {
             'CloseAppPardus': closeapppardus,
             'CloseAppHDD': closeapphdd,
-            'CloseAppUSB': closeappusb
+            'CloseAppUSB': closeappusb,
+            'AutoRefresh': autorefresh,
+            'AutoRefreshTime': autorefreshtime
         }
         if self.createDir(self.user_config_dir):
             with open(self.user_config_file, "w") as cf:
