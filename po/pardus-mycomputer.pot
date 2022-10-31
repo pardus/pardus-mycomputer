@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-19 17:34+0300\n"
+"POT-Creation-Date: 2022-10-31 14:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,114 +17,142 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ui/MainWindow.glade:7
+#: ui/MainWindow.glade:14
 msgid "About Pardus My Computer"
 msgstr ""
 
-#: ui/MainWindow.glade:13
+#: ui/MainWindow.glade:20
 msgid "UI for information and management of disks on your computer."
 msgstr ""
 
-#: ui/MainWindow.glade:15
+#: ui/MainWindow.glade:22
 msgid "Website"
 msgstr ""
 
-#: ui/MainWindow.glade:85
+#: ui/MainWindow.glade:92
 msgid "About Pardus"
 msgstr ""
 
-#: ui/MainWindow.glade:141
+#: ui/MainWindow.glade:148
 msgid "About App"
 msgstr ""
 
-#: ui/MainWindow.glade:288
+#: ui/MainWindow.glade:300
 msgid "Home"
 msgstr ""
 
-#: ui/MainWindow.glade:410
+#: ui/MainWindow.glade:422
 msgid "Root"
 msgstr ""
 
-#: ui/MainWindow.glade:482 src/MainWindow.py:158
+#: ui/MainWindow.glade:494 src/MainWindow.py:228
 msgid "is free of"
 msgstr ""
 
-#: ui/MainWindow.glade:562
+#: ui/MainWindow.glade:574
 msgid "Hard Drives"
 msgstr ""
 
-#: ui/MainWindow.glade:651
+#: ui/MainWindow.glade:663
 msgid "Removable Drives"
 msgstr ""
 
-#: ui/MainWindow.glade:704
+#: ui/MainWindow.glade:740
+msgid "Close app when Pardus directories are opened"
+msgstr ""
+
+#: ui/MainWindow.glade:780
+msgid "Close app when Hard Drives are opened"
+msgstr ""
+
+#: ui/MainWindow.glade:820
+msgid "Close app when Removable Drives are opened"
+msgstr ""
+
+#: ui/MainWindow.glade:860
+msgid "Auto refresh disks"
+msgstr ""
+
+#: ui/MainWindow.glade:900
+msgid "Refresh time (seconds)"
+msgstr ""
+
+#: ui/MainWindow.glade:958
 msgid "My Computer"
 msgstr ""
 
-#: ui/MainWindow.glade:752
+#: ui/MainWindow.glade:1047
 msgid "Ok"
 msgstr ""
 
-#: ui/MainWindow.glade:837
+#: ui/MainWindow.glade:1133
 msgid "Device Model"
 msgstr ""
 
-#: ui/MainWindow.glade:864
+#: ui/MainWindow.glade:1160
 msgid "Device Path"
 msgstr ""
 
-#: ui/MainWindow.glade:880
+#: ui/MainWindow.glade:1176
 msgid "Mountpoint"
 msgstr ""
 
-#: ui/MainWindow.glade:896
+#: ui/MainWindow.glade:1192
 msgid "Filesystem"
 msgstr ""
 
-#: ui/MainWindow.glade:923
+#: ui/MainWindow.glade:1219
 msgid "Used GB"
 msgstr ""
 
-#: ui/MainWindow.glade:939
+#: ui/MainWindow.glade:1235
 msgid "Free GB"
 msgstr ""
 
-#: ui/MainWindow.glade:955
+#: ui/MainWindow.glade:1251
 msgid "Total GB"
 msgstr ""
 
-#: ui/MainWindow.glade:1257
+#: ui/MainWindow.glade:1559
 msgid "Mount on Startup"
 msgstr ""
 
-#: ui/MainWindow.glade:1276
+#: ui/MainWindow.glade:1572
 msgid "Format"
 msgstr ""
 
-#: ui/MainWindow.glade:1294
+#: ui/MainWindow.glade:1597
 msgid "Unmount"
 msgstr ""
 
-#: src/MainWindow.py:110
+#: src/MainWindow.py:134
 msgid "Pardus My Computer"
 msgstr ""
 
-#: src/MainWindow.py:203
+#: src/MainWindow.py:280
 msgid "Disk is available, click to mount."
 msgstr ""
 
-#: src/MainWindow.py:411
+#: src/MainWindow.py:597
 msgid "Please wait"
 msgstr ""
 
-#: src/MainWindow.py:411
+#: src/MainWindow.py:599
 msgid "USB disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:480
+#: src/MainWindow.py:601
+msgid "Disk is unmounting."
+msgstr ""
+
+#: src/MainWindow.py:680
 msgid "Unmounting process is done"
 msgstr ""
 
-#: src/MainWindow.py:480
+#: src/MainWindow.py:682
 msgid "You can eject the USB disk."
+msgstr ""
+
+#: src/MainWindow.py:684
+msgid "You can eject the disk."
 msgstr ""
