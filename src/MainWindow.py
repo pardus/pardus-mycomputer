@@ -145,6 +145,7 @@ class MainWindow:
         self.selected_volume = None
         self.selected_volume_info = None
         self.actioned_volume = None
+        self.autorefresh_glibid = None
 
         # VolumeMonitor
         self.vm = Gio.VolumeMonitor.get()
@@ -461,7 +462,8 @@ class MainWindow:
     def on_btn_volume_settings_clicked(self, btn):
 
         # disable auto refreshing because the popover is closing when auto refresh while open
-        GLib.source_remove(self.autorefresh_glibid)
+        if self.autorefresh_glibid:
+            GLib.source_remove(self.autorefresh_glibid)
 
         self.popover_volume.set_relative_to(btn)
         self.popover_volume.set_position(Gtk.PositionType.LEFT)
