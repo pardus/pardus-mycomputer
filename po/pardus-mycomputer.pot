@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-31 14:37+0300\n"
+"POT-Creation-Date: 2022-10-31 16:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Root"
 msgstr ""
 
-#: ui/MainWindow.glade:494 src/MainWindow.py:228
+#: ui/MainWindow.glade:494 src/MainWindow.py:229
 msgid "is free of"
 msgstr ""
 
@@ -81,47 +81,51 @@ msgstr ""
 msgid "My Computer"
 msgstr ""
 
-#: ui/MainWindow.glade:1047
+#: ui/MainWindow.glade:966
+msgid "Refresh"
+msgstr ""
+
+#: ui/MainWindow.glade:1048
 msgid "Ok"
 msgstr ""
 
-#: ui/MainWindow.glade:1133
+#: ui/MainWindow.glade:1134
 msgid "Device Model"
 msgstr ""
 
-#: ui/MainWindow.glade:1160
+#: ui/MainWindow.glade:1161
 msgid "Device Path"
 msgstr ""
 
-#: ui/MainWindow.glade:1176
+#: ui/MainWindow.glade:1177
 msgid "Mountpoint"
 msgstr ""
 
-#: ui/MainWindow.glade:1192
+#: ui/MainWindow.glade:1193
 msgid "Filesystem"
 msgstr ""
 
-#: ui/MainWindow.glade:1219
+#: ui/MainWindow.glade:1220
 msgid "Used GB"
 msgstr ""
 
-#: ui/MainWindow.glade:1235
+#: ui/MainWindow.glade:1236
 msgid "Free GB"
 msgstr ""
 
-#: ui/MainWindow.glade:1251
+#: ui/MainWindow.glade:1252
 msgid "Total GB"
 msgstr ""
 
-#: ui/MainWindow.glade:1559
+#: ui/MainWindow.glade:1560
 msgid "Mount on Startup"
 msgstr ""
 
-#: ui/MainWindow.glade:1572
+#: ui/MainWindow.glade:1573
 msgid "Format"
 msgstr ""
 
-#: ui/MainWindow.glade:1597
+#: ui/MainWindow.glade:1598
 msgid "Unmount"
 msgstr ""
 
@@ -129,30 +133,30 @@ msgstr ""
 msgid "Pardus My Computer"
 msgstr ""
 
-#: src/MainWindow.py:280
+#: src/MainWindow.py:281
 msgid "Disk is available, click to mount."
 msgstr ""
 
-#: src/MainWindow.py:597
+#: src/MainWindow.py:599
 msgid "Please wait"
 msgstr ""
 
-#: src/MainWindow.py:599
+#: src/MainWindow.py:601
 msgid "USB disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:601
+#: src/MainWindow.py:603
 msgid "Disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:680
+#: src/MainWindow.py:683
 msgid "Unmounting process is done"
 msgstr ""
 
-#: src/MainWindow.py:682
+#: src/MainWindow.py:685
 msgid "You can eject the USB disk."
 msgstr ""
 
-#: src/MainWindow.py:684
+#: src/MainWindow.py:687
 msgid "You can eject the disk."
 msgstr ""

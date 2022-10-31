@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-31 14:37+0300\n"
-"PO-Revision-Date: 2022-10-31 14:39+0300\n"
+"POT-Creation-Date: 2022-10-31 16:58+0300\n"
+"PO-Revision-Date: 2022-10-31 16:58+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -45,7 +45,7 @@ msgstr "Ev"
 msgid "Root"
 msgstr "Kök Dizin"
 
-#: ui/MainWindow.glade:494 src/MainWindow.py:228
+#: ui/MainWindow.glade:494 src/MainWindow.py:229
 msgid "is free of"
 msgstr "boş, toplam"
 
@@ -81,47 +81,51 @@ msgstr "Yenileme süresi (saniye)"
 msgid "My Computer"
 msgstr "Bilgisayarım"
 
-#: ui/MainWindow.glade:1047
+#: ui/MainWindow.glade:966
+msgid "Refresh"
+msgstr "Yenile"
+
+#: ui/MainWindow.glade:1048
 msgid "Ok"
 msgstr "Tamam"
 
-#: ui/MainWindow.glade:1133
+#: ui/MainWindow.glade:1134
 msgid "Device Model"
 msgstr "Cihaz Modeli"
 
-#: ui/MainWindow.glade:1160
+#: ui/MainWindow.glade:1161
 msgid "Device Path"
 msgstr "Cihaz Yolu"
 
-#: ui/MainWindow.glade:1176
+#: ui/MainWindow.glade:1177
 msgid "Mountpoint"
 msgstr "Bağlanma Yolu"
 
-#: ui/MainWindow.glade:1192
+#: ui/MainWindow.glade:1193
 msgid "Filesystem"
 msgstr "Dosya Sistemi"
 
-#: ui/MainWindow.glade:1219
+#: ui/MainWindow.glade:1220
 msgid "Used GB"
 msgstr "Kullanılan GB"
 
-#: ui/MainWindow.glade:1235
+#: ui/MainWindow.glade:1236
 msgid "Free GB"
 msgstr "Boş GB"
 
-#: ui/MainWindow.glade:1251
+#: ui/MainWindow.glade:1252
 msgid "Total GB"
 msgstr "Toplam GB"
 
-#: ui/MainWindow.glade:1559
+#: ui/MainWindow.glade:1560
 msgid "Mount on Startup"
 msgstr "Başlangıçta Bağlı Gelsin"
 
-#: ui/MainWindow.glade:1572
+#: ui/MainWindow.glade:1573
 msgid "Format"
 msgstr "Biçimlendir"
 
-#: ui/MainWindow.glade:1597
+#: ui/MainWindow.glade:1598
 msgid "Unmount"
 msgstr "Kaldır"
 
@@ -129,31 +133,31 @@ msgstr "Kaldır"
 msgid "Pardus My Computer"
 msgstr "Pardus Bilgisayarım"
 
-#: src/MainWindow.py:280
+#: src/MainWindow.py:281
 msgid "Disk is available, click to mount."
 msgstr "Disk kullanılabilir, bağlamak için tıklayın."
 
-#: src/MainWindow.py:597
+#: src/MainWindow.py:599
 msgid "Please wait"
 msgstr "Lütfen bekleyin"
 
-#: src/MainWindow.py:599
+#: src/MainWindow.py:601
 msgid "USB disk is unmounting."
 msgstr "USB disk kaldırılıyor."
 
-#: src/MainWindow.py:601
+#: src/MainWindow.py:603
 msgid "Disk is unmounting."
 msgstr "Disk kaldırılıyor."
 
-#: src/MainWindow.py:680
+#: src/MainWindow.py:683
 msgid "Unmounting process is done"
 msgstr "Kaldırma işlemi tamamlandı"
 
-#: src/MainWindow.py:682
+#: src/MainWindow.py:685
 msgid "You can eject the USB disk."
 msgstr "USB diski çıkarabilirsiniz."
 
-#: src/MainWindow.py:684
+#: src/MainWindow.py:687
 msgid "You can eject the disk."
 msgstr "Diski çıkarabilirsiniz."
 

@@ -963,6 +963,7 @@ Fatih Altun</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Refresh</property>
             <property name="relief">none</property>
             <signal name="clicked" handler="on_btn_refresh_clicked" swapped="no"/>
             <child>
