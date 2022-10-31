@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-19 17:34+0300\n"
-"PO-Revision-Date: 2022-10-19 16:48+0300\n"
+"POT-Creation-Date: 2022-10-31 14:37+0300\n"
+"PO-Revision-Date: 2022-10-31 14:39+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -17,117 +17,145 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Gtranslator 3.38.0\n"
 
-#: ui/MainWindow.glade:7
+#: ui/MainWindow.glade:14
 msgid "About Pardus My Computer"
 msgstr "Pardus Bilgisayarım Hakkında"
 
-#: ui/MainWindow.glade:13
+#: ui/MainWindow.glade:20
 msgid "UI for information and management of disks on your computer."
 msgstr "Diskleriniz için bilgi ve yönetim arayüzü."
 
-#: ui/MainWindow.glade:15
+#: ui/MainWindow.glade:22
 msgid "Website"
 msgstr "Website"
 
-#: ui/MainWindow.glade:85
+#: ui/MainWindow.glade:92
 msgid "About Pardus"
 msgstr "Pardus Hakkında"
 
-#: ui/MainWindow.glade:141
+#: ui/MainWindow.glade:148
 msgid "About App"
 msgstr "Uygulama Hakkında"
 
-#: ui/MainWindow.glade:288
+#: ui/MainWindow.glade:300
 msgid "Home"
 msgstr "Ev"
 
-#: ui/MainWindow.glade:410
+#: ui/MainWindow.glade:422
 msgid "Root"
 msgstr "Kök Dizin"
 
-#: ui/MainWindow.glade:482 src/MainWindow.py:158
+#: ui/MainWindow.glade:494 src/MainWindow.py:228
 msgid "is free of"
 msgstr "boş, toplam"
 
-#: ui/MainWindow.glade:562
+#: ui/MainWindow.glade:574
 msgid "Hard Drives"
 msgstr "Sabit Diskler"
 
-#: ui/MainWindow.glade:651
+#: ui/MainWindow.glade:663
 msgid "Removable Drives"
 msgstr "Çıkarılabilir Diskler"
 
-#: ui/MainWindow.glade:704
+#: ui/MainWindow.glade:740
+msgid "Close app when Pardus directories are opened"
+msgstr "Pardus dizinleri açıldığında uygulamayı kapat"
+
+#: ui/MainWindow.glade:780
+msgid "Close app when Hard Drives are opened"
+msgstr "Sabit Diskler açıldığında uygulamayı kapat"
+
+#: ui/MainWindow.glade:820
+msgid "Close app when Removable Drives are opened"
+msgstr "Çıkarılabilir Diskler açıldığında uygulamayı kapat"
+
+#: ui/MainWindow.glade:860
+msgid "Auto refresh disks"
+msgstr "Diskleri otomatik yenile"
+
+#: ui/MainWindow.glade:900
+msgid "Refresh time (seconds)"
+msgstr "Yenileme süresi (saniye)"
+
+#: ui/MainWindow.glade:958
 msgid "My Computer"
 msgstr "Bilgisayarım"
 
-#: ui/MainWindow.glade:752
+#: ui/MainWindow.glade:1047
 msgid "Ok"
 msgstr "Tamam"
 
-#: ui/MainWindow.glade:837
+#: ui/MainWindow.glade:1133
 msgid "Device Model"
 msgstr "Cihaz Modeli"
 
-#: ui/MainWindow.glade:864
+#: ui/MainWindow.glade:1160
 msgid "Device Path"
 msgstr "Cihaz Yolu"
 
-#: ui/MainWindow.glade:880
+#: ui/MainWindow.glade:1176
 msgid "Mountpoint"
 msgstr "Bağlanma Yolu"
 
-#: ui/MainWindow.glade:896
+#: ui/MainWindow.glade:1192
 msgid "Filesystem"
 msgstr "Dosya Sistemi"
 
-#: ui/MainWindow.glade:923
+#: ui/MainWindow.glade:1219
 msgid "Used GB"
 msgstr "Kullanılan GB"
 
-#: ui/MainWindow.glade:939
+#: ui/MainWindow.glade:1235
 msgid "Free GB"
 msgstr "Boş GB"
 
-#: ui/MainWindow.glade:955
+#: ui/MainWindow.glade:1251
 msgid "Total GB"
 msgstr "Toplam GB"
 
-#: ui/MainWindow.glade:1257
+#: ui/MainWindow.glade:1559
 msgid "Mount on Startup"
 msgstr "Başlangıçta Bağlı Gelsin"
 
-#: ui/MainWindow.glade:1276
+#: ui/MainWindow.glade:1572
 msgid "Format"
 msgstr "Biçimlendir"
 
-#: ui/MainWindow.glade:1294
+#: ui/MainWindow.glade:1597
 msgid "Unmount"
 msgstr "Kaldır"
 
-#: src/MainWindow.py:110
+#: src/MainWindow.py:134
 msgid "Pardus My Computer"
 msgstr "Pardus Bilgisayarım"
 
-#: src/MainWindow.py:203
+#: src/MainWindow.py:280
 msgid "Disk is available, click to mount."
 msgstr "Disk kullanılabilir, bağlamak için tıklayın."
 
-#: src/MainWindow.py:411
+#: src/MainWindow.py:597
 msgid "Please wait"
 msgstr "Lütfen bekleyin"
 
-#: src/MainWindow.py:411
+#: src/MainWindow.py:599
 msgid "USB disk is unmounting."
 msgstr "USB disk kaldırılıyor."
 
-#: src/MainWindow.py:480
+#: src/MainWindow.py:601
+msgid "Disk is unmounting."
+msgstr "Disk kaldırılıyor."
+
+#: src/MainWindow.py:680
 msgid "Unmounting process is done"
 msgstr "Kaldırma işlemi tamamlandı"
 
-#: src/MainWindow.py:480
+#: src/MainWindow.py:682
 msgid "You can eject the USB disk."
 msgstr "USB diski çıkarabilirsiniz."
+
+#: src/MainWindow.py:684
+msgid "You can eject the disk."
+msgstr "Diski çıkarabilirsiniz."
 
 #~ msgid "Details"
 #~ msgstr "Detaylar"
