@@ -297,7 +297,7 @@ class MainWindow:
 
         # Add widgets to box:
         box_volume_info.add(lbl_volume_name)
-        box_volume_info.add(lbl_volume_name)
+        # box_volume_info.add(lbl_volume_name)
         # box_volume_info.add(lbl_volume_dev_directory)
         box_volume_info.add(pb_volume_size)
         box_volume_info.add(lbl_volume_size_info)        
@@ -622,6 +622,7 @@ class MainWindow:
         self.dialog_disk_details.hide()
 
     def on_btn_refresh_clicked(self, button):
+        print("Manually refreshing disks")
         self.addDisksToGUI()
 
     def on_btn_settings_clicked(self, button):
