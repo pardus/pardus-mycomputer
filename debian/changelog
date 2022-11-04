@@ -1,3 +1,20 @@
+pardus-mycomputer (0.2.0) unstable; urgency=medium
+
+  * Add unmount option to hard drives too
+  * Add refresh button
+  * Add copy desktop file to user's desktop on first run
+  * Add settings page and close app switch controls
+  * Add auto refresh prefs to settings page
+  * Add UserSettings.py to setup
+  * Update pot file
+  * Update Turkish translations
+  * Add control for autorefresh glib id
+  * Fix redundant widget warning
+  * Add refresh tooltip and translations
+  * Add +x to pardus-mycomputer-add-to-desktop
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 04 Nov 2022 22:22:57 +0300
+
 pardus-mycomputer (0.1.1) unstable; urgency=medium
 
   * Add screenshots
