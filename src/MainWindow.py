@@ -124,8 +124,6 @@ class MainWindow:
         self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
         self.sw_closeapp_usb = UI("sw_closeapp_usb")
         self.sw_autorefresh = UI("sw_autorefresh")
-        self.spinbutton_refreshtime = UI("spinbutton_refreshtime")
-        self.box_refreshtime = UI("box_refreshtime")
 
         self.img_settings = UI("img_settings")
 
@@ -552,28 +550,10 @@ class MainWindow:
                                               self.UserSettings.config_autorefresh_time
                                               )
                 self.user_settings()
-                self.box_refreshtime.set_visible(state)
                 if state:
                     self.autorefresh()
                 else:
                     GLib.source_remove(self.autorefresh_glibid)
-            except Exception as e:
-                print("{}".format(e))
-
-    def on_spinbutton_refreshtime_value_changed(self, spinbutton):
-        user_config_autorefresh_time = self.UserSettings.config_autorefresh_time
-        if spinbutton.get_value() != user_config_autorefresh_time:
-            print("Updating autorefresh time")
-            try:
-                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb,
-                                              self.UserSettings.config_autorefresh,
-                                              spinbutton.get_value()
-                                              )
-                self.user_settings()
-                GLib.source_remove(self.autorefresh_glibid)
-                self.autorefresh()
             except Exception as e:
                 print("{}".format(e))
 
@@ -634,8 +614,6 @@ class MainWindow:
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
             self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
-            self.spinbutton_refreshtime.set_value(self.UserSettings.config_autorefresh_time)
-            self.box_refreshtime.set_visible(self.UserSettings.config_autorefresh)
             self.stack_main.set_visible_child_name("settings")
             self.img_settings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
 
