@@ -861,7 +861,7 @@ Fatih Altun</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Auto refresh disks (on every 1.5 seconds)</property>
+                        <property name="label" translatable="yes">Auto refresh disks (refresh time: 1.5 seconds)</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
