@@ -30,7 +30,7 @@ class UserSettings(object):
             'CloseAppHDD': 'no',
             'CloseAppUSB': 'no',
             'AutoRefresh': 'no',
-            'AutoRefreshTime': 5
+            'AutoRefreshTime': 1.5
         }
 
         if not Path.is_file(self.user_config_file) or force:
