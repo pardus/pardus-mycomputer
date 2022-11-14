@@ -60,6 +60,10 @@ Fatih Altun</property>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkButton" id="menu_aboutpardus">
@@ -857,7 +861,7 @@ Fatih Altun</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Auto refresh disks</property>
+                        <property name="label" translatable="yes">Auto refresh disks (refresh time: 1.5 seconds)</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -884,50 +888,6 @@ Fatih Altun</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box_refreshtime">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">13</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Refresh time (seconds)</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinbutton_refreshtime">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="input-purpose">number</property>
-                        <property name="adjustment">adjustment_refreshtime</property>
-                        <property name="climb-rate">0.5</property>
-                        <property name="digits">1</property>
-                        <property name="numeric">True</property>
-                        <property name="value">5</property>
-                        <signal name="value-changed" handler="on_spinbutton_refreshtime_value_changed" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
