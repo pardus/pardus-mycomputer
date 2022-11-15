@@ -5,8 +5,15 @@ def get_file_info(file):
 
     keys = ["device", "total_kb", "usage_kb", "free_kb", "mountpoint"]
     obj = dict(zip(keys, process.stdout.decode("utf-8").strip().split(" ")))
-    obj["usage_percent"] = int(obj['usage_kb']) / int(obj['total_kb'])
-    obj["free_percent"] = int(obj['free_kb']) / int(obj['total_kb'])
+
+    try:
+        obj["usage_percent"] = (int(obj['total_kb']) - int(obj['free_kb'])) / int(obj['total_kb'])
+    except:
+        obj["usage_percent"] = 0
+    try:
+        obj["free_percent"] = int(obj['free_kb']) / int(obj['total_kb'])
+    except:
+        obj["free_percent"] = 0
 
     return obj
 

@@ -144,6 +144,7 @@ class MainWindow:
         self.selected_volume_info = None
         self.actioned_volume = None
         self.autorefresh_glibid = None
+        self.mount_paths = []
 
         # VolumeMonitor
         self.vm = Gio.VolumeMonitor.get()
@@ -162,12 +163,12 @@ class MainWindow:
             print("{} {}".format("Desktop file copying to",
                                  GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)))
             try:
-                subprocess.Popen(["/usr/bin/bash",
+                subprocess.Popen(["/bin/bash",
                                   "/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
             except Exception as e:
                 print("{}".format(e))
                 try:
-                    subprocess.Popen(["/bin/bash",
+                    subprocess.Popen(["/usr/bin/bash",
                                       "/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
                 except Exception as e:
                     print("{}".format(e))
@@ -195,12 +196,21 @@ class MainWindow:
         return self.UserSettings.config_autorefresh
 
     def showDiskDetailsDialog(self, vl):
+        try:
+            name = vl.get_drive().get_name()
+        except:
+            name = vl.get_name()
+
         dr = vl.get_drive()
-        mount_point = vl.get_mount().get_root().get_parse_name()
+        try:
+            mount_point = vl.get_mount().get_root().get_path()
+        except:
+            mount_point = vl.get_root().get_path()
+
         file_info = DiskManager.get_file_info(mount_point)
 
         self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(vl.get_name()))
-        self.dlg_lbl_model.set_label(dr.get_name())
+        self.dlg_lbl_model.set_label(name)
 
         self.dlg_lbl_dev.set_label(file_info["device"])
         self.dlg_lbl_mountpoint.set_label(mount_point)
@@ -214,9 +224,26 @@ class MainWindow:
 
     def showVolumeSizes(self, row_volume):
         vl = row_volume._volume
-        if vl.get_mount() != None:
-            mount_point = row_volume._volume.get_mount().get_root().get_parse_name()
+
+        try:
+            gm = vl.get_mount()
+        except:
+            gm = vl
+
+        if gm != None:
+            # print("{} {} {}".format(vl.get_name(), vl.get_mount(), vl.get_mount().get_root().get_path()))
+            mount_point = gm.get_root().get_path()
             file_info = DiskManager.get_file_info(mount_point)
+
+            try:
+                free_kb = int(file_info['free_kb'])
+            except:
+                free_kb = 0
+
+            try:
+                total_kb = int(file_info['total_kb'])
+            except:
+                total_kb = 0
 
             # Show values on UI
             row_volume._lbl_volume_name.set_markup(
@@ -224,7 +251,7 @@ class MainWindow:
             # row_volume._lbl_volume_size_info.set_markup(
             #     f'<span size="small"><b>{int(file_info["free_kb"])/1000/1000:.2f} GB</b> {_("is free of")} {int(file_info["total_kb"])/1000/1000:.2f} GB</span>')
             row_volume._lbl_volume_size_info.set_markup("<span size='small'><b>{:.2f} GB</b> {} {:.2f} GB</span>".format(
-                int(file_info['free_kb'])/1000/1000, _("is free of"),int(file_info["total_kb"])/1000/1000))
+                free_kb/1000/1000, _("is free of"),total_kb/1000/1000))
             # row_volume._lbl_volume_dev_directory.set_markup(
             #     f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
             row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
@@ -264,12 +291,23 @@ class MainWindow:
             self.showVolumeSizes(row_volume)
             return True
     
-    def addVolumeRow(self, vl, listbox, is_removable):
+    def addVolumeRow(self, vl, listbox, is_removable, media=False, phone=False, card=False, othermount=False):
         # Prepare UI Containers:
         box_volume = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 7)
-        img_volume = Gtk.Image.new_from_icon_name(
-            "drive-removable-media" if is_removable else "drive-harddisk",
-            Gtk.IconSize.DIALOG)
+        if not media:
+            img_volume = Gtk.Image.new_from_icon_name(
+                "media-removable" if is_removable else "drive-harddisk", Gtk.IconSize.DIALOG)
+            if othermount:
+                img_volume = Gtk.Image.new_from_icon_name("network-server", Gtk.IconSize.DIALOG)
+        else:
+            if not phone:
+                if not card:
+                    img_volume = Gtk.Image.new_from_icon_name("media-optical", Gtk.IconSize.DIALOG)
+                else:
+                    img_volume = Gtk.Image.new_from_icon_name("media-flash", Gtk.IconSize.DIALOG)
+            else:
+                img_volume = Gtk.Image.new_from_icon_name("phone", Gtk.IconSize.DIALOG)
+
 
         box_volume_info = Gtk.Box.new(Gtk.Orientation.VERTICAL, 3)
 
@@ -397,35 +435,162 @@ class MainWindow:
         
     def addRemovableDevicesToList(self):
         self.box_removables.foreach(lambda child: self.box_removables.remove(child))
-        
-        drives = self.vm.get_connected_drives()
-        for dr in drives:
+
+        connected_drives = self.vm.get_connected_drives()
+
+        for dr in connected_drives:
             if dr.has_volumes() and dr.is_removable():
+                # print("{} {}".format(dr.get_name(), dr.get_icon().to_string()))
+                # print("{} {}".format(dr.get_name(), dr.is_media_removable()))
+                # print("{} {}".format(dr.get_name(), dr.get_identifier(Gio.VOLUME_IDENTIFIER_KIND_UNIX_DEVICE)))
+
                 # Drive Label
                 lbl_drive_name = Gtk.Label.new()
                 lbl_drive_name.set_markup(f'<span size="medium">{dr.get_name()}</span>')
                 lbl_drive_name.set_halign(Gtk.Align.START)
-
-                # Drive Frame
-                # frame = Gtk.Frame.new()
-                # frame.set_shadow_type(Gtk.ShadowType.IN)
 
                 # Volume ListBox
                 listbox = Gtk.ListBox.new()
                 listbox.set_selection_mode(Gtk.SelectionMode.NONE)
                 listbox.connect("row-activated", self.on_volume_row_activated)
                 listbox.get_style_context().add_class("pardus-mycomputer-listbox")
-                # frame.add(listbox)
-                
+
                 # Add Volumes to the ListBox:
                 for vl in dr.get_volumes():
-                    self.addVolumeRow(vl, listbox, True)
+                    self.addVolumeRow(vl, listbox, True,
+                                      media=dr.is_media_removable() if dr.is_media_removable() else False,
+                                      card=self.is_card(vl))
+                    try:
+                        if vl.get_mount():
+                            self.mount_paths.append(vl.get_mount().get_root().get_path())
+                    except Exception as e:
+                        print("mount_paths append error: {}".format(e))
+
                 
                 #self.box_removables.add(lbl_drive_name)
                 self.box_removables.add(listbox)
+
+
+        # disk images, phones
+        drives = []
+        for cd in connected_drives:
+            if cd.get_volumes():
+                for gvcd in cd.get_volumes():
+                    drives.append(gvcd)
+        volumes = self.vm.get_volumes()
+        others = [volume for volume in volumes if volume not in drives]
+
+        for other in others:
+            if other.get_drive() is None:
+
+                # Drive Label
+                lbl_drive_name = Gtk.Label.new()
+                lbl_drive_name.set_markup(f'<span size="medium">{other.get_name()}</span>')
+                lbl_drive_name.set_halign(Gtk.Align.START)
+
+                # Volume ListBox
+                listbox = Gtk.ListBox.new()
+                listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+                listbox.connect("row-activated", self.on_volume_row_activated)
+                listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+
+                # Add Volumes to the ListBox:
+                self.addVolumeRow(other, listbox, True, media=True, phone=self.is_phone(other))
+
+                try:
+                    if other.get_mount():
+                        self.mount_paths.append(other.get_mount().get_root().get_path())
+                except Exception as e:
+                    print("mount_paths append error: {}".format(e))
+
+                # self.box_removables.add(lbl_drive_name)
+                self.box_removables.add(listbox)
+
+
+        # smb, sftp vs..
+        connected_mounts = []
+        for cd in connected_drives:
+            if cd.get_volumes():
+                for gvcd in cd.get_volumes():
+                    if gvcd.get_mount():
+                        connected_mounts.append(gvcd.get_mount())
+        all_mounts = self.vm.get_mounts()
+        mounts = [mount for mount in all_mounts if mount not in connected_mounts]
+        for mount in mounts:
+            if mount.get_volume() is None:
+
+                if mount.get_root().get_path() not in self.mount_paths:
+                    # Drive Label
+                    lbl_drive_name = Gtk.Label.new()
+                    lbl_drive_name.set_markup(f'<span size="medium">{mount.get_name()}</span>')
+                    lbl_drive_name.set_halign(Gtk.Align.START)
+
+                    # Volume ListBox
+                    listbox = Gtk.ListBox.new()
+                    listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+                    listbox.connect("row-activated", self.on_volume_row_activated)
+                    listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+
+                    # Add Volumes to the ListBox:
+                    self.addVolumeRow(mount, listbox, True, othermount=True)
+
+                    # self.box_removables.add(lbl_drive_name)
+                    self.box_removables.add(listbox)
         
         self.box_removables.show_all()
-    
+
+
+    def is_phone(self, volume):
+        usb = False
+        phone = False
+        drive = False
+        try:
+            if "/usb/" in volume.get_identifier(Gio.VOLUME_IDENTIFIER_KIND_UNIX_DEVICE):
+                usb = True
+        except Exception as e:
+            print("Error in get_identifier(): {}".format(e))
+
+        try:
+            if "phone" in volume.get_icon().to_string():
+                phone = True
+            if "drive" in volume.get_icon().to_string():
+                drive = True
+        except Exception as e:
+                print("Error in get_symbolic_icon(): {}".format(e))
+
+        if phone:
+            return True
+        else:
+            if not drive and usb:
+                return True
+
+        return False
+
+    def is_card(self, volume):
+        mmc = False
+        card = False
+        drive = False
+        try:
+            if "/dev/mmc" in volume.get_identifier(Gio.VOLUME_IDENTIFIER_KIND_UNIX_DEVICE):
+                mmc = True
+        except Exception as e:
+            print("Error in get_identifier(): {}".format(e))
+
+        try:
+            if "flash" in volume.get_icon().to_string():
+                card = True
+            if "media-removable" in volume.get_icon().to_string():
+                drive = True
+        except Exception as e:
+                print("Error in get_symbolic_icon(): {}".format(e))
+
+        if card:
+            return True
+        else:
+            if not drive and mmc:
+                return True
+
+        return False
     # Window methods:
     def onDestroy(self, action):
         self.window.get_application().quit()
@@ -444,18 +609,26 @@ class MainWindow:
             self.onDestroy(listbox)
 
     def on_volume_row_activated(self, listbox, row):
-        mount  = row._volume.get_mount()
+        try:
+            mount  = row._volume.get_mount()
+        except:
+            mount = row._volume
+
         if mount == None:
             self.tryMountVolume(row)
         else:
-            subprocess.run(["xdg-open", mount.get_root().get_parse_name()])
+            subprocess.run(["xdg-open", mount.get_root().get_path()])
 
+        if row._volume.get_drive():
             if row._volume.get_drive().is_removable():
                 if self.UserSettings.config_closeapp_usb:
                     self.onDestroy(listbox)
             else:
                 if self.UserSettings.config_closeapp_hdd:
                     self.onDestroy(listbox)
+        else:
+            if self.UserSettings.config_closeapp_usb:
+                self.onDestroy(listbox)
     
     def on_btn_volume_settings_clicked(self, btn):
 
@@ -471,8 +644,10 @@ class MainWindow:
         else:
             self.popover_dt_stack.set_visible_child_name("disk")
 
-
-        mount = btn._volume.get_mount()
+        try:
+            mount = btn._volume.get_mount()
+        except:
+            mount = btn._volume
         if mount == None:
             self.tryMountVolume(btn)
             return
@@ -482,7 +657,7 @@ class MainWindow:
         # self.popover_removable.set_sensitive(True)
         self.popover_volume.set_sensitive(True)
 
-        mount_point = mount.get_root().get_parse_name()
+        mount_point = mount.get_root().get_path()
         self.selected_volume_info = DiskManager.get_file_info(mount_point)
 
         self.cb_mount_on_startup.set_active(DiskManager.is_drive_automounted(self.selected_volume_info["device"]))
@@ -562,7 +737,7 @@ class MainWindow:
         DiskManager.set_automounted(self.selected_volume_info["device"], cb.get_active())
     
     def on_btn_format_removable_clicked(self, btn):
-        mount_point = self.selected_volume.get_mount().get_root().get_parse_name()
+        mount_point = self.selected_volume.get_mount().get_root().get_path()
         file_info = DiskManager.get_file_info(mount_point)
 
         self.popover_volume.popdown()
@@ -572,15 +747,38 @@ class MainWindow:
     def on_btn_unmount_clicked(self, btn):
         self.actioned_volume = self.selected_volume
 
-        mount_point = self.actioned_volume.get_mount().get_root().get_parse_name()
+        try:
+            network_device = False
+            mount_point = self.actioned_volume.get_mount().get_root().get_path()
+        except:
+            network_device = True
+            mount_point = self.actioned_volume.get_root().get_path()
 
         command = [os.path.dirname(os.path.abspath(__file__)) + "/Unmount.py", "unmount", mount_point]
 
         summary = _("Please wait")
-        if self.actioned_volume.get_drive().is_removable():
-            body = _("USB disk is unmounting.")
+        if network_device:
+            body = _("Device is unmounting.")
         else:
-            body = _("Disk is unmounting.")
+            if self.actioned_volume.get_drive():
+                if self.actioned_volume.get_drive().is_removable():
+                    if self.actioned_volume.get_drive().is_media_removable():
+                        if self.is_card(self.actioned_volume):
+                            body = _("Card drive is unmounting.")
+                        else:
+                            body = _("Optical disk is unmounting.")
+                    else:
+                        body = _("USB disk is unmounting.")
+                else:
+                    body = _("Disk is unmounting.")
+            else:
+                if self.is_phone(self.actioned_volume):
+                    body = _("Phone is unmounting.")
+                else:
+                    if self.is_card(self.actioned_volume):
+                        body = _("Card drive is unmounting.")
+                    else:
+                        body = _("Optical drive is unmounting.")
 
         self.notify(summary, body, "emblem-synchronizing-symbolic")
 
@@ -590,10 +788,12 @@ class MainWindow:
     def on_mount_added(self, volumemonitor, mount):
         self.addHardDisksToList()
         self.addRemovableDevicesToList()
+        self.mount_paths.clear()
 
     def on_mount_removed(self, volumemonitor, mount):
         self.addHardDisksToList()
         self.addRemovableDevicesToList()
+        self.mount_paths.clear()
 
     def on_btn_volume_details_clicked(self, btn):
         self.showDiskDetailsDialog(self.selected_volume)
@@ -655,14 +855,37 @@ class MainWindow:
     def onProcessExit(self, pid, status):
         # print(f'pid, status: {pid, status}')
 
-        vl = self.actioned_volume.get_mount()
+        try:
+            network_device = False
+            vl = self.actioned_volume.get_mount()
+        except:
+            network_device = True
+            vl = self.actioned_volume
         dr = self.actioned_volume.get_drive()
 
         summary = _("Unmounting process is done")
-        if dr.is_removable():
-            body = _("You can eject the USB disk.")
+        if network_device:
+            body = _("You can eject the device.")
         else:
-            body = _("You can eject the disk.")
+            if dr:
+                if dr.is_removable():
+                    if dr.is_media_removable():
+                        if self.is_card(dr):
+                            body = _("You can eject the card drive.")
+                        else:
+                            body = _("You can eject the Optical drive.")
+                    else:
+                        body = _("You can eject the USB disk.")
+                else:
+                    body = _("You can eject the disk.")
+            else:
+                if self.is_phone(self.actioned_volume):
+                    body = _("You can eject the phone.")
+                else:
+                    if self.is_card(self.actioned_volume):
+                        body = _("You can eject the card drive.")
+                    else:
+                        body = _("You can eject the optical drive.")
 
         def on_unmounted(vl, task):
             try:
