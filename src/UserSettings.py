@@ -23,6 +23,12 @@ class UserSettings(object):
         self.config_autorefresh = None
         self.config_autorefresh_time = None
 
+        self.default_closeapp_pardus = False
+        self.default_closeapp_hdd = False
+        self.default_closeapp_usb = False
+        self.default_autorefresh = False
+        self.default_autorefresh_time = 1.5
+
 
     def createDefaultConfig(self, force=False):
         self.config['MAIN'] = {
@@ -51,11 +57,11 @@ class UserSettings(object):
             print("{}".format(e))
             print("user config read error ! Trying create defaults")
             # if not read; try to create defaults
-            self.config_closeapp_pardus = False
-            self.config_closeapp_hdd = False
-            self.config_closeapp_usb = False
-            self.config_autorefresh = False
-            self.config_autorefresh_time = 5.0
+            self.config_closeapp_pardus = self.default_closeapp_pardus
+            self.config_closeapp_hdd = self.default_closeapp_hdd
+            self.config_closeapp_usb = self.default_closeapp_usb
+            self.config_autorefresh = self.default_autorefresh
+            self.config_autorefresh_time = self.default_autorefresh_time
             try:
                 self.createDefaultConfig(force=True)
             except Exception as e:
