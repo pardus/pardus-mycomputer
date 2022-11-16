@@ -856,6 +856,8 @@ class MainWindow:
                     subprocess.run(["xdg-open", self.entry_addr.get_text()])
                     self.entry_addr.set_text("")
                     return True
+                elif err.code == Gio.IOErrorEnum.FAILED_HANDLED:
+                    print("operation cancelled")
                 else:
                     self.dialog_mount_error.set_markup("<big><b>{}</b></big>".format(_("Error")))
                     self.dialog_mount_error.format_secondary_markup("{}".format(_(err.message)))
