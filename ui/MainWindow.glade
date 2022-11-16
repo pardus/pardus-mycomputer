@@ -669,6 +669,7 @@ Fatih Altun</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="selection-mode">none</property>
+                        <signal name="row-activated" handler="on_listbox_recent_servers_row_activated" swapped="no"/>
                       </object>
                     </child>
                   </object>

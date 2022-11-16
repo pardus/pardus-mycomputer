@@ -150,6 +150,7 @@ class MainWindow:
         self.popover_connect = UI("popover_connect")
         self.entry_addr = UI("entry_addr")
         self.popover_connect_examples = UI("popover_connect_examples")
+        self.popover_recent_servers = UI("popover_recent_servers")
         self.stack_recent_servers = UI("stack_recent_servers")
         self.listbox_recent_servers = UI("listbox_recent_servers")
 
@@ -1043,6 +1044,9 @@ class MainWindow:
         else:
             self.stack_recent_servers.set_visible_child_name("empty")
 
+    def on_listbox_recent_servers_row_activated(self, list_box, row):
+        self.entry_addr.set_text("{}".format(row.get_children()[0].name))
+        self.popover_recent_servers.popdown()
 
     def on_btn_settings_clicked(self, button):
         if self.stack_main.get_visible_child_name() == "settings":
