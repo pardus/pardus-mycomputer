@@ -21,7 +21,7 @@ TRANSLATIONS_PATH = "/usr/share/locale"
 locale.bindtextdomain(APPNAME, TRANSLATIONS_PATH)
 locale.textdomain(APPNAME)
 # locale.setlocale(locale.LC_ALL, SYSTEM_LANGUAGE)
-        
+
 
 class MainWindow:
     def __init__(self, application):
@@ -127,6 +127,26 @@ class MainWindow:
         self.sw_autorefresh = UI("sw_autorefresh")
 
         self.img_settings = UI("img_settings")
+
+        # Mount dialog and popovers
+        self.dialog_mount = UI("dialog_mount")
+        self.dialog_mount_error = UI("dialog_mount_error")
+        self.lbl_mount_message = UI("lbl_mount_message")
+        self.entry_mount_username = UI("entry_mount_username")
+        self.entry_mount_password = UI("entry_mount_password")
+        self.entry_mount_domain = UI("entry_mount_domain")
+        self.box_username = UI("box_username")
+        self.box_domain = UI("box_domain")
+        self.box_password = UI("box_password")
+        self.box_password_options = UI("box_password_options")
+        self.box_user_domain_pass = UI("box_user_domain_pass")
+        self.box_anonym = UI("box_anonym")
+        self.btn_mount_connect = UI("btn_mount_connect")
+        self.mount_password_options = UI("mount_password_options")
+        self.mount_anonym_options = UI("mount_anonym_options")
+        self.popover_connect = UI("popover_connect")
+        self.entry_addr = UI("entry_addr")
+        self.popover_connect_examples = UI("popover_connect_examples")
 
         # About dialog
         self.dialog_about = UI("dialog_about")
@@ -349,6 +369,8 @@ class MainWindow:
         btn_volume_settings._lbl_volume_size_info = lbl_volume_size_info
         btn_volume_settings._pb_volume_size = pb_volume_size
         btn_volume_settings._is_removable = is_removable
+        btn_volume_settings._is_media = media
+        btn_volume_settings._is_othermount = othermount
         # btn_volume_settings._lbl_volume_dev_directory = lbl_volume_dev_directory
 
         btn_volume_settings.connect("released", self.on_btn_volume_settings_clicked)
@@ -641,7 +663,14 @@ class MainWindow:
         self.popover_volume.set_position(Gtk.PositionType.LEFT)
 
         if btn._is_removable:
-            self.popover_dt_stack.set_visible_child_name("usb")
+            if not btn._is_media and not btn._is_othermount:
+                self.popover_dt_stack.set_visible_child_name("usb")
+            else:
+                if btn._is_othermount:
+                    self.popover_dt_stack.set_visible_child_name("save")
+                else:
+                    if btn._is_media:
+                        self.popover_dt_stack.set_visible_child_name("empty")
         else:
             self.popover_dt_stack.set_visible_child_name("disk")
 
@@ -668,6 +697,10 @@ class MainWindow:
     def on_popover_volume_closed(self, popover):
         # auto refresh control of disks
         self.autorefresh()
+
+    def on_btn_refresh_clicked(self, button):
+        print("Manually refreshing disks")
+        self.addDisksToGUI()
 
     def on_sw_closeapp_pardus_state_set(self, switch, state):
         user_config_closeapp_pardus = self.UserSettings.config_closeapp_pardus
@@ -807,9 +840,144 @@ class MainWindow:
         self.dialog_disk_details.run()
         self.dialog_disk_details.hide()
 
-    def on_btn_refresh_clicked(self, button):
-        print("Manually refreshing disks")
-        self.addDisksToGUI()
+    def on_btn_save_removable_clicked(self, button):
+        pass
+
+
+    def on_btn_mount_connect_clicked(self, button):
+        def on_mounted(source_object, res):
+            try:
+                source_object.mount_enclosing_volume_finish(res)
+                subprocess.run(["xdg-open", self.entry_addr.get_text()])
+                self.entry_addr.set_text("")
+                return True
+            except GLib.GError as err:
+                if err.code == Gio.IOErrorEnum.ALREADY_MOUNTED:
+                    subprocess.run(["xdg-open", self.entry_addr.get_text()])
+                    self.entry_addr.set_text("")
+                    return True
+                else:
+                    self.dialog_mount_error.set_markup("<big><b>{}</b></big>".format(_("Error")))
+                    self.dialog_mount_error.format_secondary_markup("{}".format(_(err.message)))
+                    self.dialog_mount_error.run()
+                    self.dialog_mount_error.hide()
+                    print("{}".format(err.message))
+
+        def ask_password_cb(mount_operation, message, default_user, default_domain, flags):
+            print(message)
+            print(flags)
+
+            if Gio.AskPasswordFlags.ANONYMOUS_SUPPORTED & flags:
+                self.box_anonym.set_visible(True)
+                self.box_user_domain_pass.set_sensitive(not self.mount_anonym_options.get_active())
+                self.box_password_options.set_sensitive(not self.mount_anonym_options.get_active())
+            else:
+                self.box_anonym.set_visible(False)
+
+            if Gio.AskPasswordFlags.NEED_USERNAME & flags:
+                self.box_username.set_visible(True)
+            else:
+                self.box_username.set_visible(False)
+
+            if Gio.AskPasswordFlags.NEED_DOMAIN & flags:
+                self.box_domain.set_visible(True)
+            else:
+                self.box_domain.set_visible(False)
+
+            if Gio.AskPasswordFlags.NEED_PASSWORD & flags:
+                self.box_password.set_visible(True)
+                self.box_password_options.set_visible(True)
+            else:
+                self.box_password.set_visible(False)
+                self.box_password_options.set_visible(False)
+
+            if Gio.AskPasswordFlags.SAVING_SUPPORTED  & flags:
+                self.box_password_options.set_visible(True)
+            else:
+                self.box_password_options.set_visible(False)
+
+            passwd_option = 1
+            self.lbl_mount_message.set_markup("<b>{}</b>".format(_(message)))
+            self.entry_mount_username.set_text(default_user)
+            self.entry_mount_password.set_text("")
+            self.entry_mount_domain.set_text(default_domain)
+            response = self.dialog_mount.run()
+            self.dialog_mount.hide()
+            self.lbl_mount_message.grab_focus()
+
+            if response == Gtk.ResponseType.OK:
+                for radio in self.mount_password_options.get_group():
+                    if radio.get_active():
+                        passwd_option = int(radio.get_name())
+
+                if Gio.AskPasswordFlags.ANONYMOUS_SUPPORTED & flags:
+                    mount_operation.set_anonymous(self.mount_anonym_options.get_active())
+
+                if Gio.AskPasswordFlags.NEED_USERNAME & flags:
+                    mount_operation.set_username(self.entry_mount_username.get_text())
+
+                if Gio.AskPasswordFlags.NEED_PASSWORD & flags:
+                    mount_operation.set_password(self.entry_mount_password.get_text())
+
+                if Gio.AskPasswordFlags.SAVING_SUPPORTED & flags:
+                    mount_operation.set_password_save(Gio.PasswordSave(passwd_option))
+
+                if Gio.AskPasswordFlags.NEED_DOMAIN & flags:
+                    mount_operation.set_domain(self.entry_mount_domain.get_text())
+                mount_operation.reply(Gio.MountOperationResult.HANDLED)
+
+
+            elif response == Gtk.ResponseType.CANCEL:
+                mount_operation.reply(Gio.MountOperationResult.ABORTED)
+
+        def ask_question_cb(mount_operation, message, choices):
+            print("in ask_question_cb")
+            print(message)
+            print(choices)
+            # set as 0 for now
+            # FIXME
+            # add dialog for this too
+            mount_operation.set_choice(0)
+            mount_operation.reply(Gio.MountOperationResult.HANDLED)
+
+        self.popover_connect.popdown()
+        addr = self.entry_addr.get_text()
+
+        file = Gio.File.new_for_commandline_arg(addr)
+        mount_operation = Gio.MountOperation()
+        mount_operation.set_domain(addr)
+        mount_operation.connect("ask-password", ask_password_cb)
+        mount_operation.connect("ask-question", ask_question_cb)
+        file.mount_enclosing_volume(Gio.MountMountFlags.NONE, mount_operation, None, on_mounted)
+
+
+    def on_mount_anonym_options_toggled(self, widget):
+        self.box_user_domain_pass.set_sensitive(not widget.get_active())
+        self.box_password_options.set_sensitive(not widget.get_active())
+
+    def on_entry_mount_password_icon_press(self, entry, icon_pos, event):
+        entry.set_visibility(True)
+        entry.set_icon_from_icon_name(Gtk.EntryIconPosition(1), "view-conceal-symbolic")
+
+    def on_entry_mount_password_icon_release(self, entry, icon_pos, event):
+        entry.set_visibility(False)
+        entry.set_icon_from_icon_name(Gtk.EntryIconPosition(1), "view-reveal-symbolic")
+
+    def on_btn_mount_connect_ok_clicked(self, button):
+        self.dialog_mount.response(Gtk.ResponseType.OK)
+
+    def on_btn_mount_cancel_clicked(self, button):
+        self.dialog_mount.hide()
+        self.dialog_mount.response(Gtk.ResponseType.CANCEL)
+
+    def on_entry_addr_changed(self, editable):
+        if editable.get_text().strip() != "":
+            self.btn_mount_connect.set_sensitive(True)
+        else:
+            self.btn_mount_connect.set_sensitive(False)
+
+    def on_entry_addr_icon_press(self, entry, icon_pos, event):
+        self.popover_connect_examples.popup()
 
     def on_btn_settings_clicked(self, button):
         if self.stack_main.get_visible_child_name() == "settings":
