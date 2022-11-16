@@ -15,6 +15,7 @@ class UserSettings(object):
         self.user_home = Path.home()
         self.user_config_dir = Path.joinpath(self.user_home, Path(".config/pardus-mycomputer"))
         self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
+        self.user_servers_file = Path.joinpath(self.user_config_dir, Path("servers"))
 
         self.config = configparser.ConfigParser(strict=False)
         self.config_closeapp_pardus = None
@@ -88,3 +89,36 @@ class UserSettings(object):
         except:
             print("{} : {}".format("mkdir error", dir))
             return False
+
+    def addServer(self, server):
+        def add():
+            with open(self.user_servers_file, "a+") as sf:
+                for line in sf:
+                    if server == line:
+                        break
+                else:
+                    sf.write("{}\n".format(server))
+        if not Path.is_file(self.user_servers_file):
+            self.createDir(self.user_config_dir)
+            self.user_servers_file.touch(exist_ok=True)
+            add()
+        else:
+            add()
+
+    def removeServer(self, server):
+        if Path.is_file(self.user_servers_file):
+            with open(self.user_servers_file, "r") as f:
+                lines = f.readlines()
+            with open(self.user_servers_file, "w") as f:
+                for line in lines:
+                    if line.strip("\n") != server:
+                        f.write(line)
+
+    def getServer(self):
+        servers = []
+        if Path.is_file(self.user_servers_file):
+            with open(self.user_servers_file, "r") as servf:
+                for line in servf.readlines():
+                    if line.strip("\n").strip() != "":
+                        servers.append(line.strip("\n").strip())
+        return servers

@@ -67,6 +67,9 @@ class MainWindow:
         # auto refresh control of disks
         self.autorefresh()
 
+        # add recent connections to listbox_recent_server from file
+        self.add_recents_from_file()
+
         # Show Screen:
         self.window.show_all()
 
@@ -147,6 +150,8 @@ class MainWindow:
         self.popover_connect = UI("popover_connect")
         self.entry_addr = UI("entry_addr")
         self.popover_connect_examples = UI("popover_connect_examples")
+        self.stack_recent_servers = UI("stack_recent_servers")
+        self.listbox_recent_servers = UI("listbox_recent_servers")
 
         # About dialog
         self.dialog_about = UI("dialog_about")
@@ -614,6 +619,16 @@ class MainWindow:
                 return True
 
         return False
+
+
+    def add_recents_from_file(self):
+        servers = self.UserSettings.getServer()
+        if servers:
+            for server in servers:
+                self.add_to_recent_listbox(server)
+            self.listbox_recent_servers.show_all()
+
+
     # Window methods:
     def onDestroy(self, action):
         self.window.get_application().quit()
@@ -843,18 +858,59 @@ class MainWindow:
     def on_btn_save_removable_clicked(self, button):
         pass
 
+    def network_mount_success(self):
+        in_list = False
+        for row in self.listbox_recent_servers:
+            if row.get_children()[0].name == self.entry_addr.get_text():
+                in_list = True
+                print("{} already in recent list".format(self.entry_addr.get_text()))
+        if not in_list:
+            self.add_to_recent_listbox(self.entry_addr.get_text())
+            self.UserSettings.addServer(self.entry_addr.get_text())
+
+        self.listbox_recent_servers.show_all()
+
+        subprocess.run(["xdg-open", self.entry_addr.get_text()])
+
+        self.entry_addr.set_text("")
+
+    def add_to_recent_listbox(self, server):
+        label = Gtk.Label.new()
+        label.set_text(server)
+        button = Gtk.Button.new()
+        button.name = server
+        button.connect("clicked", self.remove_from_recent_clicked)
+        button.props.valign = Gtk.Align.CENTER
+        button.props.halign = Gtk.Align.CENTER
+        button.props.always_show_image = True
+        button.set_image(Gtk.Image.new_from_icon_name("edit-delete-symbolic", Gtk.IconSize.BUTTON))
+        button.set_relief(Gtk.ReliefStyle.NONE)
+        box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 3)
+        box.set_margin_top(5)
+        box.set_margin_bottom(5)
+        box.set_margin_start(5)
+        box.set_margin_end(5)
+        box.pack_start(label, False, True, 0)
+        box.pack_end(button, False, True, 0)
+        box.name = server
+        self.listbox_recent_servers.add(box)
+
+    def remove_from_recent_clicked(self, button):
+        for row in self.listbox_recent_servers:
+            if row.get_children()[0].name == button.name:
+                self.listbox_recent_servers.remove(row)
+
+        self.UserSettings.removeServer(button.name)
 
     def on_btn_mount_connect_clicked(self, button):
         def on_mounted(source_object, res):
             try:
                 source_object.mount_enclosing_volume_finish(res)
-                subprocess.run(["xdg-open", self.entry_addr.get_text()])
-                self.entry_addr.set_text("")
+                self.network_mount_success()
                 return True
             except GLib.GError as err:
                 if err.code == Gio.IOErrorEnum.ALREADY_MOUNTED:
-                    subprocess.run(["xdg-open", self.entry_addr.get_text()])
-                    self.entry_addr.set_text("")
+                    self.network_mount_success()
                     return True
                 elif err.code == Gio.IOErrorEnum.FAILED_HANDLED:
                     print("operation cancelled")
@@ -980,6 +1036,13 @@ class MainWindow:
 
     def on_entry_addr_icon_press(self, entry, icon_pos, event):
         self.popover_connect_examples.popup()
+
+    def on_btn_server_list_toggled(self, widget):
+        if len(self.listbox_recent_servers) > 0:
+            self.stack_recent_servers.set_visible_child_name("list")
+        else:
+            self.stack_recent_servers.set_visible_child_name("empty")
+
 
     def on_btn_settings_clicked(self, button):
         if self.stack_main.get_visible_child_name() == "settings":
