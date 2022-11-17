@@ -714,7 +714,8 @@ Fatih Altun</property>
             <child>
               <object class="GtkLabel" id="dlg_lbl_name">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
+                <property name="has-focus">True</property>
                 <property name="label">Disk Adı</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
