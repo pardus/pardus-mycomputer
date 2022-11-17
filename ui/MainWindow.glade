@@ -155,7 +155,7 @@ Fatih Altun</property>
                         <property name="label" translatable="yes">Anonymous</property>
                         <property name="name">1</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">False</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
@@ -172,7 +172,7 @@ Fatih Altun</property>
                         <property name="label" translatable="yes">Registered User</property>
                         <property name="name">2</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">False</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">mount_anonym_options</property>
@@ -344,7 +344,7 @@ Fatih Altun</property>
                     <property name="label" translatable="yes">Forget password immediately</property>
                     <property name="name">0</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="can-focus">False</property>
                     <property name="receives-default">False</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">mount_password_options</property>
@@ -360,7 +360,7 @@ Fatih Altun</property>
                     <property name="label" translatable="yes">Remember password after you logout</property>
                     <property name="name">1</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="can-focus">False</property>
                     <property name="receives-default">False</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -376,7 +376,7 @@ Fatih Altun</property>
                     <property name="label" translatable="yes">Remember forever</property>
                     <property name="name">2</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="can-focus">False</property>
                     <property name="receives-default">False</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">mount_password_options</property>
@@ -413,7 +413,7 @@ Fatih Altun</property>
           <object class="GtkButton" id="btn_mount_cancel">
             <property name="label" translatable="yes">Cancel</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <signal name="clicked" handler="on_btn_mount_cancel_clicked" swapped="no"/>
           </object>
@@ -422,7 +422,7 @@ Fatih Altun</property>
           <object class="GtkButton" id="btn_mount_connect_ok">
             <property name="label" translatable="yes">Connect</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <signal name="clicked" handler="on_btn_mount_connect_ok_clicked" swapped="no"/>
             <style>
@@ -478,7 +478,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkButton" id="menu_aboutpardus">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
             <signal name="clicked" handler="on_menu_aboutpardus_clicked" swapped="no"/>
@@ -534,7 +534,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkButton" id="menu_aboutapp">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
             <signal name="clicked" handler="on_menu_aboutapp_clicked" swapped="no"/>
@@ -1173,7 +1173,7 @@ Fatih Altun</property>
                   <object class="GtkCheckButton" id="cb_mount_on_startup">
                     <property name="label" translatable="yes">Mount on Startup</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="can-focus">False</property>
                     <property name="receives-default">False</property>
                     <property name="draw-indicator">True</property>
                     <signal name="released" handler="on_cb_mount_on_startup_released" swapped="no"/>
@@ -1238,7 +1238,7 @@ Fatih Altun</property>
                   <object class="GtkButton" id="btn_unmount">
                     <property name="label" translatable="yes">Unmount</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="can-focus">False</property>
                     <property name="receives-default">True</property>
                     <signal name="clicked" handler="on_btn_unmount_clicked" swapped="no"/>
                   </object>
@@ -1301,7 +1301,7 @@ Fatih Altun</property>
               <object class="GtkButton" id="btn_dlg_disk_details_ok">
                 <property name="label" translatable="yes">Ok</property>
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="halign">end</property>
                 <style>
@@ -1393,7 +1393,7 @@ Fatih Altun</property>
                 <child>
                   <object class="GtkMenuButton" id="btn_server_list">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
+                    <property name="can-focus">False</property>
                     <property name="receives-default">True</property>
                     <property name="direction">up</property>
                     <property name="popover">popover_recent_servers</property>
@@ -1430,7 +1430,7 @@ Fatih Altun</property>
                 <property name="label" translatable="yes">Connect</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="valign">center</property>
                 <signal name="clicked" handler="on_btn_mount_connect_clicked" swapped="no"/>
@@ -1799,7 +1799,7 @@ Fatih Altun</property>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
@@ -1921,7 +1921,7 @@ Fatih Altun</property>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
@@ -2501,7 +2501,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkButton" id="btn_refresh">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Refresh</property>
             <property name="relief">none</property>
@@ -2521,7 +2521,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkMenuButton" id="headerbar_menubutton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
@@ -2542,7 +2542,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkButton" id="btn_settings">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
             <signal name="clicked" handler="on_btn_settings_clicked" swapped="no"/>
@@ -2561,7 +2561,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkMenuButton" id="header_btn_connect">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>

@@ -393,6 +393,7 @@ class MainWindow:
         # Add to listbox
         listbox.prepend(box_volume)
         row = listbox.get_row_at_index(0)
+        row.set_can_focus(False)
         row._volume = vl
         row._btn_volume_settings = btn_volume_settings
         row._lbl_volume_name = lbl_volume_name
@@ -452,7 +453,7 @@ class MainWindow:
                 listbox.connect("row-activated", self.on_volume_row_activated)
                 listbox.get_style_context().add_class("pardus-mycomputer-listbox")
                 # frame.add(listbox)
-                
+
                 # Add Volumes to the ListBox:
                 for vl in dr.get_volumes():
                     self.addVolumeRow(vl, listbox, False)
