@@ -153,6 +153,7 @@ class MainWindow:
         self.popover_recent_servers = UI("popover_recent_servers")
         self.stack_recent_servers = UI("stack_recent_servers")
         self.listbox_recent_servers = UI("listbox_recent_servers")
+        self.stack_save_delete_removable = UI("stack_save_delete_removable")
 
         # About dialog
         self.dialog_about = UI("dialog_about")
@@ -172,6 +173,9 @@ class MainWindow:
         self.actioned_volume = None
         self.autorefresh_glibid = None
         self.mount_paths = []
+        self.net_mounts = []
+        self.selected_mount_uri = ""
+        self.selected_mount_name = ""
 
         # VolumeMonitor
         self.vm = Gio.VolumeMonitor.get()
@@ -257,7 +261,7 @@ class MainWindow:
         except:
             gm = vl
 
-        if gm != None:
+        if gm != None and not isinstance(vl, str):
             # print("{} {} {}".format(vl.get_name(), vl.get_mount(), vl.get_mount().get_root().get_path()))
             mount_point = gm.get_root().get_path()
             file_info = DiskManager.get_file_info(mount_point)
@@ -293,7 +297,11 @@ class MainWindow:
             row_volume._btn_volume_settings.set_sensitive(True)
             row_volume.show_all()
         else:
-            print(f"can't mount the volume: {vl.get_name()}")
+            name = vl if isinstance(vl, str) else vl.get_name()
+            print(f"can't mount the volume: {name}")
+            if row_volume._mount_uri != "" and row_volume._mount_name != "":
+                row_volume._btn_volume_settings.set_sensitive(isinstance(vl, str))
+
 
     
     def tryMountVolume(self, row_volume):
@@ -318,13 +326,18 @@ class MainWindow:
             self.showVolumeSizes(row_volume)
             return True
     
-    def addVolumeRow(self, vl, listbox, is_removable, media=False, phone=False, card=False, othermount=False):
+    def addVolumeRow(self, vl, listbox, is_removable, media=False, phone=False, card=False, othermount=False,
+                     mount_uri="", mount_name=""):
         # Prepare UI Containers:
         box_volume = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 7)
         if not media:
             img_volume = Gtk.Image.new_from_icon_name(
                 "media-removable" if is_removable else "drive-harddisk", Gtk.IconSize.DIALOG)
             if othermount:
+                # if mount_uri != "" and mount_name != "":
+                #     img_volume = Gtk.Image.new_from_icon_name("user-bookmarks", Gtk.IconSize.DIALOG)
+                # else:
+                #     img_volume = Gtk.Image.new_from_icon_name("network-server", Gtk.IconSize.DIALOG)
                 img_volume = Gtk.Image.new_from_icon_name("network-server", Gtk.IconSize.DIALOG)
         else:
             if not phone:
@@ -339,9 +352,11 @@ class MainWindow:
         box_volume_info = Gtk.Box.new(Gtk.Orientation.VERTICAL, 3)
 
         # Volume infos
+        name = vl if isinstance(vl, str) else vl.get_name()
+
         lbl_volume_name = Gtk.Label.new()
         lbl_volume_name.set_markup("<b>{}</b><small> ( {} )</small>".format(
-            vl.get_name(),_("Disk is available, click to mount.")))
+            name,_("Disk is available, click to mount.")))
         lbl_volume_name.set_halign(Gtk.Align.START)
 
         # lbl_volume_dev_directory = Gtk.Label.new()
@@ -371,6 +386,8 @@ class MainWindow:
         btn_volume_settings.set_relief(Gtk.ReliefStyle.NONE)
         btn_volume_settings.set_valign(Gtk.Align.CENTER)
         btn_volume_settings._volume = vl
+        btn_volume_settings._mount_uri = mount_uri
+        btn_volume_settings._mount_name = mount_name
         btn_volume_settings._lbl_volume_name = lbl_volume_name
         btn_volume_settings._lbl_volume_size_info = lbl_volume_size_info
         btn_volume_settings._pb_volume_size = pb_volume_size
@@ -384,8 +401,20 @@ class MainWindow:
         btn_volume_settings.set_popover(self.popover_volume)
         btn_volume_settings.set_sensitive(False)
 
+        # btn_remove_saved_server = Gtk.Button.new()
+        # btn_remove_saved_server.set_image(Gtk.Image.new_from_icon_name("edit-delete-symbolic", Gtk.IconSize.LARGE_TOOLBAR  ))
+        # btn_remove_saved_server.set_relief(Gtk.ReliefStyle.NONE)
+        # btn_remove_saved_server.set_valign(Gtk.Align.CENTER)
+        # btn_remove_saved_server._uri = mount_uri
+        # btn_remove_saved_server._name = mount_name
+        # btn_remove_saved_server._is_othermount = othermount
+        # btn_remove_saved_server.set_sensitive(True)
+        # btn_remove_saved_server.connect("clicked", self.on_btn_delete_removable_clicked)
+
+
         box_volume.add(img_volume)
         box_volume.pack_start(box_volume_info, True, True, 0)
+        # box_volume.pack_end(btn_remove_saved_server, False, True, 0)
         box_volume.pack_end(btn_volume_settings, False, True, 0)
         box_volume.props.margin = 7
 
@@ -396,10 +425,14 @@ class MainWindow:
         row.set_can_focus(False)
         row._volume = vl
         row._btn_volume_settings = btn_volume_settings
+        # row._btn_remove_saved_server = btn_remove_saved_server
         row._lbl_volume_name = lbl_volume_name
         row._lbl_volume_size_info = lbl_volume_size_info
         row._pb_volume_size = pb_volume_size
         # row._lbl_volume_dev_directory = lbl_volume_dev_directory
+
+        row._mount_uri = mount_uri
+        row._mount_name = mount_name
 
         # Disable asking mount on app startup
         # self.tryMountVolume(row)
@@ -566,6 +599,38 @@ class MainWindow:
 
                     # self.box_removables.add(lbl_drive_name)
                     self.box_removables.add(listbox)
+
+                    # control and remove saved list
+                    uri = mount.get_root().get_uri()
+                    name = mount.get_name()
+
+                    self.net_mounts.append({"uri": uri, "name": name})
+
+        # saved servers
+        saveds = self.UserSettings.getSavedServer()
+        for saved in saveds:
+
+            if not any(d["uri"] == saved["uri"] for d in self.net_mounts):
+
+                # Drive Label
+                lbl_drive_name = Gtk.Label.new()
+                lbl_drive_name.set_markup(f'<span size="medium">{saved["name"]}</span>')
+                lbl_drive_name.set_halign(Gtk.Align.START)
+
+                # Volume ListBox
+                listbox = Gtk.ListBox.new()
+                listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+                listbox.connect("row-activated", self.on_volume_row_activated)
+                listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+
+                # Add Volumes to the ListBox:
+                self.addVolumeRow(saved["uri"], listbox, True, othermount=True,
+                                  mount_uri=saved["uri"], mount_name=saved["name"])
+
+                # self.box_removables.add(lbl_drive_name)
+                self.box_removables.add(listbox)
+            else:
+                print("saved {} mount uri already in net_mounts".format(saved["uri"]))
         
         self.box_removables.show_all()
 
@@ -624,7 +689,7 @@ class MainWindow:
 
 
     def add_recents_from_file(self):
-        servers = self.UserSettings.getServer()
+        servers = self.UserSettings.getRecentServer()
         if servers:
             for server in servers:
                 if len(server.split(" ")) > 1:
@@ -661,20 +726,37 @@ class MainWindow:
         if mount == None:
             self.tryMountVolume(row)
         else:
-            subprocess.run(["xdg-open", mount.get_root().get_path()])
+            if isinstance(mount, str):
+                self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=mount)
+            else:
+                subprocess.run(["xdg-open", mount.get_root().get_path()])
 
-        if row._volume.get_drive():
-            if row._volume.get_drive().is_removable():
+        if not isinstance(row._volume, str):
+            if row._volume.get_drive():
+                if row._volume.get_drive().is_removable():
+                    if self.UserSettings.config_closeapp_usb:
+                        self.onDestroy(listbox)
+                else:
+                    if self.UserSettings.config_closeapp_hdd:
+                        self.onDestroy(listbox)
+            else:
                 if self.UserSettings.config_closeapp_usb:
                     self.onDestroy(listbox)
-            else:
-                if self.UserSettings.config_closeapp_hdd:
-                    self.onDestroy(listbox)
-        else:
-            if self.UserSettings.config_closeapp_usb:
-                self.onDestroy(listbox)
     
     def on_btn_volume_settings_clicked(self, btn):
+
+        # clear all disk info labels
+        self.dlg_lbl_name.set_label("")
+        self.dlg_lbl_model.set_label("")
+        self.dlg_lbl_dev.set_label("")
+        self.dlg_lbl_mountpoint.set_label("")
+        self.dlg_lbl_used_gb.set_label("")
+        self.dlg_lbl_free_gb.set_label("")
+        self.dlg_lbl_total_gb.set_label("")
+        self.dlg_lbl_filesystem_type.set_label("")
+
+        self.stack_unmount.set_visible(True)
+
 
         # disable auto refreshing because the popover is closing when auto refresh while open
         if self.autorefresh_glibid:
@@ -682,18 +764,6 @@ class MainWindow:
 
         self.popover_volume.set_relative_to(btn)
         self.popover_volume.set_position(Gtk.PositionType.LEFT)
-
-        if btn._is_removable:
-            if not btn._is_media and not btn._is_othermount:
-                self.popover_dt_stack.set_visible_child_name("usb")
-            else:
-                if btn._is_othermount:
-                    self.popover_dt_stack.set_visible_child_name("save")
-                else:
-                    if btn._is_media:
-                        self.popover_dt_stack.set_visible_child_name("empty")
-        else:
-            self.popover_dt_stack.set_visible_child_name("disk")
 
         try:
             mount = btn._volume.get_mount()
@@ -704,16 +774,43 @@ class MainWindow:
             return
 
         self.selected_volume = btn._volume
+        self.selected_mount_uri = btn._mount_uri
+        self.selected_mount_name = btn._mount_name
+
+        if btn._is_removable:
+            if not btn._is_media and not btn._is_othermount:
+                self.popover_dt_stack.set_visible_child_name("usb")
+            else:
+                if btn._is_othermount:
+                    self.popover_dt_stack.set_visible_child_name("save")
+                    try:
+                        uri = self.selected_volume.get_root().get_uri().strip()
+                        name = self.selected_volume.get_name().strip()
+                    except:
+                        # saved but not mounted network drive
+                        uri = btn._mount_uri
+                        name = btn._mount_name
+                    self.control_save_server_button(uri, name)
+                else:
+                    if btn._is_media:
+                        self.popover_dt_stack.set_visible_child_name("empty")
+        else:
+            self.popover_dt_stack.set_visible_child_name("disk")
 
         # self.popover_removable.set_sensitive(True)
         self.popover_volume.set_sensitive(True)
 
-        mount_point = mount.get_root().get_path()
-        self.selected_volume_info = DiskManager.get_file_info(mount_point)
+        if not isinstance(mount, str):
 
-        self.cb_mount_on_startup.set_active(DiskManager.is_drive_automounted(self.selected_volume_info["device"]))
+            mount_point = mount.get_root().get_path()
+            self.selected_volume_info = DiskManager.get_file_info(mount_point)
 
-        self.showDiskDetailsDialog(self.selected_volume)
+            self.cb_mount_on_startup.set_active(DiskManager.is_drive_automounted(self.selected_volume_info["device"]))
+
+            self.showDiskDetailsDialog(self.selected_volume)
+
+        else:
+            self.stack_unmount.set_visible(False)
 
     def on_popover_volume_closed(self, popover):
         # auto refresh control of disks
@@ -849,11 +946,13 @@ class MainWindow:
         self.addHardDisksToList()
         self.addRemovableDevicesToList()
         self.mount_paths.clear()
+        self.net_mounts.clear()
 
     def on_mount_removed(self, volumemonitor, mount):
-        self.addHardDisksToList()
-        self.addRemovableDevicesToList()
-        self.mount_paths.clear()
+        GLib.idle_add(self.addHardDisksToList)
+        GLib.idle_add(self.addRemovableDevicesToList)
+        GLib.idle_add(self.mount_paths.clear)
+        GLib.idle_add(self.net_mounts.clear)
 
     def on_btn_volume_details_clicked(self, btn):
         self.showDiskDetailsDialog(self.selected_volume)
@@ -862,7 +961,45 @@ class MainWindow:
         self.dialog_disk_details.hide()
 
     def on_btn_save_removable_clicked(self, button):
-        pass
+        uri = self.selected_volume.get_root().get_uri().strip()
+        name = self.selected_volume.get_name().strip()
+        print("saving server: {} {}".format(uri, name))
+        self.UserSettings.addSavedServer(uri, name)
+        self.control_save_server_button(uri, name)
+
+    def on_btn_delete_removable_clicked(self, button):
+        uri = self.selected_mount_uri
+        name = self.selected_mount_name
+        refresh = True
+        try:
+            if uri == "":
+                uri = self.selected_volume.get_root().get_uri().strip()
+                refresh = False
+            if name == "":
+                name = self.selected_volume.get_name().strip()
+        except:
+            pass
+
+        print("deleting saved server: {} {}".format(uri, name))
+        self.UserSettings.removeSavedServer("{} {}".format(uri, name).strip())
+        self.control_save_server_button(uri, name)
+
+        if refresh:
+            GLib.idle_add(self.addHardDisksToList)
+            GLib.idle_add(self.addRemovableDevicesToList)
+            GLib.idle_add(self.mount_paths.clear)
+            GLib.idle_add(self.net_mounts.clear)
+
+
+    def control_save_server_button(self, uri, name):
+        servers = self.UserSettings.getSavedServer()
+        # self.btn_save_removable.set_sensitive(not any(d["uri"] == uri for d in servers))
+
+        if any(d["uri"] == uri for d in servers):
+            self.stack_save_delete_removable.set_visible_child_name("delete")
+        else:
+            self.stack_save_delete_removable.set_visible_child_name("save")
+
 
     def network_mount_success(self, uri, name):
         in_list = False
@@ -872,11 +1009,11 @@ class MainWindow:
                 print("{} {} already in recent list".format(uri, name).strip())
         if not in_list:
             self.add_to_recent_listbox(uri, name)
-            self.UserSettings.addServer(uri, name)
+            self.UserSettings.addRecentServer(uri, name)
 
         self.listbox_recent_servers.show_all()
 
-        subprocess.run(["xdg-open", self.entry_addr.get_text()])
+        subprocess.run(["xdg-open", uri])
 
         self.entry_addr.set_text("")
 
@@ -907,14 +1044,17 @@ class MainWindow:
             if row.get_children()[0].name == button.name:
                 self.listbox_recent_servers.remove(row)
 
-        self.UserSettings.removeServer(button.name)
+        self.UserSettings.removeRecentServer(button.name)
 
-    def on_btn_mount_connect_clicked(self, button):
+    def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri=""):
         def get_uri_name(source_object):
             try:
                 uri = source_object.get_uri()
             except:
-                uri = self.entry_addr.get_text()
+                if not from_saved:
+                    uri = self.entry_addr.get_text()
+                else:
+                    uri = ""
 
             try:
                 name = source_object.query_info(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, Gio.FileQueryInfoFlags.NONE,
@@ -923,7 +1063,10 @@ class MainWindow:
                 try:
                     name = source_object.get_uri()
                 except:
-                    name = self.entry_addr.get_text()
+                    if not from_saved:
+                        name = self.entry_addr.get_text()
+                    else:
+                        name = ""
 
             return uri, name
 
@@ -1024,15 +1167,23 @@ class MainWindow:
             mount_operation.set_choice(0)
             mount_operation.reply(Gio.MountOperationResult.HANDLED)
 
-        self.popover_connect.popdown()
-        addr = self.entry_addr.get_text()
+        if not from_saved:
 
-        file = Gio.File.new_for_commandline_arg(addr)
-        mount_operation = Gio.MountOperation()
-        # mount_operation.set_domain(addr)
-        mount_operation.connect("ask-password", ask_password_cb)
-        mount_operation.connect("ask-question", ask_question_cb)
-        file.mount_enclosing_volume(Gio.MountMountFlags.NONE, mount_operation, None, on_mounted)
+            self.popover_connect.popdown()
+            addr = self.entry_addr.get_text()
+
+            file = Gio.File.new_for_commandline_arg(addr)
+            mount_operation = Gio.MountOperation()
+            # mount_operation.set_domain(addr)
+            mount_operation.connect("ask-password", ask_password_cb)
+            mount_operation.connect("ask-question", ask_question_cb)
+            file.mount_enclosing_volume(Gio.MountMountFlags.NONE, mount_operation, None, on_mounted)
+        else:
+            file = Gio.File.new_for_commandline_arg(saved_uri)
+            mount_operation = Gio.MountOperation()
+            mount_operation.connect("ask-password", ask_password_cb)
+            mount_operation.connect("ask-question", ask_question_cb)
+            file.mount_enclosing_volume(Gio.MountMountFlags.NONE, mount_operation, None, on_mounted)
 
 
     def on_mount_anonym_options_toggled(self, widget):
@@ -1153,6 +1304,7 @@ class MainWindow:
         summary = _("Unmounting process is done")
         if network_device:
             body = _("You can eject the device.")
+            self.net_mounts.clear()
         else:
             if dr:
                 if dr.is_removable():

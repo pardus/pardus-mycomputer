@@ -15,7 +15,8 @@ class UserSettings(object):
         self.user_home = Path.home()
         self.user_config_dir = Path.joinpath(self.user_home, Path(".config/pardus-mycomputer"))
         self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
-        self.user_servers_file = Path.joinpath(self.user_config_dir, Path("servers"))
+        self.user_recent_servers_file = Path.joinpath(self.user_config_dir, Path("servers-recent"))
+        self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
 
         self.config = configparser.ConfigParser(strict=False)
         self.config_closeapp_pardus = None
@@ -90,36 +91,76 @@ class UserSettings(object):
             print("{} : {}".format("mkdir error", dir))
             return False
 
-    def addServer(self, uri, name):
+    def addRecentServer(self, uri, name):
         server = "{} {}".format(uri, name).strip()
         def add():
-            with open(self.user_servers_file, "a+") as sf:
+            with open(self.user_recent_servers_file, "a+") as sf:
                 for line in sf:
                     if server == line:
                         break
                 else:
                     sf.write("{}\n".format(server))
-        if not Path.is_file(self.user_servers_file):
+        if not Path.is_file(self.user_recent_servers_file):
             self.createDir(self.user_config_dir)
-            self.user_servers_file.touch(exist_ok=True)
+            self.user_recent_servers_file.touch(exist_ok=True)
             add()
         else:
             add()
 
-    def removeServer(self, server):
-        if Path.is_file(self.user_servers_file):
-            with open(self.user_servers_file, "r") as f:
+    def removeRecentServer(self, server):
+        if Path.is_file(self.user_recent_servers_file):
+            with open(self.user_recent_servers_file, "r") as f:
                 lines = f.readlines()
-            with open(self.user_servers_file, "w") as f:
+            with open(self.user_recent_servers_file, "w") as f:
                 for line in lines:
                     if line.strip("\n").strip() != server:
                         f.write(line)
 
-    def getServer(self):
+    def getRecentServer(self):
         servers = []
-        if Path.is_file(self.user_servers_file):
-            with open(self.user_servers_file, "r") as servf:
+        if Path.is_file(self.user_recent_servers_file):
+            with open(self.user_recent_servers_file, "r") as servf:
                 for line in servf.readlines():
                     if line.strip("\n").strip() != "":
                         servers.append(line.strip("\n").strip())
+        return servers
+
+    def addSavedServer(self, uri, name):
+        server = "{} {}".format(uri, name).strip()
+        def add():
+            with open(self.user_saved_servers_file, "a+") as sf:
+                for line in sf:
+                    if server == line:
+                        break
+                else:
+                    sf.write("{}\n".format(server))
+        if not Path.is_file(self.user_saved_servers_file):
+            self.createDir(self.user_config_dir)
+            self.user_saved_servers_file.touch(exist_ok=True)
+            add()
+        else:
+            add()
+
+    def removeSavedServer(self, server):
+        if Path.is_file(self.user_saved_servers_file):
+            with open(self.user_saved_servers_file, "r") as f:
+                lines = f.readlines()
+            with open(self.user_saved_servers_file, "w") as f:
+                for line in lines:
+                    if line.strip("\n").strip() != server:
+                        f.write(line)
+
+    def getSavedServer(self):
+        servers = []
+        if Path.is_file(self.user_saved_servers_file):
+            with open(self.user_saved_servers_file, "r") as servf:
+                for line in servf.readlines():
+                    if line.strip("\n").strip() != "":
+                        server = line.strip("\n").strip()
+                        if len(server.split(" ")) > 1:
+                            uri, name = server.split(" ", 1)
+                        else:
+                            uri = server
+                            name = ""
+                        servers.append({"uri": uri, "name": name})
         return servers
