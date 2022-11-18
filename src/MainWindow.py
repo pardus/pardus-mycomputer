@@ -1136,7 +1136,7 @@ class MainWindow:
                         if self.is_card(dr):
                             body = _("You can eject the card drive.")
                         else:
-                            body = _("You can eject the Optical drive.")
+                            body = _("You can eject the optical disk.")
                     else:
                         body = _("You can eject the USB disk.")
                 else:
