@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-31 16:58+0300\n"
+"POT-Creation-Date: 2022-11-18 14:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ui/MainWindow.glade:14
@@ -29,134 +29,312 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: ui/MainWindow.glade:92
+#: ui/MainWindow.glade:111
+msgid "message"
+msgstr ""
+
+#: ui/MainWindow.glade:139
+msgid "Connect As"
+msgstr ""
+
+#: ui/MainWindow.glade:155
+msgid "Anonymous"
+msgstr ""
+
+#: ui/MainWindow.glade:172
+msgid "Registered User"
+msgstr ""
+
+#: ui/MainWindow.glade:218
+msgid "Username:"
+msgstr ""
+
+#: ui/MainWindow.glade:257
+msgid "Domain:"
+msgstr ""
+
+#: ui/MainWindow.glade:296
+msgid "Password:"
+msgstr ""
+
+#: ui/MainWindow.glade:344
+msgid "Forget password immediately"
+msgstr ""
+
+#: ui/MainWindow.glade:360
+msgid "Remember password after you logout"
+msgstr ""
+
+#: ui/MainWindow.glade:376
+msgid "Remember forever"
+msgstr ""
+
+#: ui/MainWindow.glade:414
+msgid "Cancel"
+msgstr ""
+
+#: ui/MainWindow.glade:423 ui/MainWindow.glade:1430
+msgid "Connect"
+msgstr ""
+
+#: ui/MainWindow.glade:506
 msgid "About Pardus"
 msgstr ""
 
-#: ui/MainWindow.glade:148
+#: ui/MainWindow.glade:562
 msgid "About App"
 msgstr ""
 
-#: ui/MainWindow.glade:300
-msgid "Home"
+#. Translators: Server as any successfully connected network address
+#: ui/MainWindow.glade:616
+msgid "No recent servers found"
 msgstr ""
 
-#: ui/MainWindow.glade:422
-msgid "Root"
+#: ui/MainWindow.glade:643
+msgid "Recent Servers"
 msgstr ""
 
-#: ui/MainWindow.glade:494 src/MainWindow.py:229
-msgid "is free of"
-msgstr ""
-
-#: ui/MainWindow.glade:574
-msgid "Hard Drives"
-msgstr ""
-
-#: ui/MainWindow.glade:663
-msgid "Removable Drives"
-msgstr ""
-
-#: ui/MainWindow.glade:740
-msgid "Close app when Pardus directories are opened"
-msgstr ""
-
-#: ui/MainWindow.glade:780
-msgid "Close app when Hard Drives are opened"
-msgstr ""
-
-#: ui/MainWindow.glade:820
-msgid "Close app when Removable Drives are opened"
-msgstr ""
-
-#: ui/MainWindow.glade:860
-msgid "Auto refresh disks"
-msgstr ""
-
-#: ui/MainWindow.glade:900
-msgid "Refresh time (seconds)"
-msgstr ""
-
-#: ui/MainWindow.glade:958
-msgid "My Computer"
-msgstr ""
-
-#: ui/MainWindow.glade:966
-msgid "Refresh"
-msgstr ""
-
-#: ui/MainWindow.glade:1048
-msgid "Ok"
-msgstr ""
-
-#: ui/MainWindow.glade:1134
+#: ui/MainWindow.glade:748
 msgid "Device Model"
 msgstr ""
 
-#: ui/MainWindow.glade:1161
+#: ui/MainWindow.glade:775
 msgid "Device Path"
 msgstr ""
 
-#: ui/MainWindow.glade:1177
+#: ui/MainWindow.glade:791
 msgid "Mountpoint"
 msgstr ""
 
-#: ui/MainWindow.glade:1193
+#: ui/MainWindow.glade:807
 msgid "Filesystem"
 msgstr ""
 
-#: ui/MainWindow.glade:1220
+#: ui/MainWindow.glade:834
 msgid "Used GB"
 msgstr ""
 
-#: ui/MainWindow.glade:1236
+#: ui/MainWindow.glade:850
 msgid "Free GB"
 msgstr ""
 
-#: ui/MainWindow.glade:1252
+#: ui/MainWindow.glade:866
 msgid "Total GB"
 msgstr ""
 
-#: ui/MainWindow.glade:1560
+#: ui/MainWindow.glade:1174
 msgid "Mount on Startup"
 msgstr ""
 
-#: ui/MainWindow.glade:1573
+#: ui/MainWindow.glade:1187
 msgid "Format"
 msgstr ""
 
-#: ui/MainWindow.glade:1598
+#: ui/MainWindow.glade:1200
+msgid "Save"
+msgstr ""
+
+#: ui/MainWindow.glade:1239
 msgid "Unmount"
 msgstr ""
 
-#: src/MainWindow.py:134
+#: ui/MainWindow.glade:1302
+msgid "Ok"
+msgstr ""
+
+#: ui/MainWindow.glade:1354
+msgid "Connect to Server"
+msgstr ""
+
+#: ui/MainWindow.glade:1382
+msgid "Enter server address…"
+msgstr ""
+
+#: ui/MainWindow.glade:1470
+msgid "Server Addresses"
+msgstr ""
+
+#: ui/MainWindow.glade:1489
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr ""
+
+#: ui/MainWindow.glade:1532
+msgid "Available Protocols"
+msgstr ""
+
+#: ui/MainWindow.glade:1548
+msgid "Prefix"
+msgstr ""
+
+#: ui/MainWindow.glade:1564
+msgid "AppleTalk"
+msgstr ""
+
+#: ui/MainWindow.glade:1576
+msgid "afp://"
+msgstr ""
+
+#: ui/MainWindow.glade:1588
+msgid "File Transfer Protocol"
+msgstr ""
+
+#: ui/MainWindow.glade:1600
+msgid "ftp:// or ftps://"
+msgstr ""
+
+#: ui/MainWindow.glade:1612
+msgid "Network File System"
+msgstr ""
+
+#: ui/MainWindow.glade:1624
+msgid "Samba"
+msgstr ""
+
+#: ui/MainWindow.glade:1636
+msgid "SSH File Transfer Protocol"
+msgstr ""
+
+#: ui/MainWindow.glade:1648
+msgid "WebDAV"
+msgstr ""
+
+#: ui/MainWindow.glade:1660
+msgid "nfs://"
+msgstr ""
+
+#: ui/MainWindow.glade:1672
+msgid "smb://"
+msgstr ""
+
+#: ui/MainWindow.glade:1684
+msgid "sftp:// or ssh://"
+msgstr ""
+
+#: ui/MainWindow.glade:1696
+msgid "dav:// or davs://"
+msgstr ""
+
+#: ui/MainWindow.glade:1845
+msgid "Home"
+msgstr ""
+
+#: ui/MainWindow.glade:1967
+msgid "Root"
+msgstr ""
+
+#: ui/MainWindow.glade:2039 src/MainWindow.py:281
+msgid "is free of"
+msgstr ""
+
+#: ui/MainWindow.glade:2119
+msgid "Hard Drives"
+msgstr ""
+
+#: ui/MainWindow.glade:2208
+msgid "Removable Drives"
+msgstr ""
+
+#: ui/MainWindow.glade:2289
+msgid "Close app when Pardus directories are opened"
+msgstr ""
+
+#: ui/MainWindow.glade:2329
+msgid "Close app when Hard Drives are opened"
+msgstr ""
+
+#: ui/MainWindow.glade:2369
+msgid "Close app when Removable Drives are opened"
+msgstr ""
+
+#: ui/MainWindow.glade:2409
+msgid "Auto refresh disks (refresh time: 1.5 seconds)"
+msgstr ""
+
+#: ui/MainWindow.glade:2452
+msgid "Restore Defaults"
+msgstr ""
+
+#: ui/MainWindow.glade:2498
+msgid "My Computer"
+msgstr ""
+
+#: ui/MainWindow.glade:2506
+msgid "Refresh"
+msgstr ""
+
+#: src/MainWindow.py:159
 msgid "Pardus My Computer"
 msgstr ""
 
-#: src/MainWindow.py:281
+#: src/MainWindow.py:344
 msgid "Disk is available, click to mount."
 msgstr ""
 
-#: src/MainWindow.py:599
+#: src/MainWindow.py:815
 msgid "Please wait"
 msgstr ""
 
-#: src/MainWindow.py:601
+#: src/MainWindow.py:817
+msgid "Device is unmounting."
+msgstr ""
+
+#: src/MainWindow.py:823 src/MainWindow.py:835
+msgid "Card drive is unmounting."
+msgstr ""
+
+#: src/MainWindow.py:825
+msgid "Optical disk is unmounting."
+msgstr ""
+
+#: src/MainWindow.py:827
 msgid "USB disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:603
+#: src/MainWindow.py:829
 msgid "Disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:683
+#: src/MainWindow.py:832
+msgid "Phone is unmounting."
+msgstr ""
+
+#: src/MainWindow.py:837
+msgid "Optical drive is unmounting."
+msgstr ""
+
+#: src/MainWindow.py:920
+msgid "Error"
+msgstr ""
+
+#: src/MainWindow.py:1129
 msgid "Unmounting process is done"
 msgstr ""
 
-#: src/MainWindow.py:685
+#: src/MainWindow.py:1131
+msgid "You can eject the device."
+msgstr ""
+
+#: src/MainWindow.py:1137 src/MainWindow.py:1149
+msgid "You can eject the card drive."
+msgstr ""
+
+#: src/MainWindow.py:1139
+msgid "You can eject the optical disk."
+msgstr ""
+
+#: src/MainWindow.py:1141
 msgid "You can eject the USB disk."
 msgstr ""
 
-#: src/MainWindow.py:687
+#: src/MainWindow.py:1143
 msgid "You can eject the disk."
+msgstr ""
+
+#: src/MainWindow.py:1146
+msgid "You can eject the phone."
+msgstr ""
+
+#: src/MainWindow.py:1151
+msgid "You can eject the optical drive."
 msgstr ""
