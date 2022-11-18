@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=My Computer
-Name[tr]=Bilgisayarım
-GenericName=My Computer
-GenericName[tr]=Bilgisayarım
+Name=Computer
+Name[tr]=Bilgisayar
+GenericName=Computer
+GenericName[tr]=Bilgisayar
 Comment=My Computer, UI for information and management of disks on your computer.
 Comment[tr]=Bilgisayarım, diskleriniz için bilgi ve yönetim arayüzü.
 Exec=pardus-mycomputer
@@ -11,4 +11,5 @@ Terminal=false
 Type=Application
 Categories=Settings;
 StartupNotify=true
-Keywords=computer,mycomputer,pardus
+Keywords=this computer,pardus computer
+Keywords[tr]=bu bilgisayar,pardus bilgisayar
