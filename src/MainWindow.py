@@ -627,9 +627,13 @@ class MainWindow:
         servers = self.UserSettings.getServer()
         if servers:
             for server in servers:
-                self.add_to_recent_listbox(server)
+                if len(server.split(" ")) > 1:
+                    uri, name = server.split(" ", 1)
+                else:
+                    uri = server
+                    name = ""
+                self.add_to_recent_listbox(uri, name)
             self.listbox_recent_servers.show_all()
-
 
     # Window methods:
     def onDestroy(self, action):
@@ -860,15 +864,15 @@ class MainWindow:
     def on_btn_save_removable_clicked(self, button):
         pass
 
-    def network_mount_success(self):
+    def network_mount_success(self, uri, name):
         in_list = False
         for row in self.listbox_recent_servers:
-            if row.get_children()[0].name == self.entry_addr.get_text():
+            if row.get_children()[0].name == "{} {}".format(uri, name).strip():
                 in_list = True
-                print("{} already in recent list".format(self.entry_addr.get_text()))
+                print("{} {} already in recent list".format(uri, name).strip())
         if not in_list:
-            self.add_to_recent_listbox(self.entry_addr.get_text())
-            self.UserSettings.addServer(self.entry_addr.get_text())
+            self.add_to_recent_listbox(uri, name)
+            self.UserSettings.addServer(uri, name)
 
         self.listbox_recent_servers.show_all()
 
@@ -876,11 +880,12 @@ class MainWindow:
 
         self.entry_addr.set_text("")
 
-    def add_to_recent_listbox(self, server):
+    def add_to_recent_listbox(self, uri, name):
         label = Gtk.Label.new()
-        label.set_text(server)
+        label.set_markup("<b>{}</b>\n<small>{}</small>".format(
+            GLib.markup_escape_text(name if name != "" else uri, -1), GLib.markup_escape_text(uri, -1)))
         button = Gtk.Button.new()
-        button.name = server
+        button.name = "{} {}".format(uri, name).strip()
         button.connect("clicked", self.remove_from_recent_clicked)
         button.props.valign = Gtk.Align.CENTER
         button.props.halign = Gtk.Align.CENTER
@@ -894,7 +899,7 @@ class MainWindow:
         box.set_margin_end(5)
         box.pack_start(label, False, True, 0)
         box.pack_end(button, False, True, 0)
-        box.name = server
+        box.name = "{} {}".format(uri, name).strip()
         self.listbox_recent_servers.add(box)
 
     def remove_from_recent_clicked(self, button):
@@ -905,14 +910,33 @@ class MainWindow:
         self.UserSettings.removeServer(button.name)
 
     def on_btn_mount_connect_clicked(self, button):
+        def get_uri_name(source_object):
+            try:
+                uri = source_object.get_uri()
+            except:
+                uri = self.entry_addr.get_text()
+
+            try:
+                name = source_object.query_info(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, Gio.FileQueryInfoFlags.NONE,
+                                                None).get_attribute_as_string(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+            except:
+                try:
+                    name = source_object.get_uri()
+                except:
+                    name = self.entry_addr.get_text()
+
+            return uri, name
+
         def on_mounted(source_object, res):
             try:
                 source_object.mount_enclosing_volume_finish(res)
-                self.network_mount_success()
+                uri,name = get_uri_name(source_object)
+                self.network_mount_success(uri, name)
                 return True
             except GLib.GError as err:
                 if err.code == Gio.IOErrorEnum.ALREADY_MOUNTED:
-                    self.network_mount_success()
+                    uri, name = get_uri_name(source_object)
+                    self.network_mount_success(uri, name)
                     return True
                 elif err.code == Gio.IOErrorEnum.FAILED_HANDLED:
                     print("operation cancelled")
@@ -1005,7 +1029,7 @@ class MainWindow:
 
         file = Gio.File.new_for_commandline_arg(addr)
         mount_operation = Gio.MountOperation()
-        mount_operation.set_domain(addr)
+        # mount_operation.set_domain(addr)
         mount_operation.connect("ask-password", ask_password_cb)
         mount_operation.connect("ask-question", ask_question_cb)
         file.mount_enclosing_volume(Gio.MountMountFlags.NONE, mount_operation, None, on_mounted)
@@ -1046,7 +1070,7 @@ class MainWindow:
             self.stack_recent_servers.set_visible_child_name("empty")
 
     def on_listbox_recent_servers_row_activated(self, list_box, row):
-        self.entry_addr.set_text("{}".format(row.get_children()[0].name))
+        self.entry_addr.set_text("{}".format(row.get_children()[0].name.split(" ")[0]))
         self.popover_recent_servers.popdown()
 
     def on_btn_settings_clicked(self, button):

@@ -90,7 +90,8 @@ class UserSettings(object):
             print("{} : {}".format("mkdir error", dir))
             return False
 
-    def addServer(self, server):
+    def addServer(self, uri, name):
+        server = "{} {}".format(uri, name).strip()
         def add():
             with open(self.user_servers_file, "a+") as sf:
                 for line in sf:
@@ -111,7 +112,7 @@ class UserSettings(object):
                 lines = f.readlines()
             with open(self.user_servers_file, "w") as f:
                 for line in lines:
-                    if line.strip("\n") != server:
+                    if line.strip("\n").strip() != server:
                         f.write(line)
 
     def getServer(self):
