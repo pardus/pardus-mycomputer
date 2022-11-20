@@ -1,0 +1,340 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2021, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-18 14:22+0300\n"
+"PO-Revision-Date: 2022-11-20 18:55+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2\n"
+
+#: ui/MainWindow.glade:14
+msgid "About Pardus My Computer"
+msgstr "Sobre o Pardus Meu Computador"
+
+#: ui/MainWindow.glade:20
+msgid "UI for information and management of disks on your computer."
+msgstr "Interface para informação e gestão de discos no seu computador."
+
+#: ui/MainWindow.glade:22
+msgid "Website"
+msgstr "Website"
+
+#: ui/MainWindow.glade:111
+msgid "message"
+msgstr "mensagem"
+
+#: ui/MainWindow.glade:139
+msgid "Connect As"
+msgstr "Ligar como"
+
+#: ui/MainWindow.glade:155
+msgid "Anonymous"
+msgstr "Anónimo"
+
+#: ui/MainWindow.glade:172
+msgid "Registered User"
+msgstr "Utilizador registado"
+
+#: ui/MainWindow.glade:218
+msgid "Username:"
+msgstr "Nome de utilizador:"
+
+#: ui/MainWindow.glade:257
+msgid "Domain:"
+msgstr "Domínio:"
+
+#: ui/MainWindow.glade:296
+msgid "Password:"
+msgstr "Palavra-passe:"
+
+#: ui/MainWindow.glade:344
+msgid "Forget password immediately"
+msgstr "Esquecer imediatamente a palavra-passe"
+
+#: ui/MainWindow.glade:360
+msgid "Remember password after you logout"
+msgstr "Lembrar a palavra-passe depois de terminar sessão"
+
+#: ui/MainWindow.glade:376
+msgid "Remember forever"
+msgstr "Lembrar para sempre"
+
+#: ui/MainWindow.glade:414
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ui/MainWindow.glade:423 ui/MainWindow.glade:1430
+msgid "Connect"
+msgstr "Ligar"
+
+#: ui/MainWindow.glade:506
+msgid "About Pardus"
+msgstr "Sobre o Pardus"
+
+#: ui/MainWindow.glade:562
+msgid "About App"
+msgstr "Sobre a Aplicação"
+
+#. Translators: Server as any successfully connected network address
+#: ui/MainWindow.glade:616
+msgid "No recent servers found"
+msgstr "Nenhuns servidores recentes encontrados"
+
+#: ui/MainWindow.glade:643
+msgid "Recent Servers"
+msgstr "Servidores recentes"
+
+#: ui/MainWindow.glade:748
+msgid "Device Model"
+msgstr "Modelo do Dispositivo"
+
+#: ui/MainWindow.glade:775
+msgid "Device Path"
+msgstr "Caminho do dispositivo"
+
+#: ui/MainWindow.glade:791
+msgid "Mountpoint"
+msgstr "Ponto de montagem"
+
+#: ui/MainWindow.glade:807
+msgid "Filesystem"
+msgstr "Sistema de ficheiros"
+
+#: ui/MainWindow.glade:834
+msgid "Used GB"
+msgstr "GB usado"
+
+#: ui/MainWindow.glade:850
+msgid "Free GB"
+msgstr "GB livre"
+
+#: ui/MainWindow.glade:866
+msgid "Total GB"
+msgstr "GB total"
+
+#: ui/MainWindow.glade:1174
+msgid "Mount on Startup"
+msgstr "Montar no arranque"
+
+#: ui/MainWindow.glade:1187
+msgid "Format"
+msgstr "Formato"
+
+#: ui/MainWindow.glade:1200
+msgid "Save"
+msgstr "Guardar"
+
+#: ui/MainWindow.glade:1239
+msgid "Unmount"
+msgstr "Desmontar"
+
+#: ui/MainWindow.glade:1302
+msgid "Ok"
+msgstr "Aceitar"
+
+#: ui/MainWindow.glade:1354
+msgid "Connect to Server"
+msgstr "Ligar ao servidor"
+
+#: ui/MainWindow.glade:1382
+msgid "Enter server address…"
+msgstr "Insira o endereço do servidor…"
+
+#: ui/MainWindow.glade:1470
+msgid "Server Addresses"
+msgstr "Endereços do servidor"
+
+#: ui/MainWindow.glade:1489
+msgid "Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr "Os endereços do servidor são constituídos por um prefixo do protocolo e um endereço. Exemplos:"
+
+#: ui/MainWindow.glade:1532
+msgid "Available Protocols"
+msgstr "Protocolos disponíveis"
+
+#: ui/MainWindow.glade:1548
+msgid "Prefix"
+msgstr "Prefixo"
+
+#: ui/MainWindow.glade:1564
+msgid "AppleTalk"
+msgstr "AppleTalk"
+
+#: ui/MainWindow.glade:1576
+msgid "afp://"
+msgstr "afp://"
+
+#: ui/MainWindow.glade:1588
+msgid "File Transfer Protocol"
+msgstr "FTP (protocolo de transferência de ficheiros)"
+
+#: ui/MainWindow.glade:1600
+msgid "ftp:// or ftps://"
+msgstr "ftp:// ou ftps://"
+
+#: ui/MainWindow.glade:1612
+msgid "Network File System"
+msgstr "NFS (sistema de ficheiros de rede)"
+
+#: ui/MainWindow.glade:1624
+msgid "Samba"
+msgstr "Samba"
+
+#: ui/MainWindow.glade:1636
+msgid "SSH File Transfer Protocol"
+msgstr "Protocolo de transferência de ficheiros SSH"
+
+#: ui/MainWindow.glade:1648
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: ui/MainWindow.glade:1660
+msgid "nfs://"
+msgstr "nfs://"
+
+#: ui/MainWindow.glade:1672
+msgid "smb://"
+msgstr "smb://"
+
+#: ui/MainWindow.glade:1684
+msgid "sftp:// or ssh://"
+msgstr "sftp:// ou ssh://"
+
+#: ui/MainWindow.glade:1696
+msgid "dav:// or davs://"
+msgstr "dav:// ou davs://"
+
+#: ui/MainWindow.glade:1845
+msgid "Home"
+msgstr "Pasta pessoal"
+
+#: ui/MainWindow.glade:1967
+msgid "Root"
+msgstr "Root"
+
+#: ui/MainWindow.glade:2039 src/MainWindow.py:281
+msgid "is free of"
+msgstr "é livre de"
+
+#: ui/MainWindow.glade:2119
+msgid "Hard Drives"
+msgstr "Discos rígidos"
+
+#: ui/MainWindow.glade:2208
+msgid "Removable Drives"
+msgstr "Unidades removíveis"
+
+#: ui/MainWindow.glade:2289
+msgid "Close app when Pardus directories are opened"
+msgstr "Fechar a aplicação quando os diretórios Pardus são abertos"
+
+#: ui/MainWindow.glade:2329
+msgid "Close app when Hard Drives are opened"
+msgstr "Fechar a aplicação quando os discos rígidos são abertos"
+
+#: ui/MainWindow.glade:2369
+msgid "Close app when Removable Drives are opened"
+msgstr "Fechar a aplicação quando os dispositivos removíveis são abertos"
+
+#: ui/MainWindow.glade:2409
+msgid "Auto refresh disks (refresh time: 1.5 seconds)"
+msgstr "Atualizar discos automaticamente (tempo de atualização 1.5 segundos)"
+
+#: ui/MainWindow.glade:2452
+msgid "Restore Defaults"
+msgstr "Restaurar predefinições"
+
+#: ui/MainWindow.glade:2498
+msgid "My Computer"
+msgstr "Meu Computador"
+
+#: ui/MainWindow.glade:2506
+msgid "Refresh"
+msgstr "Atualizar"
+
+#: src/MainWindow.py:159
+msgid "Pardus My Computer"
+msgstr "Pardus Meu Computador"
+
+#: src/MainWindow.py:344
+msgid "Disk is available, click to mount."
+msgstr "O disco está disponível, clique para montar."
+
+#: src/MainWindow.py:815
+msgid "Please wait"
+msgstr "Aguarde"
+
+#: src/MainWindow.py:817
+msgid "Device is unmounting."
+msgstr "O dispositivo está a ser desmontado."
+
+#: src/MainWindow.py:823 src/MainWindow.py:835
+msgid "Card drive is unmounting."
+msgstr "A unidade do cartão está a ser desmontada."
+
+#: src/MainWindow.py:825
+msgid "Optical disk is unmounting."
+msgstr "O disco ótico está a ser desmontado."
+
+#: src/MainWindow.py:827
+msgid "USB disk is unmounting."
+msgstr "O disco USB está a ser desmontado."
+
+#: src/MainWindow.py:829
+msgid "Disk is unmounting."
+msgstr "O disco está a ser desmontado."
+
+#: src/MainWindow.py:832
+msgid "Phone is unmounting."
+msgstr "O telefone está a ser desmontado."
+
+#: src/MainWindow.py:837
+msgid "Optical drive is unmounting."
+msgstr "A unidade ótica está a ser desmontada."
+
+#: src/MainWindow.py:920
+msgid "Error"
+msgstr "Erro"
+
+#: src/MainWindow.py:1129
+msgid "Unmounting process is done"
+msgstr "O processo de desmontagem está concluído"
+
+#: src/MainWindow.py:1131
+msgid "You can eject the device."
+msgstr "Pode ejetar o dispositivo."
+
+#: src/MainWindow.py:1137 src/MainWindow.py:1149
+msgid "You can eject the card drive."
+msgstr "Pode ejetar o cartão de armazenamento."
+
+#: src/MainWindow.py:1139
+msgid "You can eject the optical disk."
+msgstr "Pode ejetar o disco ótico."
+
+#: src/MainWindow.py:1141
+msgid "You can eject the USB disk."
+msgstr "Pode ejetar o disco USB."
+
+#: src/MainWindow.py:1143
+msgid "You can eject the disk."
+msgstr "Pode ejetar o disco."
+
+#: src/MainWindow.py:1146
+msgid "You can eject the phone."
+msgstr "Pode ejetar o telefone."
+
+#: src/MainWindow.py:1151
+msgid "You can eject the optical drive."
+msgstr "Pode ejetar a unidade ótica."
