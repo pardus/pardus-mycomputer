@@ -51,6 +51,9 @@ class MainWindow:
         # load user settings
         self.user_settings()
 
+        # set os label and image
+        self.set_os_label_img()
+
         # Add Disks to GUI
         self.addDisksToGUI()
 
@@ -85,6 +88,13 @@ class MainWindow:
         self.pb_root_usage = UI("pb_root_usage")
         self.lbl_root_free = UI("lbl_root_free")
         self.lbl_root_total = UI("lbl_root_total")
+
+        # os label and image
+        self.lbl_os = UI("lbl_os")
+        self.img_os = UI("img_os")
+        self.lbl_os_menu = UI("lbl_os")
+        self.img_os_menu = UI("img_os")
+        self.menu_aboutpardus = UI("menu_aboutpardus")
 
         # Drives
         self.box_drives = UI("box_drives")
@@ -214,6 +224,70 @@ class MainWindow:
         print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
         print("{} {}".format("config_autorefresh", self.UserSettings.config_autorefresh))
         print("{} {}".format("config_autorefresh_time", self.UserSettings.config_autorefresh_time))
+
+    def set_os_label_img(self):
+        os_name = ""
+        os_id = ""
+        pixbuf = None
+        if os.path.isfile("/etc/os-release"):
+            with open("/etc/os-release") as osf:
+                osfile = osf.read().strip()
+
+            if "PRETTY_NAME" in osfile:
+                for line in osfile.splitlines():
+                    if line.startswith("PRETTY_NAME="):
+                        os_name = line.split("PRETTY_NAME=")[1].strip(' "')
+                        break
+            elif "NAME" in osfile:
+                for line in osfile.splitlines():
+                    if line.startswith("NAME="):
+                        os_name = line.split("NAME=")[1].strip(' "')
+                        break
+            else:
+                print("name or prettyname not in /etc/os-release file")
+                os_name = _("Unknown (/etc/os-release syntax error)")
+
+            if "ID" in osfile:
+                for line in osfile.splitlines():
+                    if line.startswith("ID="):
+                        os_id = line.split("ID=")[1].strip(' "').lower()
+                        break
+        else:
+            print("/etc/os-release file not found")
+            os_name = _("Unknown (/etc/os-release file not exists)")
+
+
+        if os_id == "pardus":
+            self.img_os.set_from_icon_name("emblem-pardus-symbolic", Gtk.IconSize.BUTTON)
+            self.img_os_menu.set_from_icon_name("emblem-pardus-symbolic", Gtk.IconSize.BUTTON)
+            self.lbl_os_menu.set_label("{}".format(_("About Pardus")))
+        else:
+            try:
+                pixbuf = Gtk.IconTheme.get_default().load_icon("emblem-{}".format(os_id), 16,
+                                                               Gtk.IconLookupFlags(16))
+            except Exception as e:
+                print("{}".format(e))
+                try:
+                    pixbuf = Gtk.IconTheme.get_default().load_icon("distributor-logo", 16, Gtk.IconLookupFlags(16))
+                except Exception as e:
+                    print("{}".format(e))
+                    try:
+                        pixbuf = Gtk.IconTheme.get_default().load_icon("image-missing", 16, Gtk.IconLookupFlags(16))
+                    except Exception as e:
+                        print("{}".format(e))
+                        pixbuf = None
+
+            if pixbuf is not None:
+                self.img_os.set_from_pixbuf(pixbuf)
+                self.img_os_menu.set_from_pixbuf(pixbuf)
+
+            if os_id != "":
+                self.lbl_os_menu.set_label("{} {}".format(_("About"), os_id.title()))
+            else:
+                self.lbl_os_menu.set_label("{}".format(_("About System")))
+
+        self.lbl_os.set_label("{}".format(os_name))
+
 
     def autorefresh(self):
         if self.UserSettings.config_autorefresh:
@@ -1265,7 +1339,24 @@ class MainWindow:
         try:
             subprocess.Popen(["pardus-about"])
         except Exception as e:
-            print("on_menu_aboutpardus_clicked Exception: {}".format(e))
+            print("{}".format(e))
+            try:
+                subprocess.Popen(["gnome-control-center", "info-overview"])
+            except Exception as e:
+                print("{}".format(e))
+                try:
+                    subprocess.Popen(["xfce4-about"])
+                except Exception as e:
+                    print("{}".format(e))
+                    try:
+                        subprocess.Popen(["cinnamon-settings", "info"])
+                    except Exception as e:
+                        print("{}".format(e))
+                        try:
+                            subprocess.Popen(["mate-about"])
+                        except Exception as e:
+                            print("{}".format(e))
+                            print("no about app found")
 
     def startProcess(self, params):
         pid, stdin, stdout, stderr = GLib.spawn_async(params, flags=GLib.SpawnFlags.DO_NOT_REAP_CHILD,
