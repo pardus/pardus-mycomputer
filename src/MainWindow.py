@@ -92,8 +92,8 @@ class MainWindow:
         # os label and image
         self.lbl_os = UI("lbl_os")
         self.img_os = UI("img_os")
-        self.lbl_os_menu = UI("lbl_os")
-        self.img_os_menu = UI("img_os")
+        self.lbl_os_menu = UI("lbl_os_menu")
+        self.img_os_menu = UI("img_os_menu")
         self.menu_aboutpardus = UI("menu_aboutpardus")
 
         # Drives
