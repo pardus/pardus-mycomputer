@@ -164,6 +164,7 @@ class MainWindow:
         self.stack_recent_servers = UI("stack_recent_servers")
         self.listbox_recent_servers = UI("listbox_recent_servers")
         self.stack_save_delete_removable = UI("stack_save_delete_removable")
+        self.spinner_header = UI("spinner_header")
 
         # About dialog
         self.dialog_about = UI("dialog_about")
@@ -1145,6 +1146,7 @@ class MainWindow:
             return uri, name
 
         def on_mounted(source_object, res):
+            self.spinner_header.stop()
             try:
                 source_object.mount_enclosing_volume_finish(res)
                 uri,name = get_uri_name(source_object)
@@ -1258,6 +1260,8 @@ class MainWindow:
             mount_operation.connect("ask-password", ask_password_cb)
             mount_operation.connect("ask-question", ask_question_cb)
             file.mount_enclosing_volume(Gio.MountMountFlags.NONE, mount_operation, None, on_mounted)
+
+        self.spinner_header.start()
 
 
     def on_mount_anonym_options_toggled(self, widget):

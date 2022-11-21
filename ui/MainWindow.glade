@@ -2612,6 +2612,15 @@ Fatih Altun</property>
             <property name="position">4</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkSpinner" id="spinner_header">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="position">4</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>
