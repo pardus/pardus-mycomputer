@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=Computer
+Name[pt]=Computador
 Name[tr]=Bilgisayar
 GenericName=Computer
+GenericName[pt]=Computador
 GenericName[tr]=Bilgisayar
 Comment=My Computer, UI for information and management of disks on your computer.
+Comment[pt]=Meu computador, interface para informação e gestão de discos no seu computador.
 Comment[tr]=Bilgisayarım, diskleriniz için bilgi ve yönetim arayüzü.
 Exec=pardus-mycomputer
 Icon=pardus-mycomputer
@@ -12,4 +15,5 @@ Type=Application
 Categories=Settings;
 StartupNotify=true
 Keywords=this computer,pardus computer
+Keywords[pt]=este computador,computador pardus
 Keywords[tr]=bu bilgisayar,pardus bilgisayar
