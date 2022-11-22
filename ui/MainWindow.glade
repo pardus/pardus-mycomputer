@@ -350,7 +350,7 @@ Fatih Altun</property>
                 <property name="can-focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="spacing">7</property>
+                <property name="spacing">8</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
@@ -1640,7 +1640,7 @@ Fatih Altun</property>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="spacing">7</property>
+                <property name="spacing">8</property>
                 <child>
                   <object class="GtkImage" id="img_os">
                     <property name="visible">True</property>
@@ -1694,7 +1694,7 @@ Fatih Altun</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-bottom">21</property>
-                <property name="spacing">15</property>
+                <property name="spacing">13</property>
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkListBox" id="home_listbox">
@@ -2000,8 +2000,8 @@ Fatih Altun</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="opacity">0.50196078431372548</property>
-                <property name="margin-top">7</property>
-                <property name="margin-bottom">7</property>
+                <property name="margin-top">8</property>
+                <property name="margin-bottom">8</property>
                 <property name="label">©TÜBİTAK ULAKBİM | 2022</property>
                 <attributes>
                   <attribute name="size" value="10000"/>
@@ -2035,7 +2035,7 @@ Fatih Altun</property>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="spacing">7</property>
+                            <property name="spacing">8</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
@@ -2090,7 +2090,7 @@ Fatih Altun</property>
                             <property name="can-focus">False</property>
                             <property name="margin-bottom">21</property>
                             <property name="orientation">vertical</property>
-                            <property name="spacing">7</property>
+                            <property name="spacing">8</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -2105,7 +2105,7 @@ Fatih Altun</property>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="spacing">7</property>
+                            <property name="spacing">8</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
@@ -2160,7 +2160,7 @@ Fatih Altun</property>
                             <property name="can-focus">False</property>
                             <property name="margin-bottom">21</property>
                             <property name="orientation">vertical</property>
-                            <property name="spacing">7</property>
+                            <property name="spacing">8</property>
                             <child>
                               <placeholder/>
                             </child>

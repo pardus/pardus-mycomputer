@@ -413,7 +413,7 @@ class MainWindow:
     
     def addVolumeRow(self, vl, listbox, is_removable, is_ejectable, main_type="", type="", mount_uri="", mount_name=""):
         # Prepare UI Containers:
-        box_volume = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 7)
+        box_volume = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
         img_volume = Gtk.Image.new_from_icon_name("drive-removable-media", Gtk.IconSize.DIALOG)
 
@@ -480,6 +480,7 @@ class MainWindow:
         btn_mount.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.BUTTON  ))
         btn_mount.set_relief(Gtk.ReliefStyle.NONE)
         btn_mount.set_valign(Gtk.Align.CENTER)
+        btn_mount.set_tooltip_text(_("Mount"))
         btn_mount._volume = vl
         btn_mount._lbl_volume_name = lbl_volume_name
         btn_mount._lbl_volume_size_info = lbl_volume_size_info
@@ -491,6 +492,7 @@ class MainWindow:
         btn_unmount.set_image(Gtk.Image.new_from_icon_name("media-playback-stop-symbolic", Gtk.IconSize.BUTTON  ))
         btn_unmount.set_relief(Gtk.ReliefStyle.NONE)
         btn_unmount.set_valign(Gtk.Align.CENTER)
+        btn_unmount.set_tooltip_text(_("Unmount"))
         btn_unmount._volume = vl
         btn_unmount._is_removable = is_removable
         btn_unmount._main_type = main_type
@@ -518,6 +520,7 @@ class MainWindow:
         btn_eject.set_image(Gtk.Image.new_from_icon_name("media-eject-symbolic", Gtk.IconSize.BUTTON  ))
         btn_eject.set_relief(Gtk.ReliefStyle.NONE)
         btn_eject.set_valign(Gtk.Align.CENTER)
+        btn_eject.set_tooltip_text(_("Eject"))
         btn_eject._volume = vl
         btn_eject._is_removable = is_removable
         btn_eject._main_type = main_type
@@ -542,6 +545,7 @@ class MainWindow:
         btn_bookmark_add.set_image(Gtk.Image.new_from_icon_name("bookmark-new-symbolic", Gtk.IconSize.BUTTON  ))
         btn_bookmark_add.set_relief(Gtk.ReliefStyle.NONE)
         btn_bookmark_add.set_valign(Gtk.Align.CENTER)
+        btn_bookmark_add.set_tooltip_text(_("Add Bookmark"))
         btn_bookmark_add._volume = vl
         btn_bookmark_add._mount_uri = mount_uri
         btn_bookmark_add._mount_name = mount_name
@@ -552,6 +556,7 @@ class MainWindow:
         btn_bookmark_delete.set_image(Gtk.Image.new_from_icon_name("edit-delete-symbolic", Gtk.IconSize.BUTTON  ))
         btn_bookmark_delete.set_relief(Gtk.ReliefStyle.NONE)
         btn_bookmark_delete.set_valign(Gtk.Align.CENTER)
+        btn_bookmark_delete.set_tooltip_text(_("Remove Bookmark"))
         btn_bookmark_delete._volume = vl
         btn_bookmark_delete._mount_uri = mount_uri
         btn_bookmark_delete._mount_name = mount_name
@@ -588,6 +593,7 @@ class MainWindow:
         btn_info.set_image(Gtk.Image.new_from_icon_name("dialog-information-symbolic", Gtk.IconSize.BUTTON  ))
         btn_info.set_relief(Gtk.ReliefStyle.NONE)
         btn_info.set_valign(Gtk.Align.CENTER)
+        btn_info.set_tooltip_text(_("Information"))
         btn_info._lbl_volume_name = lbl_volume_name
         btn_info._lbl_volume_size_info = lbl_volume_size_info
         btn_info._pb_volume_size = pb_volume_size
@@ -612,7 +618,7 @@ class MainWindow:
         if show_info:
             box_volume.pack_start(btn_info, False, True, 0)
         # box_volume.pack_end(btn_volume_settings, False, True, 0)
-        box_volume.props.margin = 7
+        box_volume.props.margin = 8
 
 
         # Add to listbox
