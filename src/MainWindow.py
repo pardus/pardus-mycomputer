@@ -1054,6 +1054,8 @@ class MainWindow:
                     self.notify(summary, body, "emblem-ok-symbolic")
                     return True
                 except Exception as e:
+                    self.mount_inprogress = False
+                    self.addDisksToGUI()
                     print("{}".format(e))
                     return False
             button._volume.eject_with_operation(Gio.MountUnmountFlags.FORCE, self.mount_operation, None, on_ejected)
@@ -1647,6 +1649,8 @@ class MainWindow:
                 self.notify(summary, body, "emblem-ok-symbolic")
                 return True
             except Exception as e:
+                self.mount_inprogress = False
+                self.addDisksToGUI()
                 print("{}".format(e))
                 return False
 
@@ -1696,6 +1700,8 @@ class MainWindow:
                 self.notify(summary, body, "emblem-ok-symbolic")
                 return True
             except Exception as e:
+                self.mount_inprogress = False
+                self.addDisksToGUI()
                 print("{}".format(e))
                 return False
 
