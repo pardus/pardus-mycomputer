@@ -3,7 +3,7 @@ import os, subprocess
 import gi
 gi.require_version("Notify", "0.7")
 gi.require_version('Gtk', '3.0')
-from gi.repository import GLib, Gio, Gtk, Notify, Gdk
+from gi.repository import GLib, Gio, Gtk, Notify, Gdk, Pango
 
 import DiskManager
 
@@ -358,12 +358,11 @@ class MainWindow:
             # Show values on UI
             row_volume._lbl_volume_name.set_markup(
                 f'<b>{display_name}</b> <span size="small">( { mount_point } )</span>')
-            # row_volume._lbl_volume_size_info.set_markup(
-            #     f'<span size="small"><b>{int(file_info["free_kb"])/1000/1000:.2f} GB</b> {_("is free of")} {int(file_info["total_kb"])/1000/1000:.2f} GB</span>')
+            # row_volume._lbl_volume_name.set_tooltip_text("{}".format(mount_point))
+
             row_volume._lbl_volume_size_info.set_markup("<span size='small'><b>{:.2f} GB</b> {} {:.2f} GB</span>".format(
                 free_kb/1000/1000, _("is free of"),total_kb/1000/1000))
-            # row_volume._lbl_volume_dev_directory.set_markup(
-            #     f'<span size="small" alpha="75%">{ file_info["device"] }</span>')
+
             row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
 
             # if volume usage >= 0.9 then add destructive color
@@ -456,6 +455,7 @@ class MainWindow:
         lbl_volume_name.set_markup("<b>{}</b><small> ( {} )</small>".format(
             name,_("Disk is available, click to mount.")))
         lbl_volume_name.set_halign(Gtk.Align.START)
+        lbl_volume_name.set_ellipsize(Pango.EllipsizeMode.END)
 
         pb_volume_size = Gtk.ProgressBar.new()
         pb_volume_size.set_valign(Gtk.Align.CENTER)
