@@ -948,17 +948,6 @@ class MainWindow:
             else:
                 subprocess.run(["xdg-open", mount.get_root().get_path()])
 
-        if not isinstance(button._volume, str):
-            if button._volume.get_drive():
-                if button._volume.get_drive().is_removable():
-                    if self.UserSettings.config_closeapp_usb:
-                        self.onDestroy(button)
-                else:
-                    if self.UserSettings.config_closeapp_hdd:
-                        self.onDestroy(button)
-            else:
-                if self.UserSettings.config_closeapp_usb:
-                    self.onDestroy(button)
 
     def on_btn_unmount_clicked(self, button):
         self.actioned_volume = button
@@ -1078,17 +1067,17 @@ class MainWindow:
             else:
                 subprocess.run(["xdg-open", mount.get_root().get_path()])
 
-        if not isinstance(row._volume, str):
-            if row._volume.get_drive():
-                if row._volume.get_drive().is_removable():
+            if not isinstance(row._volume, str):
+                if row._volume.get_drive():
+                    if row._volume.get_drive().is_removable():
+                        if self.UserSettings.config_closeapp_usb:
+                            self.onDestroy(row)
+                    else:
+                        if self.UserSettings.config_closeapp_hdd:
+                            self.onDestroy(row)
+                else:
                     if self.UserSettings.config_closeapp_usb:
                         self.onDestroy(row)
-                else:
-                    if self.UserSettings.config_closeapp_hdd:
-                        self.onDestroy(row)
-            else:
-                if self.UserSettings.config_closeapp_usb:
-                    self.onDestroy(row)
 
     def on_btn_volume_info_clicked(self, button):
         # clear all disk info labels
