@@ -2216,7 +2216,7 @@ Fatih Altun</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Close app when Pardus directories are opened</property>
+                        <property name="label" translatable="yes">Close app when Main directories are opened</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
