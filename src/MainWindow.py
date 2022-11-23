@@ -315,7 +315,27 @@ class MainWindow:
         except:
             mount_point = volume.get_root().get_path()
 
-        self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(volume.get_name()))
+        if vl._main_type == "network":
+            try:
+                display_name = volume.get_name()
+            except:
+                try:
+                    display_name = volume.get_drive().get_name()
+                except:
+                    display_name = ""
+        else:
+            mount = volume.get_mount()
+            display_name = self.get_display_name(mount)
+            if display_name == "":
+                try:
+                    display_name = volume.get_name()
+                except:
+                    try:
+                        display_name = volume.get_drive().get_name()
+                    except:
+                        display_name = ""
+
+        self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(display_name))
         self.dlg_lbl_model.set_label(name)
 
         file_info = DiskManager.get_file_info(mount_point, network=True if vl._main_type == "network" else False)
