@@ -1,12 +1,15 @@
 import os, subprocess
 
-def get_file_info(file):
+def get_file_info(file, network=False):
 
-    try:
-        process = subprocess.check_output(f"df '{file}' --block-size=1000 -T | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$5,$7; exit}}'", shell=True, timeout=1)
-    except subprocess.TimeoutExpired:
-        print("timeout error on {}".format(file))
-        return None
+    if network:
+        try:
+            process = subprocess.check_output(f"df '{file}' --block-size=1000 -T | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$5,$7; exit}}'", shell=True, timeout=1)
+        except subprocess.TimeoutExpired:
+            print("timeout error on {}".format(file))
+            return None
+    else:
+        process = subprocess.check_output(f"df '{file}' --block-size=1000 -T | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$5,$7; exit}}'", shell=True)
 
     if len(process.decode("utf-8").strip().split(" ")) == 6:
         keys = ["device", "fstype", "total_kb", "usage_kb", "free_kb", "mountpoint"]

@@ -302,20 +302,21 @@ class MainWindow:
         return self.UserSettings.config_autorefresh
 
     def showDiskDetailsDialog(self, vl):
+        volume = vl._volume
         try:
-            name = vl.get_drive().get_name()
+            name = volume.get_drive().get_name()
         except:
-            name = vl.get_name()
+            name = volume.get_name()
 
         try:
-            mount_point = vl.get_mount().get_root().get_path()
+            mount_point = volume.get_mount().get_root().get_path()
         except:
-            mount_point = vl.get_root().get_path()
+            mount_point = volume.get_root().get_path()
 
-        self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(vl.get_name()))
+        self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(volume.get_name()))
         self.dlg_lbl_model.set_label(name)
 
-        file_info = DiskManager.get_file_info(mount_point)
+        file_info = DiskManager.get_file_info(mount_point, network=True if vl._main_type == "network" else False)
 
         if file_info is not None:
 
@@ -340,7 +341,7 @@ class MainWindow:
         if gm != None and not isinstance(vl, str):
 
             mount_point = gm.get_root().get_path()
-            file_info = DiskManager.get_file_info(mount_point)
+            file_info = DiskManager.get_file_info(mount_point, network=True if row_volume._main_type == "network" else False)
 
             if row_volume._main_type == "network":
                 display_name = vl.get_name()
@@ -641,7 +642,6 @@ class MainWindow:
         # Home:
         home_info = DiskManager.get_file_info(GLib.get_home_dir())
         self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.get_home_dir()))
-        home_info = DiskManager.get_file_info(GLib.get_home_dir())
         self.lbl_home_size.set_label(f"{int(home_info['usage_kb'])/1000/1000:.2f} GB")
 
         # Root:
@@ -1129,7 +1129,7 @@ class MainWindow:
             btn_mount_on_startup._volume = button._volume
 
             mount_point = mount.get_root().get_path()
-            selected_volume_info = DiskManager.get_file_info(mount_point)
+            selected_volume_info = DiskManager.get_file_info(mount_point, network=True if button._main_type == "network" else False)
             btn_mount_on_startup.set_active(DiskManager.is_drive_automounted(selected_volume_info["device"]))
             btn_mount_on_startup._device = selected_volume_info["device"]
 
@@ -1144,7 +1144,7 @@ class MainWindow:
                 add_button_for_usb()
 
         if not isinstance(mount, str):
-            self.showDiskDetailsDialog(button._volume)
+            self.showDiskDetailsDialog(button)
         else:
            print("saved drive")
 
@@ -1252,12 +1252,6 @@ class MainWindow:
         GLib.idle_add(self.mount_paths.clear)
         GLib.idle_add(self.net_mounts.clear)
         # print("on_mount_removed")
-
-    def on_btn_volume_details_clicked(self, btn):
-        self.showDiskDetailsDialog(self.selected_volume)
-
-        self.dialog_disk_details.run()
-        self.dialog_disk_details.hide()
 
     def on_btn_save_othermount_clicked(self, button):
         uri = button._volume.get_root().get_uri().strip()
