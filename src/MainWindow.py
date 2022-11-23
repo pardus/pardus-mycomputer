@@ -163,6 +163,8 @@ class MainWindow:
         self.listbox_recent_servers = UI("listbox_recent_servers")
         self.stack_save_delete_removable = UI("stack_save_delete_removable")
         self.spinner_header = UI("spinner_header")
+        self.spinner_harddrive = UI("spinner_harddrive")
+        self.spinner_removable = UI("spinner_removable")
 
         self.mount_inprogress = False
 
@@ -380,8 +382,8 @@ class MainWindow:
                 row_volume._stack_mount.get_child_by_name("mount").show()
                 row_volume._stack_mount.set_visible_child_name("mount")
 
-            name = vl if isinstance(vl, str) else vl.get_name()
-            print(f"can't mount the volume: {name}")
+            # name = vl if isinstance(vl, str) else vl.get_name()
+            # print(f"can't mount the volume: {name}")
 
     
     def tryMountVolume(self, row_volume):
@@ -814,8 +816,8 @@ class MainWindow:
 
                 # self.box_removables.add(lbl_drive_name)
                 self.box_removables.add(listbox)
-            else:
-                print("saved {} mount uri already in net_mounts".format(saved["uri"]))
+            # else:
+            #     print("saved {} mount uri already in net_mounts".format(saved["uri"]))
         
         self.box_removables.show_all()
 
@@ -956,14 +958,7 @@ class MainWindow:
     def on_btn_unmount_clicked(self, button):
         self.actioned_volume = button
 
-        for row in self.box_removables:
-            for child in  row.get_children()[0].get_children()[0]:
-                if child.get_name() == "eject":
-                    child.set_sensitive(False)
-                    self.mount_inprogress = True
-            if row.get_children()[0].get_children()[0].get_children()[2].get_visible_child_name() == "unmount":
-                row.get_children()[0].get_children()[0].get_children()[2].get_children()[1].set_sensitive(False)
-                self.mount_inprogress = True
+        self.disable_unmount_eject_buttons()
 
         body = ""
         summary = _("Please wait")
@@ -991,7 +986,13 @@ class MainWindow:
                     elif button._type == "phone":
                         body = _("Phone is unmounting.")
 
-        display_name = self.get_display_name(mount)
+        if button._main_type == "network":
+            try:
+                display_name = mount.get_name()
+            except:
+                display_name = ""
+        else:
+            display_name = self.get_display_name(mount)
         if display_name != "":
             body = "{}\n({})".format(body, display_name)
 
@@ -1004,17 +1005,9 @@ class MainWindow:
     def on_btn_eject_clicked(self, button):
         self.actioned_volume = button
 
-        for row in self.box_removables:
-            for child in  row.get_children()[0].get_children()[0]:
-                if child.get_name() == "eject":
-                    child.set_sensitive(False)
-                    self.mount_inprogress = True
-            if row.get_children()[0].get_children()[0].get_children()[2].get_visible_child_name() == "unmount":
-                row.get_children()[0].get_children()[0].get_children()[2].get_children()[1].set_sensitive(False)
-                self.mount_inprogress = True
+        self.disable_unmount_eject_buttons()
 
         if button._volume.get_mount():
-            print("mounted")
             mount_point = button._volume.get_mount().get_root().get_path()
             mount = button._volume.get_mount()
 
@@ -1037,27 +1030,63 @@ class MainWindow:
             if display_name != "":
                 body = "{}\n({})".format(body, display_name)
 
+            print("{} is mounted, will be ejected after unmount".format(display_name))
+
             self.notify(summary, body, "emblem-synchronizing-symbolic")
 
             command = [os.path.dirname(os.path.abspath(__file__)) + "/Unmount.py", "unmount", mount_point]
             self.startEjectProcess(command)
 
         else:
-            print("not mounted")
             summary = _("Device ejected.")
             body = button._volume.get_name()
+            print("{} is not mounted, ejecting".format(body))
             def on_ejected(volume, task):
                 try:
                     volume.eject_with_operation_finish(task)
                     self.notify(summary, body, "emblem-ok-symbolic")
+                    print("{} successfully ejected".format(body))
+                    self.mount_inprogress = False
+                    if self.actioned_volume._is_removable:
+                        self.spinner_removable.stop()
+                    else:
+                        self.spinner_harddrive.stop()
                     return True
                 except Exception as e:
                     self.mount_inprogress = False
                     self.addDisksToGUI()
+                    if self.actioned_volume._is_removable:
+                        self.spinner_removable.stop()
+                    else:
+                        self.spinner_harddrive.stop()
                     print("{}".format(e))
                     return False
             button._volume.eject_with_operation(Gio.MountUnmountFlags.FORCE, self.mount_operation, None, on_ejected)
 
+    def disable_unmount_eject_buttons(self):
+
+        if self.actioned_volume._is_removable:
+            self.spinner_removable.start()
+        else:
+            self.spinner_harddrive.start()
+
+        for row in self.box_removables:
+            for child in row.get_children()[0].get_children()[0]:
+                if child.get_name() == "eject":
+                    child.set_sensitive(False)
+                    self.mount_inprogress = True
+            if row.get_children()[0].get_children()[0].get_children()[2].get_visible_child_name() == "unmount":
+                row.get_children()[0].get_children()[0].get_children()[2].get_children()[1].set_sensitive(False)
+                self.mount_inprogress = True
+
+        for row in self.box_drives:
+            for child in row.get_children()[0].get_children()[0]:
+                if child.get_name() == "eject":
+                    child.set_sensitive(False)
+                    self.mount_inprogress = True
+            if row.get_children()[0].get_children()[0].get_children()[2].get_visible_child_name() == "unmount":
+                row.get_children()[0].get_children()[0].get_children()[2].get_children()[1].set_sensitive(False)
+                self.mount_inprogress = True
 
     def on_volume_row_activated(self, listbox, row):
         try:
@@ -1607,6 +1636,11 @@ class MainWindow:
         # print(f'pid, status: {pid, status}')
         self.mount_inprogress = False
 
+        if self.actioned_volume._is_removable:
+            self.spinner_removable.stop()
+        else:
+            self.spinner_harddrive.stop()
+
         body = ""
         summary = _("Unmounting process is done")
 
@@ -1632,7 +1666,13 @@ class MainWindow:
                     elif self.actioned_volume._type == "phone":
                         body = _("You can eject the phone.")
 
-        display_name = self.get_display_name(mount)
+        if self.actioned_volume._main_type == "network":
+            try:
+                display_name = mount.get_name()
+            except:
+                display_name = ""
+        else:
+            display_name = self.get_display_name(mount)
         if display_name != "":
             body = "{}\n({})".format(body, display_name)
 
@@ -1640,9 +1680,9 @@ class MainWindow:
             try:
                 mount.unmount_with_operation_finish(task)
                 self.notify(summary, body, "emblem-ok-symbolic")
+                print("{} successfully unmounted".format(display_name))
                 return True
             except Exception as e:
-                self.mount_inprogress = False
                 self.addDisksToGUI()
                 print("{}".format(e))
                 return False
@@ -1678,6 +1718,11 @@ class MainWindow:
         # print(f'pid, status: {pid, status}')
         self.mount_inprogress = False
 
+        if self.actioned_volume._is_removable:
+            self.spinner_removable.stop()
+        else:
+            self.spinner_harddrive.stop()
+
         summary = _("Device ejected.")
         body = ""
 
@@ -1691,6 +1736,7 @@ class MainWindow:
             try:
                 volume.eject_with_operation_finish(task)
                 self.notify(summary, body, "emblem-ok-symbolic")
+                print("{} successfully ejected".format(display_name))
                 return True
             except Exception as e:
                 self.mount_inprogress = False
