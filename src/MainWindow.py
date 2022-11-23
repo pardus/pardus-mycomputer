@@ -307,25 +307,26 @@ class MainWindow:
         except:
             name = vl.get_name()
 
-        dr = vl.get_drive()
         try:
             mount_point = vl.get_mount().get_root().get_path()
         except:
             mount_point = vl.get_root().get_path()
 
-        file_info = DiskManager.get_file_info(mount_point)
-
         self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(vl.get_name()))
         self.dlg_lbl_model.set_label(name)
 
-        self.dlg_lbl_dev.set_label(file_info["device"])
-        self.dlg_lbl_mountpoint.set_label(mount_point)
+        file_info = DiskManager.get_file_info(mount_point)
 
-        self.dlg_lbl_used_gb.set_label(f"{int(file_info['usage_kb'])/1000/1000:.2f} GB (%{file_info['usage_percent']*100:.2f})")
-        self.dlg_lbl_free_gb.set_label(f"{int(file_info['free_kb'])/1000/1000:.2f} GB (%{file_info['free_percent']*100:.2f})")
-        self.dlg_lbl_total_gb.set_label(f"{int(file_info['total_kb'])/1000/1000:.2f} GB")
+        if file_info is not None:
 
-        self.dlg_lbl_filesystem_type.set_label(DiskManager.get_filesystem_of_partition(file_info["device"]))
+            self.dlg_lbl_dev.set_label(file_info["device"])
+            self.dlg_lbl_mountpoint.set_label(mount_point)
+
+            self.dlg_lbl_used_gb.set_label(f"{int(file_info['usage_kb'])/1000/1000:.2f} GB (%{file_info['usage_percent']*100:.2f})")
+            self.dlg_lbl_free_gb.set_label(f"{int(file_info['free_kb'])/1000/1000:.2f} GB (%{file_info['free_percent']*100:.2f})")
+            self.dlg_lbl_total_gb.set_label(f"{int(file_info['total_kb'])/1000/1000:.2f} GB")
+
+            self.dlg_lbl_filesystem_type.set_label(DiskManager.get_filesystem_of_partition(file_info["device"]))
 
 
     def showVolumeSizes(self, row_volume):
@@ -337,40 +338,35 @@ class MainWindow:
             gm = vl
 
         if gm != None and not isinstance(vl, str):
-            # print("{} {} {}".format(vl.get_name(), vl.get_mount(), vl.get_mount().get_root().get_path()))
+
             mount_point = gm.get_root().get_path()
             file_info = DiskManager.get_file_info(mount_point)
 
-            display_name = self.get_display_name(gm)
-            if display_name == "":
-                display_name = row_volume._volume.get_name()
+            if row_volume._main_type == "network":
+                display_name = vl.get_name()
+            else:
+                display_name = self.get_display_name(gm)
+                if display_name == "":
+                    display_name = vl.get_name()
 
-            try:
+            if file_info is not None:
+
                 free_kb = int(file_info['free_kb'])
-            except:
-                free_kb = 0
-
-            try:
                 total_kb = int(file_info['total_kb'])
-            except:
-                total_kb = 0
 
-            # Show values on UI
-            row_volume._lbl_volume_name.set_markup(
-                f'<b>{display_name}</b> <span size="small">( { mount_point } )</span>')
-            # row_volume._lbl_volume_name.set_tooltip_text("{}".format(mount_point))
+                # Show values on UI
+                row_volume._lbl_volume_name.set_markup(
+                    f'<b>{display_name}</b> <span size="small">( { mount_point } )</span>')
+                row_volume._lbl_volume_size_info.set_markup("<span size='small'><b>{:.2f} GB</b> {} {:.2f} GB</span>".format(
+                    free_kb/1000/1000, _("is free of"),total_kb/1000/1000))
+                row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
 
-            row_volume._lbl_volume_size_info.set_markup("<span size='small'><b>{:.2f} GB</b> {} {:.2f} GB</span>".format(
-                free_kb/1000/1000, _("is free of"),total_kb/1000/1000))
-
-            row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
-
-            # if volume usage >= 0.9 then add destructive color
-            try:
-                if file_info["usage_percent"] >= 0.9:
-                    row_volume._pb_volume_size.get_style_context().add_class("pardus-mycomputer-progress-90")
-            except Exception as e:
-                print("progress css exception: {}".format(e))
+                # if volume usage >= 0.9 then add destructive color
+                try:
+                    if file_info["usage_percent"] >= 0.9:
+                        row_volume._pb_volume_size.get_style_context().add_class("pardus-mycomputer-progress-90")
+                except Exception as e:
+                    print("progress css exception: {}".format(e))
 
             if row_volume._stack_mount.get_child_by_name("unmount"):
                 row_volume._stack_mount.get_child_by_name("unmount").show()
@@ -383,12 +379,8 @@ class MainWindow:
                 row_volume._stack_mount.get_child_by_name("mount").show()
                 row_volume._stack_mount.set_visible_child_name("mount")
 
-
             name = vl if isinstance(vl, str) else vl.get_name()
             print(f"can't mount the volume: {name}")
-            # if row_volume._mount_uri != "" and row_volume._mount_name != "":
-            #     row_volume._btn_volume_settings.set_sensitive(isinstance(vl, str))
-
 
     
     def tryMountVolume(self, row_volume):
@@ -445,11 +437,11 @@ class MainWindow:
             name = vl
         else:
             if main_type == "network":
-                name = self.get_display_name(vl)
+                name = vl.get_name()
             else:
                 name = self.get_display_name(vl.get_mount())
-            if name == "":
-                name = vl.get_name()
+                if name == "":
+                    name = vl.get_name()
 
         lbl_volume_name = Gtk.Label.new()
         lbl_volume_name.set_markup("<b>{}</b><small> ( {} )</small>".format(
@@ -482,6 +474,11 @@ class MainWindow:
         btn_mount.set_valign(Gtk.Align.CENTER)
         btn_mount.set_tooltip_text(_("Mount"))
         btn_mount._volume = vl
+        btn_mount._is_removable = is_removable
+        btn_mount._main_type = main_type
+        btn_mount._type = type
+        btn_mount._mount_uri = mount_uri
+        btn_mount._mount_name = mount_name
         btn_mount._lbl_volume_name = lbl_volume_name
         btn_mount._lbl_volume_size_info = lbl_volume_size_info
         btn_mount._pb_volume_size = pb_volume_size
@@ -626,6 +623,7 @@ class MainWindow:
         row = listbox.get_row_at_index(0)
         row.set_can_focus(False)
         row._volume = vl
+        row._main_type = main_type
         row._lbl_volume_name = lbl_volume_name
         row._lbl_volume_size_info = lbl_volume_size_info
         row._pb_volume_size = pb_volume_size
@@ -1073,7 +1071,8 @@ class MainWindow:
             if isinstance(mount, str):
                 self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=mount)
             else:
-                subprocess.run(["xdg-open", mount.get_root().get_path()])
+                th = subprocess.Popen("xdg-open {} &".format(mount.get_root().get_path()), shell=True)
+                th.communicate()
 
             if not isinstance(row._volume, str):
                 if row._volume.get_drive():

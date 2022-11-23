@@ -1,19 +1,27 @@
-import os,subprocess
+import os, subprocess
 
 def get_file_info(file):
-    process = subprocess.run(f"df '{file}' --block-size=1000 | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$6; exit}}'", shell=True, capture_output=True)
-
-    keys = ["device", "total_kb", "usage_kb", "free_kb", "mountpoint"]
-    obj = dict(zip(keys, process.stdout.decode("utf-8").strip().split(" ")))
 
     try:
-        obj["usage_percent"] = (int(obj['total_kb']) - int(obj['free_kb'])) / int(obj['total_kb'])
-    except:
-        obj["usage_percent"] = 0
-    try:
-        obj["free_percent"] = int(obj['free_kb']) / int(obj['total_kb'])
-    except:
-        obj["free_percent"] = 0
+        process = subprocess.check_output(f"df '{file}' --block-size=1000 -T | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$5,$7; exit}}'", shell=True, timeout=1)
+    except subprocess.TimeoutExpired:
+        print("timeout error on {}".format(file))
+        return None
+
+    if len(process.decode("utf-8").strip().split(" ")) == 6:
+        keys = ["device", "fstype", "total_kb", "usage_kb", "free_kb", "mountpoint"]
+        obj = dict(zip(keys, process.decode("utf-8").strip().split(" ")))
+        try:
+            obj["usage_percent"] = (int(obj['total_kb']) - int(obj['free_kb'])) / int(obj['total_kb'])
+        except:
+            obj["usage_percent"] = 0
+        try:
+            obj["free_percent"] = int(obj['free_kb']) / int(obj['total_kb'])
+        except:
+            obj["free_percent"] = 0
+    else:
+        obj = {"device": "", "fstype": "", "total_kb": 0, "usage_kb": 0, "free_kb": 0, "mountpoint": "",
+               "usage_percent": 0, "free_percent": 0}
 
     return obj
 
@@ -59,4 +67,30 @@ def get_filesystem_of_partition(partition_path):
         return "-"
     return output.split(" ")[2]
 
-#print(is_drive_automounted("/dev/nvme0n1p3"))
+# import subprocess, threading
+#
+# class Command(object):
+#     def __init__(self, cmd):
+#         self.cmd = cmd
+#         self.process = None
+#         print(self.cmd)
+#
+#     def run(self, timeout):
+#         def target():
+#             print('Thread started')
+#             self.process = subprocess.Popen(self.cmd, shell=True)
+#             self.process.communicate()
+#             print('Thread finished')
+#
+#         thread = threading.Thread(target=target)
+#         thread.start()
+#
+#         thread.join(timeout)
+#         if thread.is_alive():
+#             print('Terminating process')
+#             self.process.terminate()
+#             thread.join()
+#         print(self.process.returncode)
+
+# command = Command("xdg-open {} &".format(path))
+# command.run(timeout=1)
