@@ -597,6 +597,7 @@ class MainWindow:
         btn_info._lbl_volume_name = lbl_volume_name
         btn_info._lbl_volume_size_info = lbl_volume_size_info
         btn_info._pb_volume_size = pb_volume_size
+        btn_info._stack_mount = stack_mount
         btn_info._volume = vl
         btn_info._is_removable = is_removable
         btn_info._main_type = main_type
@@ -627,6 +628,7 @@ class MainWindow:
         row.set_can_focus(False)
         row._volume = vl
         row._main_type = main_type
+        row._type = type
         row._lbl_volume_name = lbl_volume_name
         row._lbl_volume_size_info = lbl_volume_size_info
         row._pb_volume_size = pb_volume_size
@@ -1103,6 +1105,12 @@ class MainWindow:
                 th = subprocess.Popen("xdg-open {} &".format(mount.get_root().get_path()), shell=True)
                 th.communicate()
 
+                # some times phone's disk usage infos not showing on first mount,
+                # we can update this values on phone row clicked
+                # fix this late
+                if row._type == "phone":
+                    self.showVolumeSizes(row)
+
             if not isinstance(row._volume, str):
                 if row._volume.get_drive():
                     if row._volume.get_drive().is_removable():
@@ -1174,6 +1182,12 @@ class MainWindow:
 
         if not isinstance(mount, str):
             self.showDiskDetailsDialog(button)
+
+            # some times phone's disk usage infos not showing on first mount,
+            # we can update this values on phone info button clicked
+            # fix this later
+            if button._type == "phone":
+                self.showVolumeSizes(button)
         else:
            print("saved drive")
 
