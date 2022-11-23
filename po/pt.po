@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 14:22+0300\n"
-"PO-Revision-Date: 2022-11-20 18:55+0000\n"
+"POT-Creation-Date: 2022-11-23 01:06+0300\n"
+"PO-Revision-Date: 2022-11-23 12:31+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ui/MainWindow.glade:14
 msgid "About Pardus My Computer"
-msgstr "Sobre o Pardus Meu Computador"
+msgstr "Sobre o Meu Computador Pardus"
 
 #: ui/MainWindow.glade:20
 msgid "UI for information and management of disks on your computer."
@@ -30,311 +30,353 @@ msgstr "Interface para informação e gestão de discos no seu computador."
 msgid "Website"
 msgstr "Website"
 
-#: ui/MainWindow.glade:111
-msgid "message"
-msgstr "mensagem"
-
-#: ui/MainWindow.glade:139
-msgid "Connect As"
-msgstr "Ligar como"
-
-#: ui/MainWindow.glade:155
-msgid "Anonymous"
-msgstr "Anónimo"
-
-#: ui/MainWindow.glade:172
-msgid "Registered User"
-msgstr "Utilizador registado"
-
-#: ui/MainWindow.glade:218
-msgid "Username:"
-msgstr "Nome de utilizador:"
-
-#: ui/MainWindow.glade:257
-msgid "Domain:"
-msgstr "Domínio:"
-
-#: ui/MainWindow.glade:296
-msgid "Password:"
-msgstr "Palavra-passe:"
-
-#: ui/MainWindow.glade:344
-msgid "Forget password immediately"
-msgstr "Esquecer imediatamente a palavra-passe"
-
-#: ui/MainWindow.glade:360
-msgid "Remember password after you logout"
-msgstr "Lembrar a palavra-passe depois de terminar sessão"
-
-#: ui/MainWindow.glade:376
-msgid "Remember forever"
-msgstr "Lembrar para sempre"
-
-#: ui/MainWindow.glade:414
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: ui/MainWindow.glade:423 ui/MainWindow.glade:1430
-msgid "Connect"
-msgstr "Ligar"
-
-#: ui/MainWindow.glade:506
+#: ui/MainWindow.glade:123 src/MainWindow.py:264
 msgid "About Pardus"
 msgstr "Sobre o Pardus"
 
-#: ui/MainWindow.glade:562
+#: ui/MainWindow.glade:179
 msgid "About App"
-msgstr "Sobre a Aplicação"
+msgstr "Sobre a aplicação"
 
 #. Translators: Server as any successfully connected network address
-#: ui/MainWindow.glade:616
+#: ui/MainWindow.glade:233
 msgid "No recent servers found"
-msgstr "Nenhuns servidores recentes encontrados"
+msgstr "Não foram encontrados servidores recentes"
 
-#: ui/MainWindow.glade:643
+#: ui/MainWindow.glade:260
 msgid "Recent Servers"
 msgstr "Servidores recentes"
 
-#: ui/MainWindow.glade:748
+#: ui/MainWindow.glade:365
 msgid "Device Model"
-msgstr "Modelo do Dispositivo"
+msgstr "Modelo do dispositivo"
 
-#: ui/MainWindow.glade:775
+#: ui/MainWindow.glade:392
 msgid "Device Path"
 msgstr "Caminho do dispositivo"
 
-#: ui/MainWindow.glade:791
+#: ui/MainWindow.glade:408
 msgid "Mountpoint"
 msgstr "Ponto de montagem"
 
-#: ui/MainWindow.glade:807
+#: ui/MainWindow.glade:424
 msgid "Filesystem"
 msgstr "Sistema de ficheiros"
 
-#: ui/MainWindow.glade:834
+#: ui/MainWindow.glade:451
 msgid "Used GB"
 msgstr "GB usado"
 
-#: ui/MainWindow.glade:850
+#: ui/MainWindow.glade:467
 msgid "Free GB"
 msgstr "GB livre"
 
-#: ui/MainWindow.glade:866
+#: ui/MainWindow.glade:483
 msgid "Total GB"
 msgstr "GB total"
 
-#: ui/MainWindow.glade:1174
-msgid "Mount on Startup"
-msgstr "Montar no arranque"
-
-#: ui/MainWindow.glade:1187
-msgid "Format"
-msgstr "Formato"
-
-#: ui/MainWindow.glade:1200
-msgid "Save"
-msgstr "Guardar"
-
-#: ui/MainWindow.glade:1239
-msgid "Unmount"
-msgstr "Desmontar"
-
-#: ui/MainWindow.glade:1302
+#: ui/MainWindow.glade:821
 msgid "Ok"
 msgstr "Aceitar"
 
-#: ui/MainWindow.glade:1354
+#: ui/MainWindow.glade:911
+msgid "message"
+msgstr "mensagem"
+
+#: ui/MainWindow.glade:939
+msgid "Connect As"
+msgstr "Ligar como"
+
+#: ui/MainWindow.glade:955
+msgid "Anonymous"
+msgstr "Anónimo"
+
+#: ui/MainWindow.glade:972
+msgid "Registered User"
+msgstr "Utilizador registado"
+
+#: ui/MainWindow.glade:1018
+msgid "Username:"
+msgstr "Nome de utilizador:"
+
+#: ui/MainWindow.glade:1057
+msgid "Domain:"
+msgstr "Domínio:"
+
+#: ui/MainWindow.glade:1096
+msgid "Password:"
+msgstr "Palavra-passe:"
+
+#: ui/MainWindow.glade:1144
+msgid "Forget password immediately"
+msgstr "Esquecer imediatamente a palavra-passe"
+
+#: ui/MainWindow.glade:1160
+msgid "Remember password after you logout"
+msgstr "Lembrar a palavra-passe depois de terminar sessão"
+
+#: ui/MainWindow.glade:1176
+msgid "Remember forever"
+msgstr "Lembrar para sempre"
+
+#: ui/MainWindow.glade:1214
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ui/MainWindow.glade:1223 ui/MainWindow.glade:1336
+msgid "Connect"
+msgstr "Ligar"
+
+#: ui/MainWindow.glade:1260
 msgid "Connect to Server"
 msgstr "Ligar ao servidor"
 
-#: ui/MainWindow.glade:1382
+#: ui/MainWindow.glade:1288
 msgid "Enter server address…"
 msgstr "Insira o endereço do servidor…"
 
-#: ui/MainWindow.glade:1470
+#: ui/MainWindow.glade:1376
 msgid "Server Addresses"
 msgstr "Endereços do servidor"
 
-#: ui/MainWindow.glade:1489
-msgid "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Os endereços do servidor são constituídos por um prefixo do protocolo e um endereço. Exemplos:"
+#: ui/MainWindow.glade:1395
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr ""
+"Os endereços do servidor são constituídos por um prefixo do protocolo e um "
+"endereço. Exemplos:"
 
-#: ui/MainWindow.glade:1532
+#: ui/MainWindow.glade:1438
 msgid "Available Protocols"
 msgstr "Protocolos disponíveis"
 
-#: ui/MainWindow.glade:1548
+#: ui/MainWindow.glade:1454
 msgid "Prefix"
 msgstr "Prefixo"
 
-#: ui/MainWindow.glade:1564
+#: ui/MainWindow.glade:1470
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: ui/MainWindow.glade:1576
+#: ui/MainWindow.glade:1482
 msgid "afp://"
 msgstr "afp://"
 
-#: ui/MainWindow.glade:1588
+#: ui/MainWindow.glade:1494
 msgid "File Transfer Protocol"
 msgstr "FTP (protocolo de transferência de ficheiros)"
 
-#: ui/MainWindow.glade:1600
+#: ui/MainWindow.glade:1506
 msgid "ftp:// or ftps://"
 msgstr "ftp:// ou ftps://"
 
-#: ui/MainWindow.glade:1612
+#: ui/MainWindow.glade:1518
 msgid "Network File System"
 msgstr "NFS (sistema de ficheiros de rede)"
 
-#: ui/MainWindow.glade:1624
+#: ui/MainWindow.glade:1530
 msgid "Samba"
 msgstr "Samba"
 
-#: ui/MainWindow.glade:1636
+#: ui/MainWindow.glade:1542
 msgid "SSH File Transfer Protocol"
 msgstr "Protocolo de transferência de ficheiros SSH"
 
-#: ui/MainWindow.glade:1648
+#: ui/MainWindow.glade:1554
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: ui/MainWindow.glade:1660
+#: ui/MainWindow.glade:1566
 msgid "nfs://"
 msgstr "nfs://"
 
-#: ui/MainWindow.glade:1672
+#: ui/MainWindow.glade:1578
 msgid "smb://"
 msgstr "smb://"
 
-#: ui/MainWindow.glade:1684
+#: ui/MainWindow.glade:1590
 msgid "sftp:// or ssh://"
 msgstr "sftp:// ou ssh://"
 
-#: ui/MainWindow.glade:1696
+#: ui/MainWindow.glade:1602
 msgid "dav:// or davs://"
 msgstr "dav:// ou davs://"
 
-#: ui/MainWindow.glade:1845
+#: ui/MainWindow.glade:1749
 msgid "Home"
 msgstr "Pasta pessoal"
 
-#: ui/MainWindow.glade:1967
+#: ui/MainWindow.glade:1869
 msgid "Root"
 msgstr "Root"
 
-#: ui/MainWindow.glade:2039 src/MainWindow.py:281
+#: ui/MainWindow.glade:1941 src/MainWindow.py:364
 msgid "is free of"
 msgstr "é livre de"
 
-#: ui/MainWindow.glade:2119
+#: ui/MainWindow.glade:2057
 msgid "Hard Drives"
 msgstr "Discos rígidos"
 
-#: ui/MainWindow.glade:2208
+#: ui/MainWindow.glade:2127
 msgid "Removable Drives"
 msgstr "Unidades removíveis"
 
-#: ui/MainWindow.glade:2289
-msgid "Close app when Pardus directories are opened"
-msgstr "Fechar a aplicação quando os diretórios Pardus são abertos"
+#: ui/MainWindow.glade:2219
+msgid "Close app when Main directories are opened"
+msgstr "Fechar a aplicação quando os diretórios principais são abertos"
 
-#: ui/MainWindow.glade:2329
+#: ui/MainWindow.glade:2259
 msgid "Close app when Hard Drives are opened"
 msgstr "Fechar a aplicação quando os discos rígidos são abertos"
 
-#: ui/MainWindow.glade:2369
+#: ui/MainWindow.glade:2299
 msgid "Close app when Removable Drives are opened"
 msgstr "Fechar a aplicação quando os dispositivos removíveis são abertos"
 
-#: ui/MainWindow.glade:2409
+#: ui/MainWindow.glade:2339
 msgid "Auto refresh disks (refresh time: 1.5 seconds)"
 msgstr "Atualizar discos automaticamente (tempo de atualização 1.5 segundos)"
 
-#: ui/MainWindow.glade:2452
+#: ui/MainWindow.glade:2382
 msgid "Restore Defaults"
 msgstr "Restaurar predefinições"
 
-#: ui/MainWindow.glade:2498
+#: ui/MainWindow.glade:2428
 msgid "My Computer"
 msgstr "Meu Computador"
 
-#: ui/MainWindow.glade:2506
+#: ui/MainWindow.glade:2436
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: src/MainWindow.py:159
+#: src/MainWindow.py:171
 msgid "Pardus My Computer"
-msgstr "Pardus Meu Computador"
+msgstr "Meu Computador Pardus"
 
-#: src/MainWindow.py:344
+#: src/MainWindow.py:249
+msgid "Unknown (/etc/os-release syntax error)"
+msgstr "Desconhecido (erro de sintaxe /etc/os-release)"
+
+#: src/MainWindow.py:258
+msgid "Unknown (/etc/os-release file not exists)"
+msgstr "Desconhecido (ficheiro /etc/os-release não existe)"
+
+#: src/MainWindow.py:286
+msgid "About"
+msgstr "Sobre"
+
+#: src/MainWindow.py:288
+msgid "About System"
+msgstr "Sobre o sistema"
+
+#: src/MainWindow.py:456
 msgid "Disk is available, click to mount."
-msgstr "O disco está disponível, clique para montar."
+msgstr "O disco está disponível. Clique para montar."
 
-#: src/MainWindow.py:815
+#: src/MainWindow.py:483
+msgid "Mount"
+msgstr "Montar"
+
+#: src/MainWindow.py:495
+msgid "Unmount"
+msgstr "Desmontar"
+
+#: src/MainWindow.py:523
+msgid "Eject"
+msgstr "Ejetar"
+
+#: src/MainWindow.py:548
+msgid "Add Bookmark"
+msgstr "Adicionar marcador"
+
+#: src/MainWindow.py:559
+msgid "Remove Bookmark"
+msgstr "Remover marcador"
+
+#: src/MainWindow.py:596
+msgid "Information"
+msgstr "Informação"
+
+#: src/MainWindow.py:971 src/MainWindow.py:1024
 msgid "Please wait"
 msgstr "Aguarde"
 
-#: src/MainWindow.py:817
-msgid "Device is unmounting."
-msgstr "O dispositivo está a ser desmontado."
+#: src/MainWindow.py:974
+msgid "Network device is unmounting."
+msgstr "O dispositivo de rede está a ser desmontado."
 
-#: src/MainWindow.py:823 src/MainWindow.py:835
-msgid "Card drive is unmounting."
-msgstr "A unidade do cartão está a ser desmontada."
-
-#: src/MainWindow.py:825
-msgid "Optical disk is unmounting."
-msgstr "O disco ótico está a ser desmontado."
-
-#: src/MainWindow.py:827
-msgid "USB disk is unmounting."
-msgstr "O disco USB está a ser desmontado."
-
-#: src/MainWindow.py:829
+#: src/MainWindow.py:981
 msgid "Disk is unmounting."
 msgstr "O disco está a ser desmontado."
 
-#: src/MainWindow.py:832
-msgid "Phone is unmounting."
-msgstr "O telefone está a ser desmontado."
+#: src/MainWindow.py:985 src/MainWindow.py:1027
+msgid "USB disk is unmounting."
+msgstr "O disco USB está a ser desmontado."
 
-#: src/MainWindow.py:837
+#: src/MainWindow.py:987 src/MainWindow.py:1029
+msgid "Card drive is unmounting."
+msgstr "A unidade do cartão está a ser desmontada."
+
+#: src/MainWindow.py:989 src/MainWindow.py:1031
+msgid "Optical disk is unmounting."
+msgstr "O disco ótico está a ser desmontado."
+
+#: src/MainWindow.py:992 src/MainWindow.py:1034
 msgid "Optical drive is unmounting."
 msgstr "A unidade ótica está a ser desmontada."
 
-#: src/MainWindow.py:920
+#: src/MainWindow.py:994 src/MainWindow.py:1036
+msgid "Phone is unmounting."
+msgstr "O telefone está a ser desmontado."
+
+#: src/MainWindow.py:1049 src/MainWindow.py:1688
+msgid "Device ejected."
+msgstr "Dispositivo ejetado."
+
+#: src/MainWindow.py:1121
+msgid "Format"
+msgstr "Formatar"
+
+#: src/MainWindow.py:1129
+msgid "Mount on Startup"
+msgstr "Montar no arranque"
+
+#: src/MainWindow.py:1388
 msgid "Error"
 msgstr "Erro"
 
-#: src/MainWindow.py:1129
+#: src/MainWindow.py:1618
 msgid "Unmounting process is done"
 msgstr "O processo de desmontagem está concluído"
 
-#: src/MainWindow.py:1131
-msgid "You can eject the device."
-msgstr "Pode ejetar o dispositivo."
+#: src/MainWindow.py:1622
+msgid "You can eject the network device."
+msgstr "Pode ejetar o dispositivo de rede."
 
-#: src/MainWindow.py:1137 src/MainWindow.py:1149
-msgid "You can eject the card drive."
-msgstr "Pode ejetar o cartão de armazenamento."
-
-#: src/MainWindow.py:1139
-msgid "You can eject the optical disk."
-msgstr "Pode ejetar o disco ótico."
-
-#: src/MainWindow.py:1141
-msgid "You can eject the USB disk."
-msgstr "Pode ejetar o disco USB."
-
-#: src/MainWindow.py:1143
+#: src/MainWindow.py:1627
 msgid "You can eject the disk."
 msgstr "Pode ejetar o disco."
 
-#: src/MainWindow.py:1146
+#: src/MainWindow.py:1631
+msgid "You can eject the USB disk."
+msgstr "Pode ejetar o disco USB."
+
+#: src/MainWindow.py:1633
+msgid "You can eject the card drive."
+msgstr "Pode ejetar o cartão de armazenamento."
+
+#: src/MainWindow.py:1635
+msgid "You can eject the optical disk."
+msgstr "Pode ejetar o disco ótico."
+
+#: src/MainWindow.py:1638
+msgid "You can eject the optical drive."
+msgstr "Pode ejetar a unidade ótica."
+
+#: src/MainWindow.py:1640
 msgid "You can eject the phone."
 msgstr "Pode ejetar o telefone."
 
-#: src/MainWindow.py:1151
-msgid "You can eject the optical drive."
-msgstr "Pode ejetar a unidade ótica."
+#~ msgid "Save"
+#~ msgstr "Guardar"
