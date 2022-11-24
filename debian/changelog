@@ -1,3 +1,68 @@
+pardus-mycomputer (0.3.0) unstable; urgency=medium
+
+  [ Hakan Dündar ]
+  * Visual improvements for main menu of the application
+  * Removed refresh time spinbutton for a simpler GUI
+  * Updated Auto refresh disks label
+
+  [ Fatih Altun ]
+  * Update default refresh time as 1.5 secs
+  * Add opticals, disk images, phones, cards and network mounts to removable drives
+  * Add gvfs-fuse to recommends for network mounts
+  * Add restore defaults to settings page
+  * Add mount network drives menu with ui callbacks
+  * Add operation cancelled exception to mount
+  * Add recently connected servers to listbox and file
+  * Add row-activated signal to recent_servers listbox
+  * Fix focus problem on disk details popup
+  * Fix focus problem on all listbox and buttons
+  * Update desktop file name
+  * Fix typo
+  * Update pot file
+  * Update Turkish translations
+  * Update recent servers listbox ui as uri and name
+  * Add save and delete functions to network mounts as like bookmark
+
+  [ Hugo Carvalho ]
+  * Add Portuguese translation
+
+  [ Fatih Altun ]
+  * Add dynamic os label and image
+  * Fix typo
+  * Add spinner for show network mount progress
+  * Add centered to dialog_mount and attach to main window
+  * Add scrolled window to hard disks and removables
+
+  [ Hugo Carvalho ]
+  * Update tr.org.pardus.mycomputer.desktop
+
+  [ Fatih Altun ]
+  * Add action buttons to listbox, eject func, Update ui and some fixes
+  * Add ellipsize to volume name label
+  * Add notify and pango to dependencies
+  * Fix typo
+  * Fix close app config problem
+  * Add tooltips to action buttons and Update spacing values
+  * Fix unmount, eject button sensitive on exceptions
+  * Update pot file
+  * Update Turkish translations
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translation
+
+  [ Fatih Altun ]
+  * Add timeout to get_file_info and Fix broken mounted network ui errors
+  * Add is_network to get_file_info function for timeout control
+  * Add spinner to removable, usb boxes and some fixes
+  * Fix disk usage info of phone on some first mount as temporary
+  * Add get_display_name to volume info popup
+  * Update Turkish translations
+  * Update pot file
+  * Add pt to update-translations script
+  * Update pt.po file
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Thu, 24 Nov 2022 13:09:51 +0300
+
 pardus-mycomputer (0.2.0) unstable; urgency=medium
 
   * Add unmount option to hard drives too
