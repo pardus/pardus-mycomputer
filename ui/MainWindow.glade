@@ -2238,7 +2238,7 @@ Fatih Altun</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Close app when Main directories are opened</property>
+                        <property name="label" translatable="yes">Close app when directories are opened</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2247,12 +2247,12 @@ Fatih Altun</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch" id="sw_closeapp_pardus">
+                      <object class="GtkSwitch" id="sw_closeapp_directories">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
-                        <signal name="state-set" handler="on_sw_closeapp_pardus_state_set" swapped="no"/>
+                        <signal name="state-set" handler="on_sw_closeapp_directories_state_set" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2265,86 +2265,6 @@ Fatih Altun</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">13</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Close app when Hard Drives are opened</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSwitch" id="sw_closeapp_hdd">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">center</property>
-                        <signal name="state-set" handler="on_sw_closeapp_hdd_state_set" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">13</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Close app when Removable Drives are opened</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSwitch" id="sw_closeapp_usb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">center</property>
-                        <signal name="state-set" handler="on_sw_closeapp_usb_state_set" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -2384,7 +2304,7 @@ Fatih Altun</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>

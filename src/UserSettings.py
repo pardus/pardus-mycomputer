@@ -19,24 +19,18 @@ class UserSettings(object):
         self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
 
         self.config = configparser.ConfigParser(strict=False)
-        self.config_closeapp_pardus = None
-        self.config_closeapp_hdd = None
-        self.config_closeapp_usb = None
+        self.config_closeapp_directories = None
         self.config_autorefresh = None
         self.config_autorefresh_time = None
 
-        self.default_closeapp_pardus = False
-        self.default_closeapp_hdd = False
-        self.default_closeapp_usb = False
+        self.default_closeapp_directories = False
         self.default_autorefresh = False
         self.default_autorefresh_time = 1.5
 
 
     def createDefaultConfig(self, force=False):
         self.config['MAIN'] = {
-            'CloseAppPardus': 'no',
-            'CloseAppHDD': 'no',
-            'CloseAppUSB': 'no',
+            'CloseAppDirectories': 'no',
             'AutoRefresh': 'no',
             'AutoRefreshTime': 1.5
         }
@@ -49,9 +43,7 @@ class UserSettings(object):
     def readConfig(self):
         try:
             self.config.read(self.user_config_file)
-            self.config_closeapp_pardus = self.config.getboolean('MAIN', 'CloseAppPardus')
-            self.config_closeapp_hdd = self.config.getboolean('MAIN', 'CloseAppHDD')
-            self.config_closeapp_usb = self.config.getboolean('MAIN', 'CloseAppUSB')
+            self.config_closeapp_directories = self.config.getboolean('MAIN', 'CloseAppDirectories')
             self.config_autorefresh = self.config.getboolean('MAIN', 'AutoRefresh')
             self.config_autorefresh_time = self.config.getfloat('MAIN', 'AutoRefreshTime')
 
@@ -59,9 +51,7 @@ class UserSettings(object):
             print("{}".format(e))
             print("user config read error ! Trying create defaults")
             # if not read; try to create defaults
-            self.config_closeapp_pardus = self.default_closeapp_pardus
-            self.config_closeapp_hdd = self.default_closeapp_hdd
-            self.config_closeapp_usb = self.default_closeapp_usb
+            self.config_closeapp_directories = self.default_closeapp_directories
             self.config_autorefresh = self.default_autorefresh
             self.config_autorefresh_time = self.default_autorefresh_time
             try:
@@ -69,11 +59,9 @@ class UserSettings(object):
             except Exception as e:
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
-    def writeConfig(self, closeapppardus, closeapphdd, closeappusb, autorefresh, autorefreshtime):
+    def writeConfig(self, closeappdirectories, autorefresh, autorefreshtime):
         self.config['MAIN'] = {
-            'CloseAppPardus': closeapppardus,
-            'CloseAppHDD': closeapphdd,
-            'CloseAppUSB': closeappusb,
+            'CloseAppDirectories': closeappdirectories,
             'AutoRefresh': autorefresh,
             'AutoRefreshTime': autorefreshtime
         }

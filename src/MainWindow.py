@@ -132,9 +132,7 @@ class MainWindow:
         self.popover_menu = UI("popover_menu")
 
         # Settings switch buttons
-        self.sw_closeapp_pardus = UI("sw_closeapp_pardus")
-        self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
-        self.sw_closeapp_usb = UI("sw_closeapp_usb")
+        self.sw_closeapp_directories = UI("sw_closeapp_directories")
         self.sw_autorefresh = UI("sw_autorefresh")
 
         self.img_settings = UI("img_settings")
@@ -222,9 +220,7 @@ class MainWindow:
         self.UserSettings.createDefaultConfig()
         self.UserSettings.readConfig()
 
-        print("{} {}".format("config_closeapp_pardus", self.UserSettings.config_closeapp_pardus))
-        print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
-        print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
+        print("{} {}".format("config_closeapp_directories", self.UserSettings.config_closeapp_directories))
         print("{} {}".format("config_autorefresh", self.UserSettings.config_autorefresh))
         print("{} {}".format("config_autorefresh_time", self.UserSettings.config_autorefresh_time))
 
@@ -954,12 +950,12 @@ class MainWindow:
     # SIGNALS:
     def on_lb_home_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", GLib.get_home_dir()])
-        if self.UserSettings.config_closeapp_pardus:
+        if self.UserSettings.config_closeapp_directories:
             self.onDestroy(listbox)
 
     def on_lb_root_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", "/"])
-        if self.UserSettings.config_closeapp_pardus:
+        if self.UserSettings.config_closeapp_directories:
             self.onDestroy(listbox)
 
     def on_btn_mount_clicked(self, button):
@@ -1132,16 +1128,7 @@ class MainWindow:
                     self.showVolumeSizes(row)
 
             if not isinstance(row._volume, str):
-                if row._volume.get_drive():
-                    if row._volume.get_drive().is_removable():
-                        if self.UserSettings.config_closeapp_usb:
-                            self.onDestroy(row)
-                    else:
-                        if self.UserSettings.config_closeapp_hdd:
-                            self.onDestroy(row)
-                else:
-                    if self.UserSettings.config_closeapp_usb:
-                        self.onDestroy(row)
+                self.onDestroy(row)
 
     def on_btn_volume_info_clicked(self, button):
         # clear all disk info labels
@@ -1219,46 +1206,12 @@ class MainWindow:
         print("Manually refreshing disks")
         self.addDisksToGUI()
 
-    def on_sw_closeapp_pardus_state_set(self, switch, state):
-        user_config_closeapp_pardus = self.UserSettings.config_closeapp_pardus
-        if state != user_config_closeapp_pardus:
-            print("Updating close app pardus state")
+    def on_sw_closeapp_directories_state_set(self, switch, state):
+        user_config_closeapp_directories = self.UserSettings.config_closeapp_directories
+        if state != user_config_closeapp_directories:
+            print("Updating close app directories state")
             try:
                 self.UserSettings.writeConfig(state,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb,
-                                              self.UserSettings.config_autorefresh,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
-                self.user_settings()
-            except Exception as e:
-                print("{}".format(e))
-        self.control_defaults()
-
-    def on_sw_closeapp_hdd_state_set(self, switch, state):
-        user_config_closeapp_hdd = self.UserSettings.config_closeapp_hdd
-        if state != user_config_closeapp_hdd:
-            print("Updating close app hdd state")
-            try:
-                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
-                                              state,
-                                              self.UserSettings.config_closeapp_usb,
-                                              self.UserSettings.config_autorefresh,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
-                self.user_settings()
-            except Exception as e:
-                print("{}".format(e))
-        self.control_defaults()
-
-    def on_sw_closeapp_usb_state_set(self, switch, state):
-        user_config_closeapp_usb = self.UserSettings.config_closeapp_usb
-        if state != user_config_closeapp_usb:
-            print("Updating close app usb state")
-            try:
-                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              state,
                                               self.UserSettings.config_autorefresh,
                                               self.UserSettings.config_autorefresh_time
                                               )
@@ -1272,9 +1225,7 @@ class MainWindow:
         if state != user_config_autorefresh:
             print("Updating autorefresh state")
             try:
-                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb,
+                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_directories,
                                               state,
                                               self.UserSettings.config_autorefresh_time
                                               )
@@ -1588,9 +1539,7 @@ class MainWindow:
             self.stack_main.set_visible_child_name("home")
             self.img_settings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
         elif self.stack_main.get_visible_child_name() == "home":
-            self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
-            self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
-            self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
+            self.sw_closeapp_directories.set_state(self.UserSettings.config_closeapp_directories)
             self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
             self.stack_main.set_visible_child_name("settings")
             self.img_settings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
@@ -1599,15 +1548,11 @@ class MainWindow:
     def on_btn_defaults_clicked(self, button):
         self.UserSettings.createDefaultConfig(force=True)
         self.user_settings()
-        self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
-        self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
-        self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
+        self.sw_closeapp_directories.set_state(self.UserSettings.config_closeapp_directories)
         self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
 
     def control_defaults(self):
-        if self.UserSettings.config_closeapp_pardus != self.UserSettings.default_closeapp_pardus or \
-                self.UserSettings.config_closeapp_hdd != self.UserSettings.default_closeapp_hdd or \
-                self.UserSettings.config_closeapp_usb != self.UserSettings.default_closeapp_usb or \
+        if self.UserSettings.config_closeapp_directories != self.UserSettings.default_closeapp_directories or \
                 self.UserSettings.config_autorefresh != self.UserSettings.default_autorefresh or \
                 self.UserSettings.config_autorefresh_time != self.UserSettings.default_autorefresh_time:
             self.btn_defaults.set_sensitive(True)
