@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 01:06+0300\n"
-"PO-Revision-Date: 2022-11-23 01:14+0300\n"
+"POT-Creation-Date: 2022-11-24 13:06+0300\n"
+"PO-Revision-Date: 2022-11-24 13:03+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -29,7 +29,7 @@ msgstr "Diskleriniz için bilgi ve yönetim arayüzü."
 msgid "Website"
 msgstr "Website"
 
-#: ui/MainWindow.glade:123 src/MainWindow.py:264
+#: ui/MainWindow.glade:123 src/MainWindow.py:266
 msgid "About Pardus"
 msgstr "Pardus Hakkında"
 
@@ -56,7 +56,7 @@ msgstr "Cihaz Yolu"
 
 #: ui/MainWindow.glade:408
 msgid "Mountpoint"
-msgstr "Bağlanma Yolu"
+msgstr "Bağlama Yolu"
 
 #: ui/MainWindow.glade:424
 msgid "Filesystem"
@@ -208,7 +208,7 @@ msgstr "Ev"
 msgid "Root"
 msgstr "Kök Dizin"
 
-#: ui/MainWindow.glade:1941 src/MainWindow.py:364
+#: ui/MainWindow.glade:1941 src/MainWindow.py:384
 msgid "is free of"
 msgstr "boş, toplam"
 
@@ -216,163 +216,163 @@ msgstr "boş, toplam"
 msgid "Hard Drives"
 msgstr "Sabit Diskler"
 
-#: ui/MainWindow.glade:2127
+#: ui/MainWindow.glade:2138
 msgid "Removable Drives"
 msgstr "Çıkarılabilir Diskler"
 
-#: ui/MainWindow.glade:2219
+#: ui/MainWindow.glade:2241
 msgid "Close app when Main directories are opened"
 msgstr "Ana dizinler açıldığında uygulamayı kapat"
 
-#: ui/MainWindow.glade:2259
+#: ui/MainWindow.glade:2281
 msgid "Close app when Hard Drives are opened"
 msgstr "Sabit Diskler açıldığında uygulamayı kapat"
 
-#: ui/MainWindow.glade:2299
+#: ui/MainWindow.glade:2321
 msgid "Close app when Removable Drives are opened"
 msgstr "Çıkarılabilir Diskler açıldığında uygulamayı kapat"
 
-#: ui/MainWindow.glade:2339
+#: ui/MainWindow.glade:2361
 msgid "Auto refresh disks (refresh time: 1.5 seconds)"
 msgstr "Diskleri otomatik yenile (yenileme süresi: 1,5 saniye)"
 
-#: ui/MainWindow.glade:2382
+#: ui/MainWindow.glade:2404
 msgid "Restore Defaults"
 msgstr "Varsayılanları Geri Yükle"
 
-#: ui/MainWindow.glade:2428
+#: ui/MainWindow.glade:2450
 msgid "My Computer"
 msgstr "Bilgisayarım"
 
-#: ui/MainWindow.glade:2436
+#: ui/MainWindow.glade:2458
 msgid "Refresh"
 msgstr "Yenile"
 
-#: src/MainWindow.py:171
+#: src/MainWindow.py:173
 msgid "Pardus My Computer"
 msgstr "Pardus Bilgisayarım"
 
-#: src/MainWindow.py:249
+#: src/MainWindow.py:251
 msgid "Unknown (/etc/os-release syntax error)"
 msgstr "Bilinmeyen (/etc/os-release söz dizimi hatası)"
 
-#: src/MainWindow.py:258
+#: src/MainWindow.py:260
 msgid "Unknown (/etc/os-release file not exists)"
 msgstr "Bilinmeyen (/etc/os-release dosyası mevcut değil)"
 
-#: src/MainWindow.py:286
+#: src/MainWindow.py:288
 msgid "About"
 msgstr "Hakkında"
 
-#: src/MainWindow.py:288
+#: src/MainWindow.py:290
 msgid "About System"
 msgstr "Sistem Hakkında"
 
-#: src/MainWindow.py:456
+#: src/MainWindow.py:471
 msgid "Disk is available, click to mount."
 msgstr "Disk kullanılabilir, bağlamak için tıklayın."
 
-#: src/MainWindow.py:483
+#: src/MainWindow.py:498
 msgid "Mount"
 msgstr "Bağla"
 
-#: src/MainWindow.py:495
+#: src/MainWindow.py:515
 msgid "Unmount"
-msgstr "Kaldır"
+msgstr "Bağı Çöz"
 
-#: src/MainWindow.py:523
+#: src/MainWindow.py:543
 msgid "Eject"
 msgstr "Çıkart"
 
-#: src/MainWindow.py:548
+#: src/MainWindow.py:568
 msgid "Add Bookmark"
 msgstr "Yer İmi Ekle"
 
-#: src/MainWindow.py:559
+#: src/MainWindow.py:579
 msgid "Remove Bookmark"
 msgstr "Yer İmini Kaldır"
 
-#: src/MainWindow.py:596
+#: src/MainWindow.py:616
 msgid "Information"
 msgstr "Bilgi"
 
-#: src/MainWindow.py:971 src/MainWindow.py:1024
+#: src/MainWindow.py:986 src/MainWindow.py:1037
 msgid "Please wait"
 msgstr "Lütfen bekleyin"
 
-#: src/MainWindow.py:974
+#: src/MainWindow.py:989
 msgid "Network device is unmounting."
 msgstr "Ağ cihazı kaldırılıyor."
 
-#: src/MainWindow.py:981
+#: src/MainWindow.py:996
 msgid "Disk is unmounting."
 msgstr "Disk kaldırılıyor."
 
-#: src/MainWindow.py:985 src/MainWindow.py:1027
+#: src/MainWindow.py:1000 src/MainWindow.py:1040
 msgid "USB disk is unmounting."
 msgstr "USB disk kaldırılıyor."
 
-#: src/MainWindow.py:987 src/MainWindow.py:1029
+#: src/MainWindow.py:1002 src/MainWindow.py:1042
 msgid "Card drive is unmounting."
 msgstr "Kart sürücüsü kaldırılıyor."
 
-#: src/MainWindow.py:989 src/MainWindow.py:1031
+#: src/MainWindow.py:1004 src/MainWindow.py:1044
 msgid "Optical disk is unmounting."
 msgstr "Optik disk kaldırılıyor."
 
-#: src/MainWindow.py:992 src/MainWindow.py:1034
+#: src/MainWindow.py:1007 src/MainWindow.py:1047
 msgid "Optical drive is unmounting."
 msgstr "Optik sürücü kaldırılıyor."
 
-#: src/MainWindow.py:994 src/MainWindow.py:1036
+#: src/MainWindow.py:1009 src/MainWindow.py:1049
 msgid "Phone is unmounting."
 msgstr "Telefon kaldırılıyor."
 
-#: src/MainWindow.py:1049 src/MainWindow.py:1688
+#: src/MainWindow.py:1063 src/MainWindow.py:1760
 msgid "Device ejected."
 msgstr "Cihaz çıkartıldı."
 
-#: src/MainWindow.py:1121
+#: src/MainWindow.py:1177
 msgid "Format"
 msgstr "Biçimlendir"
 
-#: src/MainWindow.py:1129
+#: src/MainWindow.py:1185
 msgid "Mount on Startup"
 msgstr "Başlangıçta Bağlı Gelsin"
 
-#: src/MainWindow.py:1388
+#: src/MainWindow.py:1444
 msgid "Error"
 msgstr "Hata"
 
-#: src/MainWindow.py:1618
+#: src/MainWindow.py:1679
 msgid "Unmounting process is done"
 msgstr "Kaldırma işlemi tamamlandı"
 
-#: src/MainWindow.py:1622
+#: src/MainWindow.py:1683
 msgid "You can eject the network device."
 msgstr "Ağ cihazını çıkarabilirsiniz."
 
-#: src/MainWindow.py:1627
+#: src/MainWindow.py:1688
 msgid "You can eject the disk."
 msgstr "Diski çıkarabilirsiniz."
 
-#: src/MainWindow.py:1631
+#: src/MainWindow.py:1692
 msgid "You can eject the USB disk."
 msgstr "USB diski çıkarabilirsiniz."
 
-#: src/MainWindow.py:1633
+#: src/MainWindow.py:1694
 msgid "You can eject the card drive."
 msgstr "Kart sürücüsünü çıkarabilirsiniz."
 
-#: src/MainWindow.py:1635
+#: src/MainWindow.py:1696
 msgid "You can eject the optical disk."
 msgstr "Optik diski çıkarabilirsiniz."
 
-#: src/MainWindow.py:1638
+#: src/MainWindow.py:1699
 msgid "You can eject the optical drive."
 msgstr "Optik sürücüyü çıkarabilirsiniz."
 
-#: src/MainWindow.py:1640
+#: src/MainWindow.py:1701
 msgid "You can eject the phone."
 msgstr "Telefonu çıkarabilirsiniz."
 
