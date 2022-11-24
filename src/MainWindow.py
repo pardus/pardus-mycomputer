@@ -349,7 +349,7 @@ class MainWindow:
             self.dlg_lbl_free_gb.set_label(f"{int(file_info['free_kb'])/1000/1000:.2f} GB (%{file_info['free_percent']*100:.2f})")
             self.dlg_lbl_total_gb.set_label(f"{int(file_info['total_kb'])/1000/1000:.2f} GB")
 
-            self.dlg_lbl_filesystem_type.set_label(DiskManager.get_filesystem_of_partition(file_info["device"]))
+            self.dlg_lbl_filesystem_type.set_label(file_info["fstype"])
 
 
     def showVolumeSizes(self, row_volume):
