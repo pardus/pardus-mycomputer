@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 01:06+0300\n"
+"POT-Creation-Date: 2022-11-24 13:06+0300\n"
 "PO-Revision-Date: 2022-11-23 12:31+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: \n"
@@ -30,7 +30,7 @@ msgstr "Interface para informação e gestão de discos no seu computador."
 msgid "Website"
 msgstr "Website"
 
-#: ui/MainWindow.glade:123 src/MainWindow.py:264
+#: ui/MainWindow.glade:123 src/MainWindow.py:266
 msgid "About Pardus"
 msgstr "Sobre o Pardus"
 
@@ -210,7 +210,7 @@ msgstr "Pasta pessoal"
 msgid "Root"
 msgstr "Root"
 
-#: ui/MainWindow.glade:1941 src/MainWindow.py:364
+#: ui/MainWindow.glade:1941 src/MainWindow.py:384
 msgid "is free of"
 msgstr "é livre de"
 
@@ -218,163 +218,163 @@ msgstr "é livre de"
 msgid "Hard Drives"
 msgstr "Discos rígidos"
 
-#: ui/MainWindow.glade:2127
+#: ui/MainWindow.glade:2138
 msgid "Removable Drives"
 msgstr "Unidades removíveis"
 
-#: ui/MainWindow.glade:2219
+#: ui/MainWindow.glade:2241
 msgid "Close app when Main directories are opened"
 msgstr "Fechar a aplicação quando os diretórios principais são abertos"
 
-#: ui/MainWindow.glade:2259
+#: ui/MainWindow.glade:2281
 msgid "Close app when Hard Drives are opened"
 msgstr "Fechar a aplicação quando os discos rígidos são abertos"
 
-#: ui/MainWindow.glade:2299
+#: ui/MainWindow.glade:2321
 msgid "Close app when Removable Drives are opened"
 msgstr "Fechar a aplicação quando os dispositivos removíveis são abertos"
 
-#: ui/MainWindow.glade:2339
+#: ui/MainWindow.glade:2361
 msgid "Auto refresh disks (refresh time: 1.5 seconds)"
 msgstr "Atualizar discos automaticamente (tempo de atualização 1.5 segundos)"
 
-#: ui/MainWindow.glade:2382
+#: ui/MainWindow.glade:2404
 msgid "Restore Defaults"
 msgstr "Restaurar predefinições"
 
-#: ui/MainWindow.glade:2428
+#: ui/MainWindow.glade:2450
 msgid "My Computer"
 msgstr "Meu Computador"
 
-#: ui/MainWindow.glade:2436
+#: ui/MainWindow.glade:2458
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: src/MainWindow.py:171
+#: src/MainWindow.py:173
 msgid "Pardus My Computer"
 msgstr "Meu Computador Pardus"
 
-#: src/MainWindow.py:249
+#: src/MainWindow.py:251
 msgid "Unknown (/etc/os-release syntax error)"
 msgstr "Desconhecido (erro de sintaxe /etc/os-release)"
 
-#: src/MainWindow.py:258
+#: src/MainWindow.py:260
 msgid "Unknown (/etc/os-release file not exists)"
 msgstr "Desconhecido (ficheiro /etc/os-release não existe)"
 
-#: src/MainWindow.py:286
+#: src/MainWindow.py:288
 msgid "About"
 msgstr "Sobre"
 
-#: src/MainWindow.py:288
+#: src/MainWindow.py:290
 msgid "About System"
 msgstr "Sobre o sistema"
 
-#: src/MainWindow.py:456
+#: src/MainWindow.py:471
 msgid "Disk is available, click to mount."
 msgstr "O disco está disponível. Clique para montar."
 
-#: src/MainWindow.py:483
+#: src/MainWindow.py:498
 msgid "Mount"
 msgstr "Montar"
 
-#: src/MainWindow.py:495
+#: src/MainWindow.py:515
 msgid "Unmount"
 msgstr "Desmontar"
 
-#: src/MainWindow.py:523
+#: src/MainWindow.py:543
 msgid "Eject"
 msgstr "Ejetar"
 
-#: src/MainWindow.py:548
+#: src/MainWindow.py:568
 msgid "Add Bookmark"
 msgstr "Adicionar marcador"
 
-#: src/MainWindow.py:559
+#: src/MainWindow.py:579
 msgid "Remove Bookmark"
 msgstr "Remover marcador"
 
-#: src/MainWindow.py:596
+#: src/MainWindow.py:616
 msgid "Information"
 msgstr "Informação"
 
-#: src/MainWindow.py:971 src/MainWindow.py:1024
+#: src/MainWindow.py:986 src/MainWindow.py:1037
 msgid "Please wait"
 msgstr "Aguarde"
 
-#: src/MainWindow.py:974
+#: src/MainWindow.py:989
 msgid "Network device is unmounting."
 msgstr "O dispositivo de rede está a ser desmontado."
 
-#: src/MainWindow.py:981
+#: src/MainWindow.py:996
 msgid "Disk is unmounting."
 msgstr "O disco está a ser desmontado."
 
-#: src/MainWindow.py:985 src/MainWindow.py:1027
+#: src/MainWindow.py:1000 src/MainWindow.py:1040
 msgid "USB disk is unmounting."
 msgstr "O disco USB está a ser desmontado."
 
-#: src/MainWindow.py:987 src/MainWindow.py:1029
+#: src/MainWindow.py:1002 src/MainWindow.py:1042
 msgid "Card drive is unmounting."
 msgstr "A unidade do cartão está a ser desmontada."
 
-#: src/MainWindow.py:989 src/MainWindow.py:1031
+#: src/MainWindow.py:1004 src/MainWindow.py:1044
 msgid "Optical disk is unmounting."
 msgstr "O disco ótico está a ser desmontado."
 
-#: src/MainWindow.py:992 src/MainWindow.py:1034
+#: src/MainWindow.py:1007 src/MainWindow.py:1047
 msgid "Optical drive is unmounting."
 msgstr "A unidade ótica está a ser desmontada."
 
-#: src/MainWindow.py:994 src/MainWindow.py:1036
+#: src/MainWindow.py:1009 src/MainWindow.py:1049
 msgid "Phone is unmounting."
 msgstr "O telefone está a ser desmontado."
 
-#: src/MainWindow.py:1049 src/MainWindow.py:1688
+#: src/MainWindow.py:1063 src/MainWindow.py:1760
 msgid "Device ejected."
 msgstr "Dispositivo ejetado."
 
-#: src/MainWindow.py:1121
+#: src/MainWindow.py:1177
 msgid "Format"
 msgstr "Formatar"
 
-#: src/MainWindow.py:1129
+#: src/MainWindow.py:1185
 msgid "Mount on Startup"
 msgstr "Montar no arranque"
 
-#: src/MainWindow.py:1388
+#: src/MainWindow.py:1444
 msgid "Error"
 msgstr "Erro"
 
-#: src/MainWindow.py:1618
+#: src/MainWindow.py:1679
 msgid "Unmounting process is done"
 msgstr "O processo de desmontagem está concluído"
 
-#: src/MainWindow.py:1622
+#: src/MainWindow.py:1683
 msgid "You can eject the network device."
 msgstr "Pode ejetar o dispositivo de rede."
 
-#: src/MainWindow.py:1627
+#: src/MainWindow.py:1688
 msgid "You can eject the disk."
 msgstr "Pode ejetar o disco."
 
-#: src/MainWindow.py:1631
+#: src/MainWindow.py:1692
 msgid "You can eject the USB disk."
 msgstr "Pode ejetar o disco USB."
 
-#: src/MainWindow.py:1633
+#: src/MainWindow.py:1694
 msgid "You can eject the card drive."
 msgstr "Pode ejetar o cartão de armazenamento."
 
-#: src/MainWindow.py:1635
+#: src/MainWindow.py:1696
 msgid "You can eject the optical disk."
 msgstr "Pode ejetar o disco ótico."
 
-#: src/MainWindow.py:1638
+#: src/MainWindow.py:1699
 msgid "You can eject the optical drive."
 msgstr "Pode ejetar a unidade ótica."
 
-#: src/MainWindow.py:1640
+#: src/MainWindow.py:1701
 msgid "You can eject the phone."
 msgstr "Pode ejetar o telefone."
 
