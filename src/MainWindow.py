@@ -222,6 +222,7 @@ class MainWindow:
         self.UserSettings.createDefaultConfig()
         self.UserSettings.readConfig()
 
+        print("{} {}".format("config_remember_window_size", self.UserSettings.config_remember_window_size))
         print("{} {}".format("config_closeapp_pardus", self.UserSettings.config_closeapp_pardus))
         print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
         print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
@@ -947,7 +948,44 @@ class MainWindow:
 
     # Window methods:
     def onDestroy(self, action):
+
         self.window.get_application().quit()
+
+    def on_window_delete_event(self, window, data=None):
+
+        # Get and save window state (if full screen or not), window size (width, height)
+        remember_window_size_value = True
+        main_window_state = window.is_maximized()
+        main_window_width, main_window_height = window.get_size()
+        remember_window_size_value_current = [remember_window_size_value, main_window_state, main_window_width, main_window_height]
+
+        user_config_remember_window_size = self.UserSettings.config_remember_window_size
+        if remember_window_size_value_current != user_config_remember_window_size:
+            print("Saving remember window size value")
+            try:
+                self.UserSettings.writeConfig(remember_window_size_value_current,
+                                              self.UserSettings.config_closeapp_pardus,
+                                              self.UserSettings.config_closeapp_hdd,
+                                              self.UserSettings.config_closeapp_usb,
+                                              self.UserSettings.config_autorefresh,
+                                              self.UserSettings.config_autorefresh_time
+                                              )
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
+        self.control_defaults()
+
+        self.window.get_application().quit()
+
+    def on_window_show(self, window):
+
+        # Resize/set state (full screen or not) of the application window
+        remember_window_size_value = self.UserSettings.config_remember_window_size
+        if remember_window_size_value[0] == True:
+            if remember_window_size_value[1] == True:
+                window.maximize()
+            else:
+                window.resize(remember_window_size_value[2], remember_window_size_value[3])
 
 
 
@@ -1224,7 +1262,8 @@ class MainWindow:
         if state != user_config_closeapp_pardus:
             print("Updating close app pardus state")
             try:
-                self.UserSettings.writeConfig(state,
+                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
+                                              state,
                                               self.UserSettings.config_closeapp_hdd,
                                               self.UserSettings.config_closeapp_usb,
                                               self.UserSettings.config_autorefresh,
@@ -1240,7 +1279,8 @@ class MainWindow:
         if state != user_config_closeapp_hdd:
             print("Updating close app hdd state")
             try:
-                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
+                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
+                                              self.UserSettings.config_closeapp_pardus,
                                               state,
                                               self.UserSettings.config_closeapp_usb,
                                               self.UserSettings.config_autorefresh,
@@ -1256,7 +1296,8 @@ class MainWindow:
         if state != user_config_closeapp_usb:
             print("Updating close app usb state")
             try:
-                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
+                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
+                                              self.UserSettings.config_closeapp_pardus,
                                               self.UserSettings.config_closeapp_hdd,
                                               state,
                                               self.UserSettings.config_autorefresh,
@@ -1272,7 +1313,8 @@ class MainWindow:
         if state != user_config_autorefresh:
             print("Updating autorefresh state")
             try:
-                self.UserSettings.writeConfig(self.UserSettings.config_closeapp_pardus,
+                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
+                                              self.UserSettings.config_closeapp_pardus,
                                               self.UserSettings.config_closeapp_hdd,
                                               self.UserSettings.config_closeapp_usb,
                                               state,

@@ -19,12 +19,14 @@ class UserSettings(object):
         self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
 
         self.config = configparser.ConfigParser(strict=False)
+        self.config_remember_window_size = None
         self.config_closeapp_pardus = None
         self.config_closeapp_hdd = None
         self.config_closeapp_usb = None
         self.config_autorefresh = None
         self.config_autorefresh_time = None
 
+        self.default_remember_window_size = [True, False, 700, 550]
         self.default_closeapp_pardus = False
         self.default_closeapp_hdd = False
         self.default_closeapp_usb = False
@@ -34,6 +36,7 @@ class UserSettings(object):
 
     def createDefaultConfig(self, force=False):
         self.config['MAIN'] = {
+            'RememberWindowSize': 'yes, no, 700, 550',
             'CloseAppPardus': 'no',
             'CloseAppHDD': 'no',
             'CloseAppUSB': 'no',
@@ -49,6 +52,21 @@ class UserSettings(object):
     def readConfig(self):
         try:
             self.config.read(self.user_config_file)
+
+            # "config_remember_window_size" setting is a list.
+            # It is processed by using the following code.
+            remember_window_size = self.config.get('MAIN', 'RememberWindowSize').strip("[]").split(", ")
+            remember_window_size_converted = []
+            for i, value in enumerate(remember_window_size):
+                if i == 0 or i == 1:
+                    if value == "True":
+                        remember_window_size_converted.append(True)
+                    else:
+                        remember_window_size_converted.append(False)
+                if i == 2 or i == 3:
+                    remember_window_size_converted.append(int(value))
+
+            self.config_remember_window_size = remember_window_size_converted
             self.config_closeapp_pardus = self.config.getboolean('MAIN', 'CloseAppPardus')
             self.config_closeapp_hdd = self.config.getboolean('MAIN', 'CloseAppHDD')
             self.config_closeapp_usb = self.config.getboolean('MAIN', 'CloseAppUSB')
@@ -59,6 +77,7 @@ class UserSettings(object):
             print("{}".format(e))
             print("user config read error ! Trying create defaults")
             # if not read; try to create defaults
+            self.config_remember_window_size = self.default_remember_window_size
             self.config_closeapp_pardus = self.default_closeapp_pardus
             self.config_closeapp_hdd = self.default_closeapp_hdd
             self.config_closeapp_usb = self.default_closeapp_usb
@@ -69,8 +88,9 @@ class UserSettings(object):
             except Exception as e:
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
-    def writeConfig(self, closeapppardus, closeapphdd, closeappusb, autorefresh, autorefreshtime):
+    def writeConfig(self, rememberwindowsize, closeapppardus, closeapphdd, closeappusb, autorefresh, autorefreshtime):
         self.config['MAIN'] = {
+            'RememberWindowSize': rememberwindowsize,
             'CloseAppPardus': closeapppardus,
             'CloseAppHDD': closeapphdd,
             'CloseAppUSB': closeappusb,
