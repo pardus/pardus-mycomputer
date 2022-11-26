@@ -132,6 +132,7 @@ class MainWindow:
         self.popover_menu = UI("popover_menu")
 
         # Settings switch buttons
+        self.sw_remember_window_size = UI("sw_remember_window_size")
         self.sw_closeapp_pardus = UI("sw_closeapp_pardus")
         self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
         self.sw_closeapp_usb = UI("sw_closeapp_usb")
@@ -953,13 +954,17 @@ class MainWindow:
 
     def on_window_delete_event(self, window, data=None):
 
+        user_config_remember_window_size = self.UserSettings.config_remember_window_size
+
+        # Stop running the function if the setting is disabled.
+        if user_config_remember_window_size[0] == False:
+            return
+
         # Get and save window state (if full screen or not), window size (width, height)
-        remember_window_size_value = True
         main_window_state = window.is_maximized()
         main_window_width, main_window_height = window.get_size()
-        remember_window_size_value_current = [remember_window_size_value, main_window_state, main_window_width, main_window_height]
+        remember_window_size_value_current = [True, main_window_state, main_window_width, main_window_height]
 
-        user_config_remember_window_size = self.UserSettings.config_remember_window_size
         if remember_window_size_value_current != user_config_remember_window_size:
             print("Saving remember window size value")
             try:
@@ -1256,6 +1261,23 @@ class MainWindow:
     def on_btn_refresh_clicked(self, button):
         print("Manually refreshing disks")
         self.addDisksToGUI()
+
+    def on_sw_remember_window_size_state_set(self, switch, state):
+        user_config_remember_window_size = self.UserSettings.config_remember_window_size
+        if state != user_config_remember_window_size[0]:
+            print("Updating remember window size state")
+            try:
+                self.UserSettings.writeConfig([state, False, -1, -1],
+                                              self.UserSettings.config_closeapp_pardus,
+                                              self.UserSettings.config_closeapp_hdd,
+                                              self.UserSettings.config_closeapp_usb,
+                                              self.UserSettings.config_autorefresh,
+                                              self.UserSettings.config_autorefresh_time
+                                              )
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
+        self.control_defaults()
 
     def on_sw_closeapp_pardus_state_set(self, switch, state):
         user_config_closeapp_pardus = self.UserSettings.config_closeapp_pardus
@@ -1630,6 +1652,7 @@ class MainWindow:
             self.stack_main.set_visible_child_name("home")
             self.img_settings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
         elif self.stack_main.get_visible_child_name() == "home":
+            self.sw_remember_window_size.set_state(self.UserSettings.config_remember_window_size[0])
             self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
@@ -1641,13 +1664,15 @@ class MainWindow:
     def on_btn_defaults_clicked(self, button):
         self.UserSettings.createDefaultConfig(force=True)
         self.user_settings()
+        self.sw_remember_window_size.set_state(self.UserSettings.config_remember_window_size[0])
         self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
         self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
         self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
         self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
 
     def control_defaults(self):
-        if self.UserSettings.config_closeapp_pardus != self.UserSettings.default_closeapp_pardus or \
+        if self.UserSettings.config_remember_window_size != self.UserSettings.default_remember_window_size or \
+                self.UserSettings.config_closeapp_pardus != self.UserSettings.default_closeapp_pardus or \
                 self.UserSettings.config_closeapp_hdd != self.UserSettings.default_closeapp_hdd or \
                 self.UserSettings.config_closeapp_usb != self.UserSettings.default_closeapp_usb or \
                 self.UserSettings.config_autorefresh != self.UserSettings.default_autorefresh or \
