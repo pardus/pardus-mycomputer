@@ -26,7 +26,7 @@ class UserSettings(object):
         self.config_autorefresh = None
         self.config_autorefresh_time = None
 
-        self.default_remember_window_size = [True, False, 700, 550]
+        self.default_remember_window_size = [False, False, -1, -1]
         self.default_closeapp_pardus = False
         self.default_closeapp_hdd = False
         self.default_closeapp_usb = False
@@ -36,7 +36,7 @@ class UserSettings(object):
 
     def createDefaultConfig(self, force=False):
         self.config['MAIN'] = {
-            'RememberWindowSize': 'yes, no, 700, 550',
+            'RememberWindowSize': 'no, no, -1, -1',
             'CloseAppPardus': 'no',
             'CloseAppHDD': 'no',
             'CloseAppUSB': 'no',
@@ -54,6 +54,7 @@ class UserSettings(object):
             self.config.read(self.user_config_file)
 
             # "config_remember_window_size" setting is a list.
+            # [bool, bool, int, int]: [remember window size, window is full screen, window width, window height]
             # It is processed by using the following code.
             remember_window_size = self.config.get('MAIN', 'RememberWindowSize').strip("[]").split(", ")
             remember_window_size_converted = []
