@@ -1619,9 +1619,8 @@ Fatih Altun</property>
   <object class="GtkApplicationWindow" id="window">
     <property name="can-focus">False</property>
     <property name="window-position">center</property>
-    <property name="default-width">700</property>
-    <property name="default-height">550</property>
     <property name="icon-name">pardus-mycomputer</property>
+    <property name="gravity">center</property>
     <signal name="delete-event" handler="on_window_delete_event" swapped="no"/>
     <signal name="show" handler="on_window_show" swapped="no"/>
     <child>
@@ -2220,7 +2219,7 @@ Fatih Altun</property>
             <property name="margin-top">21</property>
             <property name="margin-bottom">8</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">8</property>
+            <property name="spacing">13</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -2229,46 +2228,6 @@ Fatih Altun</property>
                 <property name="valign">center</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">13</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">13</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Remember window size</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSwitch" id="sw_remember_window_size">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="halign">end</property>
-                        <property name="valign">center</property>
-                        <signal name="state-set" handler="on_sw_remember_window_size_state_set" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
@@ -2289,12 +2248,12 @@ Fatih Altun</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch" id="sw_closeapp_pardus">
+                      <object class="GtkSwitch" id="sw_closeapp_main">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
-                        <signal name="state-set" handler="on_sw_closeapp_pardus_state_set" swapped="no"/>
+                        <signal name="state-set" handler="on_sw_closeapp_main_state_set" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2306,7 +2265,7 @@ Fatih Altun</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -2346,7 +2305,7 @@ Fatih Altun</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -2386,7 +2345,7 @@ Fatih Altun</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -2426,7 +2385,87 @@ Fatih Altun</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="spacing">13</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">True</property>
+                        <property name="label" translatable="yes">Remember window size</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSwitch" id="sw_remember_window_size">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <signal name="state-set" handler="on_sw_remember_window_size_state_set" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="spacing">13</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">True</property>
+                        <property name="label" translatable="yes">Use Dark Theme</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSwitch" id="sw_use_dark_theme">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <signal name="state-set" handler="on_sw_use_dark_theme_state_set" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
               </object>
@@ -2462,7 +2501,7 @@ Fatih Altun</property>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="pack-type">end</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -2474,7 +2513,7 @@ Fatih Altun</property>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="pack-type">end</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>

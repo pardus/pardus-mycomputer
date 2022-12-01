@@ -19,29 +19,51 @@ class UserSettings(object):
         self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
 
         self.config = configparser.ConfigParser(strict=False)
-        self.config_remember_window_size = None
-        self.config_closeapp_pardus = None
+
+        # main configs
+        self.config_closeapp_main = None
         self.config_closeapp_hdd = None
         self.config_closeapp_usb = None
         self.config_autorefresh = None
         self.config_autorefresh_time = None
 
-        self.default_remember_window_size = [False, False, -1, -1]
-        self.default_closeapp_pardus = False
+        # window configs
+        self.config_window_remember_size = None
+        self.config_window_fullscreen = None
+        self.config_window_width = None
+        self.config_window_height = None
+        self.config_window_use_darktheme = None
+
+        # main defaults
+        self.default_closeapp_main = False
         self.default_closeapp_hdd = False
         self.default_closeapp_usb = False
         self.default_autorefresh = False
         self.default_autorefresh_time = 1.5
 
+        # window defaults
+        self.default_window_remember_size = False
+        self.default_window_fullscreen = False
+        self.default_window_width = 700
+        self.default_window_height = 550
+        self.default_window_use_darktheme = False
+
 
     def createDefaultConfig(self, force=False):
         self.config['MAIN'] = {
-            'RememberWindowSize': 'no, no, -1, -1',
-            'CloseAppPardus': 'no',
-            'CloseAppHDD': 'no',
-            'CloseAppUSB': 'no',
-            'AutoRefresh': 'no',
-            'AutoRefreshTime': 1.5
+            'CloseAppMain': self.default_closeapp_main,
+            'CloseAppHDD': self.default_closeapp_hdd,
+            'CloseAppUSB': self.default_closeapp_usb,
+            'AutoRefresh': self.default_autorefresh,
+            'AutoRefreshTime': self.default_autorefresh_time
+        }
+
+        self.config['WINDOW'] = {
+            'RememberWindowSize': self.default_window_remember_size,
+            'FullScreen': self.default_window_fullscreen,
+            'Width': self.default_window_width,
+            'Height': self.default_window_height,
+            'UseDarkTheme': self.default_window_use_darktheme
         }
 
         if not Path.is_file(self.user_config_file) or force:
@@ -52,52 +74,75 @@ class UserSettings(object):
     def readConfig(self):
         try:
             self.config.read(self.user_config_file)
-
-            # "config_remember_window_size" setting is a list.
-            # [bool, bool, int, int]: [remember window size, window is full screen, window width, window height]
-            # It is processed by using the following code.
-            remember_window_size = self.config.get('MAIN', 'RememberWindowSize').strip("[]").split(", ")
-            remember_window_size_converted = []
-            for i, value in enumerate(remember_window_size):
-                if i == 0 or i == 1:
-                    if value == "True":
-                        remember_window_size_converted.append(True)
-                    else:
-                        remember_window_size_converted.append(False)
-                if i == 2 or i == 3:
-                    remember_window_size_converted.append(int(value))
-
-            self.config_remember_window_size = remember_window_size_converted
-            self.config_closeapp_pardus = self.config.getboolean('MAIN', 'CloseAppPardus')
+            self.config_closeapp_main = self.config.getboolean('MAIN', 'CloseAppMain')
             self.config_closeapp_hdd = self.config.getboolean('MAIN', 'CloseAppHDD')
             self.config_closeapp_usb = self.config.getboolean('MAIN', 'CloseAppUSB')
             self.config_autorefresh = self.config.getboolean('MAIN', 'AutoRefresh')
             self.config_autorefresh_time = self.config.getfloat('MAIN', 'AutoRefreshTime')
+            self.config_window_remember_size = self.config.getboolean('WINDOW', 'RememberWindowSize')
+            self.config_window_fullscreen = self.config.getboolean('WINDOW', 'FullScreen')
+            self.config_window_width = self.config.getint('WINDOW', 'Width')
+            self.config_window_height = self.config.getint('WINDOW', 'Height')
+            self.config_window_use_darktheme = self.config.getboolean('WINDOW', 'UseDarkTheme')
 
         except Exception as e:
             print("{}".format(e))
             print("user config read error ! Trying create defaults")
             # if not read; try to create defaults
-            self.config_remember_window_size = self.default_remember_window_size
-            self.config_closeapp_pardus = self.default_closeapp_pardus
+            self.config_closeapp_main = self.default_closeapp_main
             self.config_closeapp_hdd = self.default_closeapp_hdd
             self.config_closeapp_usb = self.default_closeapp_usb
             self.config_autorefresh = self.default_autorefresh
             self.config_autorefresh_time = self.default_autorefresh_time
+            self.config_window_remember_size = self.default_window_remember_size
+            self.config_window_fullscreen = self.default_window_fullscreen
+            self.config_window_width = self.default_window_width
+            self.config_window_height = self.default_window_height
+            self.config_window_use_darktheme = self.default_window_use_darktheme
             try:
                 self.createDefaultConfig(force=True)
             except Exception as e:
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
-    def writeConfig(self, rememberwindowsize, closeapppardus, closeapphdd, closeappusb, autorefresh, autorefreshtime):
+    def writeConfig(self, closeappmain="", closeapphdd="", closeappusb="", autorefresh="", autorefreshtime="",
+                    rememberwindowsize="", fullscreen="", width="", height="", usedarktheme=""):
+        if closeappmain == "":
+            closeappmain = self.config_closeapp_main
+        if closeapphdd == "":
+            closeapphdd = self.config_closeapp_hdd
+        if closeappusb == "":
+            closeappusb = self.config_closeapp_usb
+        if autorefresh == "":
+            autorefresh = self.config_autorefresh
+        if autorefreshtime == "":
+            autorefreshtime = self.config_autorefresh_time
+        if rememberwindowsize == "":
+            rememberwindowsize = self.config_window_remember_size
+        if fullscreen == "":
+            fullscreen = self.config_window_fullscreen
+        if width == "":
+            width = self.config_window_width
+        if height == "":
+            height = self.config_window_height
+        if usedarktheme == "":
+            usedarktheme = self.config_window_use_darktheme
+
         self.config['MAIN'] = {
-            'RememberWindowSize': rememberwindowsize,
-            'CloseAppPardus': closeapppardus,
+            'CloseAppMain': closeappmain,
             'CloseAppHDD': closeapphdd,
             'CloseAppUSB': closeappusb,
             'AutoRefresh': autorefresh,
             'AutoRefreshTime': autorefreshtime
         }
+
+        self.config['WINDOW'] = {
+            'RememberWindowSize': rememberwindowsize,
+            'FullScreen': fullscreen,
+            'Width': width,
+            'Height': height,
+            'UseDarkTheme': usedarktheme
+        }
+
         if self.createDir(self.user_config_dir):
             with open(self.user_config_file, "w") as cf:
                 self.config.write(cf)

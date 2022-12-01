@@ -37,7 +37,6 @@ class MainWindow:
 
         # Window
         self.window = self.builder.get_object("window")
-        self.window.set_position(Gtk.WindowPosition.CENTER)
         self.window.set_application(application)
         self.window.connect("destroy", self.onDestroy)
 
@@ -50,6 +49,10 @@ class MainWindow:
 
         # load user settings
         self.user_settings()
+
+        # control dark theme option
+        if self.UserSettings.config_window_use_darktheme:
+            Gtk.Settings.get_default().props.gtk_application_prefer_dark_theme = True
 
         # set os label and image
         self.set_os_label_img()
@@ -132,11 +135,12 @@ class MainWindow:
         self.popover_menu = UI("popover_menu")
 
         # Settings switch buttons
-        self.sw_remember_window_size = UI("sw_remember_window_size")
-        self.sw_closeapp_pardus = UI("sw_closeapp_pardus")
+        self.sw_closeapp_main = UI("sw_closeapp_main")
         self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
         self.sw_closeapp_usb = UI("sw_closeapp_usb")
         self.sw_autorefresh = UI("sw_autorefresh")
+        self.sw_remember_window_size = UI("sw_remember_window_size")
+        self.sw_use_dark_theme = UI("sw_use_dark_theme")
 
         self.img_settings = UI("img_settings")
 
@@ -223,12 +227,17 @@ class MainWindow:
         self.UserSettings.createDefaultConfig()
         self.UserSettings.readConfig()
 
-        print("{} {}".format("config_remember_window_size", self.UserSettings.config_remember_window_size))
-        print("{} {}".format("config_closeapp_pardus", self.UserSettings.config_closeapp_pardus))
+        print("{} {}".format("config_closeapp_main", self.UserSettings.config_closeapp_main))
         print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
         print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
         print("{} {}".format("config_autorefresh", self.UserSettings.config_autorefresh))
         print("{} {}".format("config_autorefresh_time", self.UserSettings.config_autorefresh_time))
+        print("{} {}".format("config_window_remember_size", self.UserSettings.config_window_remember_size))
+        if self.UserSettings.config_window_remember_size:
+            print("{} {}".format("config_window_fullscreen", self.UserSettings.config_window_fullscreen))
+            print("{} {}".format("config_window_width", self.UserSettings.config_window_width))
+            print("{} {}".format("config_window_height", self.UserSettings.config_window_height))
+        print("{} {}".format("config_window_use_darktheme", self.UserSettings.config_window_use_darktheme))
 
     def set_os_label_img(self):
         os_name = ""
@@ -954,55 +963,44 @@ class MainWindow:
 
     def on_window_delete_event(self, window, data=None):
 
-        user_config_remember_window_size = self.UserSettings.config_remember_window_size
-
         # Stop running the function if the setting is disabled.
-        if user_config_remember_window_size[0] == False:
+        if self.UserSettings.config_window_remember_size == False:
             return
 
-        # Get and save window state (if full screen or not), window size (width, height)
-        main_window_state = window.is_maximized()
-        main_window_width, main_window_height = window.get_size()
-        remember_window_size_value_current = [True, main_window_state, main_window_width, main_window_height]
+        current_fullscreen = window.is_maximized()
+        current_width, current_height = window.get_size()
 
-        if remember_window_size_value_current != user_config_remember_window_size:
-            print("Saving remember window size value")
-            try:
-                self.UserSettings.writeConfig(remember_window_size_value_current,
-                                              self.UserSettings.config_closeapp_pardus,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb,
-                                              self.UserSettings.config_autorefresh,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
-                self.user_settings()
-            except Exception as e:
-                print("{}".format(e))
-        self.control_defaults()
+        print("Saving remember window size value")
+        try:
+            self.UserSettings.writeConfig(rememberwindowsize=self.UserSettings.config_window_remember_size,
+                                          fullscreen=current_fullscreen, width=current_width, height=current_height)
+            self.user_settings()
+        except Exception as e:
+            print("{}".format(e))
 
         self.window.get_application().quit()
 
     def on_window_show(self, window):
 
         # Resize/set state (full screen or not) of the application window
-        remember_window_size_value = self.UserSettings.config_remember_window_size
-        if remember_window_size_value[0] == True:
-            if remember_window_size_value[1] == True:
+        if self.UserSettings.config_window_remember_size:
+            if self.UserSettings.config_window_fullscreen:
                 window.maximize()
             else:
-                window.resize(remember_window_size_value[2], remember_window_size_value[3])
-
+                window.resize(self.UserSettings.config_window_width, self.UserSettings.config_window_height)
+        else:
+            window.resize(self.UserSettings.default_window_width, self.UserSettings.default_window_height)
 
 
     # SIGNALS:
     def on_lb_home_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", GLib.get_home_dir()])
-        if self.UserSettings.config_closeapp_pardus:
+        if self.UserSettings.config_closeapp_main:
             self.onDestroy(listbox)
 
     def on_lb_root_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", "/"])
-        if self.UserSettings.config_closeapp_pardus:
+        if self.UserSettings.config_closeapp_main:
             self.onDestroy(listbox)
 
     def on_btn_mount_clicked(self, button):
@@ -1262,35 +1260,12 @@ class MainWindow:
         print("Manually refreshing disks")
         self.addDisksToGUI()
 
-    def on_sw_remember_window_size_state_set(self, switch, state):
-        user_config_remember_window_size = self.UserSettings.config_remember_window_size
-        if state != user_config_remember_window_size[0]:
-            print("Updating remember window size state")
+    def on_sw_closeapp_main_state_set(self, switch, state):
+        user_config_closeapp_main = self.UserSettings.config_closeapp_main
+        if state != user_config_closeapp_main:
+            print("Updating close app main state")
             try:
-                self.UserSettings.writeConfig([state, False, -1, -1],
-                                              self.UserSettings.config_closeapp_pardus,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb,
-                                              self.UserSettings.config_autorefresh,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
-                self.user_settings()
-            except Exception as e:
-                print("{}".format(e))
-        self.control_defaults()
-
-    def on_sw_closeapp_pardus_state_set(self, switch, state):
-        user_config_closeapp_pardus = self.UserSettings.config_closeapp_pardus
-        if state != user_config_closeapp_pardus:
-            print("Updating close app pardus state")
-            try:
-                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
-                                              state,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb,
-                                              self.UserSettings.config_autorefresh,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
+                self.UserSettings.writeConfig(closeappmain=state)
                 self.user_settings()
             except Exception as e:
                 print("{}".format(e))
@@ -1301,13 +1276,7 @@ class MainWindow:
         if state != user_config_closeapp_hdd:
             print("Updating close app hdd state")
             try:
-                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
-                                              self.UserSettings.config_closeapp_pardus,
-                                              state,
-                                              self.UserSettings.config_closeapp_usb,
-                                              self.UserSettings.config_autorefresh,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
+                self.UserSettings.writeConfig(closeapphdd=state)
                 self.user_settings()
             except Exception as e:
                 print("{}".format(e))
@@ -1318,13 +1287,7 @@ class MainWindow:
         if state != user_config_closeapp_usb:
             print("Updating close app usb state")
             try:
-                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
-                                              self.UserSettings.config_closeapp_pardus,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              state,
-                                              self.UserSettings.config_autorefresh,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
+                self.UserSettings.writeConfig(closeappusb=state)
                 self.user_settings()
             except Exception as e:
                 print("{}".format(e))
@@ -1335,19 +1298,36 @@ class MainWindow:
         if state != user_config_autorefresh:
             print("Updating autorefresh state")
             try:
-                self.UserSettings.writeConfig(self.UserSettings.config_remember_window_size,
-                                              self.UserSettings.config_closeapp_pardus,
-                                              self.UserSettings.config_closeapp_hdd,
-                                              self.UserSettings.config_closeapp_usb,
-                                              state,
-                                              self.UserSettings.config_autorefresh_time
-                                              )
+                self.UserSettings.writeConfig(autorefresh=state)
                 self.user_settings()
                 if state:
                     self.autorefresh()
                 else:
                     GLib.source_remove(self.autorefresh_glibid)
                     self.autorefresh_glibid = None
+            except Exception as e:
+                print("{}".format(e))
+        self.control_defaults()
+
+    def on_sw_remember_window_size_state_set(self, switch, state):
+        user_config_remember_window_size = self.UserSettings.config_window_remember_size
+        if state != user_config_remember_window_size:
+            print("Updating remember window size state")
+            try:
+                self.UserSettings.writeConfig(rememberwindowsize=state)
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
+        self.control_defaults()
+
+    def on_sw_use_dark_theme_state_set(self, switch, state):
+        user_config_use_dark_theme = self.UserSettings.config_window_use_darktheme
+        if state != user_config_use_dark_theme:
+            print("Updating remember window size state")
+            try:
+                self.UserSettings.writeConfig(usedarktheme=state)
+                self.user_settings()
+                Gtk.Settings.get_default().props.gtk_application_prefer_dark_theme = state
             except Exception as e:
                 print("{}".format(e))
         self.control_defaults()
@@ -1652,31 +1632,41 @@ class MainWindow:
             self.stack_main.set_visible_child_name("home")
             self.img_settings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
         elif self.stack_main.get_visible_child_name() == "home":
-            self.sw_remember_window_size.set_state(self.UserSettings.config_remember_window_size[0])
-            self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
+            self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
             self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
+            self.sw_remember_window_size.set_state(self.UserSettings.config_window_remember_size)
+            self.sw_use_dark_theme.set_state(self.UserSettings.config_window_use_darktheme)
             self.stack_main.set_visible_child_name("settings")
             self.img_settings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
             self.control_defaults()
 
     def on_btn_defaults_clicked(self, button):
+        old_window_remember_size = self.UserSettings.config_window_remember_size
         self.UserSettings.createDefaultConfig(force=True)
         self.user_settings()
-        self.sw_remember_window_size.set_state(self.UserSettings.config_remember_window_size[0])
-        self.sw_closeapp_pardus.set_state(self.UserSettings.config_closeapp_pardus)
+        self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
         self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
         self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
         self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
+        self.sw_remember_window_size.set_state(self.UserSettings.config_window_remember_size)
+        self.sw_use_dark_theme.set_state(self.UserSettings.config_window_use_darktheme)
+
+        if self.autorefresh_glibid:
+            GLib.source_remove(self.autorefresh_glibid)
+
+        Gtk.Settings.get_default().props.gtk_application_prefer_dark_theme = self.UserSettings.config_window_use_darktheme
+
 
     def control_defaults(self):
-        if self.UserSettings.config_remember_window_size != self.UserSettings.default_remember_window_size or \
-                self.UserSettings.config_closeapp_pardus != self.UserSettings.default_closeapp_pardus or \
-                self.UserSettings.config_closeapp_hdd != self.UserSettings.default_closeapp_hdd or \
-                self.UserSettings.config_closeapp_usb != self.UserSettings.default_closeapp_usb or \
-                self.UserSettings.config_autorefresh != self.UserSettings.default_autorefresh or \
-                self.UserSettings.config_autorefresh_time != self.UserSettings.default_autorefresh_time:
+        if self.UserSettings.config_closeapp_main != self.UserSettings.default_closeapp_main or \
+            self.UserSettings.config_closeapp_hdd != self.UserSettings.default_closeapp_hdd or \
+            self.UserSettings.config_closeapp_usb != self.UserSettings.default_closeapp_usb or \
+            self.UserSettings.config_autorefresh != self.UserSettings.default_autorefresh or \
+            self.UserSettings.config_autorefresh_time != self.UserSettings.default_autorefresh_time or \
+            self.UserSettings.config_window_remember_size != self.UserSettings.default_window_remember_size or \
+            self.UserSettings.config_window_use_darktheme != self.UserSettings.default_window_use_darktheme:
             self.btn_defaults.set_sensitive(True)
         else:
             self.btn_defaults.set_sensitive(False)
