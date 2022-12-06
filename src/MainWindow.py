@@ -1163,7 +1163,7 @@ class MainWindow:
             if isinstance(mount, str):
                 self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=mount)
             else:
-                th = subprocess.Popen("xdg-open {} &".format(mount.get_root().get_path()), shell=True)
+                th = subprocess.Popen("xdg-open '{}' &".format(mount.get_root().get_path()), shell=True)
                 th.communicate()
 
                 # some times phone's disk usage infos not showing on first mount,
