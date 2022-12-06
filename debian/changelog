@@ -1,3 +1,23 @@
+pardus-mycomputer (0.3.1) unstable; urgency=medium
+
+  [ Fatih Altun ]
+  * Update screenshots
+  * Update get fstype method
+
+  [ Hakan Dündar ]
+  * Added remember window size feature
+  * Add option for remember window size feature
+
+  [ Fatih Altun ]
+  * Update settings backend, ui and Add dark theme option
+  * Fix open directories problem that contains space
+  * Fix typo
+  * Update pot file
+  * Update pt.po file
+  * Update Turkish translations
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Tue, 06 Dec 2022 11:46:27 +0300
+
 pardus-mycomputer (0.3.0) unstable; urgency=medium
 
   [ Hakan Dündar ]
