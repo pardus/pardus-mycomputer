@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-06 11:29+0300\n"
-"PO-Revision-Date: 2022-11-23 12:31+0000\n"
+"PO-Revision-Date: 2022-12-29 15:58+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ui/MainWindow.glade:14
 msgid "About Pardus My Computer"
@@ -212,7 +212,7 @@ msgstr "Root"
 
 #: ui/MainWindow.glade:1942 src/MainWindow.py:395
 msgid "is free of"
-msgstr "é livre de"
+msgstr "está livre de"
 
 #: ui/MainWindow.glade:2058
 msgid "Hard Drives"
@@ -239,13 +239,12 @@ msgid "Auto refresh disks (refresh time: 1.5 seconds)"
 msgstr "Atualizar discos automaticamente (tempo de atualização 1.5 segundos)"
 
 #: ui/MainWindow.glade:2402
-#, fuzzy
 msgid "Remember window size"
-msgstr "Lembrar para sempre"
+msgstr "Lembrar tamanho da janela"
 
 #: ui/MainWindow.glade:2442
 msgid "Use dark theme"
-msgstr ""
+msgstr "Usar tema escuro"
 
 #: ui/MainWindow.glade:2485
 msgid "Restore Defaults"
