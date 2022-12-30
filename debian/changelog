@@ -1,3 +1,20 @@
+pardus-mycomputer (0.4.0) unstable; urgency=medium
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translations
+
+  [ Fatih Altun ]
+  * Add places side to home page as optionally
+  * Update place control and Add network support to places
+  * Update places bottom margin
+  * Update places section as active on default
+  * Update pot file
+  * Update Turkish translations
+  * Update copyright year to 2023
+  * Update window destroy events and controls
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 30 Dec 2022 16:57:21 +0300
+
 pardus-mycomputer (0.3.1) unstable; urgency=medium
 
   [ Fatih Altun ]
