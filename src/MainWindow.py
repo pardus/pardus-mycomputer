@@ -146,7 +146,7 @@ class MainWindow:
         self.sw_closeapp_main = UI("sw_closeapp_main")
         self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
         self.sw_closeapp_usb = UI("sw_closeapp_usb")
-        self.sw_show_places = UI("sw_show_places")
+        self.sw_hide_places = UI("sw_hide_places")
         self.sw_autorefresh = UI("sw_autorefresh")
         self.sw_remember_window_size = UI("sw_remember_window_size")
         self.sw_use_dark_theme = UI("sw_use_dark_theme")
@@ -239,7 +239,7 @@ class MainWindow:
         print("{} {}".format("config_closeapp_main", self.UserSettings.config_closeapp_main))
         print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
         print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
-        print("{} {}".format("config_show_places", self.UserSettings.config_show_places))
+        print("{} {}".format("config_hide_places", self.UserSettings.config_hide_places))
         print("{} {}".format("config_autorefresh", self.UserSettings.config_autorefresh))
         print("{} {}".format("config_autorefresh_time", self.UserSettings.config_autorefresh_time))
         print("{} {}".format("config_window_remember_size", self.UserSettings.config_window_remember_size))
@@ -313,8 +313,8 @@ class MainWindow:
         self.lbl_os.set_label("{}".format(os_name))
 
     def control_display(self):
-        width = 850 if self.UserSettings.config_show_places else 700
-        height = 650 if self.UserSettings.config_show_places else 550
+        width = 700 if self.UserSettings.config_hide_places else 850
+        height = 550 if self.UserSettings.config_hide_places else 650
         s = 1
         w = 1920
         h = 1080
@@ -338,6 +338,9 @@ class MainWindow:
         print("window w:{} h:{} | monitor w:{} h:{} s:{}".format(width, height, w, h, s))
 
     def set_places(self):
+
+        if self.UserSettings.config_hide_places:
+            return
 
         self.box_places.foreach(lambda child: self.box_places.remove(child))
 
@@ -437,7 +440,7 @@ class MainWindow:
         self.box_places.show_all()
 
     def control_places_show(self, displaycontrol=False):
-        self.box_places.set_visible(self.UserSettings.config_show_places)
+        self.box_places.set_visible(not self.UserSettings.config_hide_places)
         if displaycontrol:
             self.control_display()
 
@@ -1437,13 +1440,14 @@ class MainWindow:
                 print("{}".format(e))
         self.control_defaults()
 
-    def on_sw_show_places_state_set(self, switch, state):
-        user_config_show_places = self.UserSettings.config_show_places
-        if state != user_config_show_places:
-            print("Updating show places state")
+    def on_sw_hide_places_state_set(self, switch, state):
+        user_config_hide_places = self.UserSettings.config_hide_places
+        if state != user_config_hide_places:
+            print("Updating hide places state")
             try:
-                self.UserSettings.writeConfig(showplaces=state)
+                self.UserSettings.writeConfig(hideplaces=state)
                 self.user_settings()
+                self.set_places()
                 self.control_places_show(displaycontrol=True)
             except Exception as e:
                 print("{}".format(e))
@@ -1796,7 +1800,7 @@ class MainWindow:
             self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
-            self.sw_show_places.set_state(self.UserSettings.config_show_places)
+            self.sw_hide_places.set_state(self.UserSettings.config_hide_places)
             self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
             self.sw_remember_window_size.set_state(self.UserSettings.config_window_remember_size)
             self.sw_use_dark_theme.set_state(self.UserSettings.config_window_use_darktheme)
@@ -1808,6 +1812,7 @@ class MainWindow:
         old_window_remember_size = self.UserSettings.config_window_remember_size
         self.UserSettings.createDefaultConfig(force=True)
         self.user_settings()
+        self.sw_hide_places.set_state(self.UserSettings.config_hide_places)
         self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
         self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
         self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
@@ -1820,6 +1825,8 @@ class MainWindow:
 
         Gtk.Settings.get_default().props.gtk_application_prefer_dark_theme = self.UserSettings.config_window_use_darktheme
 
+        self.set_places()
+        self.control_places_show(displaycontrol=True)
 
     def control_defaults(self):
         if self.UserSettings.config_closeapp_main != self.UserSettings.default_closeapp_main or \
@@ -1827,7 +1834,7 @@ class MainWindow:
             self.UserSettings.config_closeapp_usb != self.UserSettings.default_closeapp_usb or \
             self.UserSettings.config_autorefresh != self.UserSettings.default_autorefresh or \
             self.UserSettings.config_autorefresh_time != self.UserSettings.default_autorefresh_time or \
-            self.UserSettings.config_show_places != self.UserSettings.default_show_places or \
+            self.UserSettings.config_hide_places != self.UserSettings.default_hide_places or \
             self.UserSettings.config_window_remember_size != self.UserSettings.default_window_remember_size or \
             self.UserSettings.config_window_use_darktheme != self.UserSettings.default_window_use_darktheme:
             self.btn_defaults.set_sensitive(True)

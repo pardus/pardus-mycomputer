@@ -40,7 +40,7 @@ class UserSettings(object):
         self.config_closeapp_usb = None
         self.config_autorefresh = None
         self.config_autorefresh_time = None
-        self.config_show_places = None
+        self.config_hide_places = None
 
         # window configs
         self.config_window_remember_size = None
@@ -55,7 +55,7 @@ class UserSettings(object):
         self.default_closeapp_usb = False
         self.default_autorefresh = False
         self.default_autorefresh_time = 1.5
-        self.default_show_places = False
+        self.default_hide_places = False
 
         # window defaults
         self.default_window_remember_size = False
@@ -72,7 +72,7 @@ class UserSettings(object):
             'CloseAppUSB': self.default_closeapp_usb,
             'AutoRefresh': self.default_autorefresh,
             'AutoRefreshTime': self.default_autorefresh_time,
-            'ShowPlaces': self.default_show_places
+            'HidePlaces': self.default_hide_places
         }
 
         self.config['WINDOW'] = {
@@ -96,7 +96,7 @@ class UserSettings(object):
             self.config_closeapp_usb = self.config.getboolean('MAIN', 'CloseAppUSB')
             self.config_autorefresh = self.config.getboolean('MAIN', 'AutoRefresh')
             self.config_autorefresh_time = self.config.getfloat('MAIN', 'AutoRefreshTime')
-            self.config_show_places = self.config.getboolean('MAIN', 'ShowPlaces')
+            self.config_hide_places = self.config.getboolean('MAIN', 'HidePlaces')
             self.config_window_remember_size = self.config.getboolean('WINDOW', 'RememberWindowSize')
             self.config_window_fullscreen = self.config.getboolean('WINDOW', 'FullScreen')
             self.config_window_width = self.config.getint('WINDOW', 'Width')
@@ -112,7 +112,7 @@ class UserSettings(object):
             self.config_closeapp_usb = self.default_closeapp_usb
             self.config_autorefresh = self.default_autorefresh
             self.config_autorefresh_time = self.default_autorefresh_time
-            self.config_show_places = self.default_show_places
+            self.config_hide_places = self.default_hide_places
             self.config_window_remember_size = self.default_window_remember_size
             self.config_window_fullscreen = self.default_window_fullscreen
             self.config_window_width = self.default_window_width
@@ -124,7 +124,7 @@ class UserSettings(object):
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
     def writeConfig(self, closeappmain="", closeapphdd="", closeappusb="", autorefresh="", autorefreshtime="",
-                    showplaces="", rememberwindowsize="", fullscreen="", width="", height="", usedarktheme=""):
+                    hideplaces="", rememberwindowsize="", fullscreen="", width="", height="", usedarktheme=""):
         if closeappmain == "":
             closeappmain = self.config_closeapp_main
         if closeapphdd == "":
@@ -135,8 +135,8 @@ class UserSettings(object):
             autorefresh = self.config_autorefresh
         if autorefreshtime == "":
             autorefreshtime = self.config_autorefresh_time
-        if showplaces == "":
-            showplaces = self.config_show_places
+        if hideplaces == "":
+            hideplaces = self.config_hide_places
         if rememberwindowsize == "":
             rememberwindowsize = self.config_window_remember_size
         if fullscreen == "":
@@ -154,7 +154,7 @@ class UserSettings(object):
             'CloseAppUSB': closeappusb,
             'AutoRefresh': autorefresh,
             'AutoRefreshTime': autorefreshtime,
-            'ShowPlaces': showplaces
+            'HidePlaces': hideplaces
         }
 
         self.config['WINDOW'] = {

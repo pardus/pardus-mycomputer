@@ -2267,7 +2267,7 @@ Fatih Altun</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Show places</property>
+                        <property name="label" translatable="yes">Hide places section</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2276,12 +2276,12 @@ Fatih Altun</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch" id="sw_show_places">
+                      <object class="GtkSwitch" id="sw_hide_places">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
-                        <signal name="state-set" handler="on_sw_show_places_state_set" swapped="no"/>
+                        <signal name="state-set" handler="on_sw_hide_places_state_set" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
