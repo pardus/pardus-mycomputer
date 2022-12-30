@@ -1111,6 +1111,7 @@ class MainWindow:
 
         # Stop running the function if the setting is disabled.
         if self.UserSettings.config_window_remember_size == False:
+            self.window.get_application().quit()
             return
 
         current_fullscreen = window.is_maximized()
@@ -1142,12 +1143,12 @@ class MainWindow:
     def on_lb_home_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", GLib.get_home_dir()])
         if self.UserSettings.config_closeapp_main:
-            self.onDestroy(listbox)
+            self.on_window_delete_event(self.window)
 
     def on_lb_root_row_activated(self, listbox, row):
         subprocess.run(["xdg-open", "/"])
         if self.UserSettings.config_closeapp_main:
-            self.onDestroy(listbox)
+            self.on_window_delete_event(self.window)
 
     def on_btn_mount_clicked(self, button):
         try:
@@ -1322,13 +1323,13 @@ class MainWindow:
                 if row._volume.get_drive():
                     if row._volume.get_drive().is_removable():
                         if self.UserSettings.config_closeapp_usb:
-                            self.onDestroy(row)
+                            self.on_window_delete_event(self.window)
                     else:
                         if self.UserSettings.config_closeapp_hdd:
-                            self.onDestroy(row)
+                            self.on_window_delete_event(self.window)
                 else:
                     if self.UserSettings.config_closeapp_usb:
-                        self.onDestroy(row)
+                        self.on_window_delete_event(self.window)
 
     def on_btn_volume_info_clicked(self, button):
         # clear all disk info labels
@@ -1576,6 +1577,12 @@ class MainWindow:
             self.entry_addr.set_text("")
 
         subprocess.run(["xdg-open", uri])
+        if from_places:
+            if self.UserSettings.config_closeapp_main:
+                self.window.get_application().quit()
+        else:
+            if self.UserSettings.config_closeapp_usb:
+                self.window.get_application().quit()
 
 
     def add_to_recent_listbox(self, uri, name):
@@ -1649,6 +1656,8 @@ class MainWindow:
                     if from_places:
                         th = subprocess.Popen("xdg-open '{}' &".format(saved_uri), shell=True)
                         th.communicate()
+                        if self.UserSettings.config_closeapp_main:
+                            self.on_window_delete_event(self.window)
                     else:
                         self.dialog_mount_error.set_markup("<big><b>{}</b></big>".format(_("Error")))
                         self.dialog_mount_error.format_secondary_markup("{}".format(_(err.message)))
