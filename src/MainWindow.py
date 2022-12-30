@@ -60,6 +60,8 @@ class MainWindow:
         # Add Disks to GUI
         self.addDisksToGUI()
 
+        self.set_places()
+
         cssProvider = Gtk.CssProvider()
         cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../css/style.css")
         screen = Gdk.Screen.get_default()
@@ -79,9 +81,15 @@ class MainWindow:
         # Show Screen:
         self.window.show_all()
 
+        # control places show setting
+        self.control_places_show()
+
     def defineComponents(self):
         def UI(str):
             return self.builder.get_object(str)
+
+        # places
+        self.box_places = UI("box_places")
 
         # Home
         self.lbl_home_path = UI("lbl_home_path")
@@ -138,6 +146,7 @@ class MainWindow:
         self.sw_closeapp_main = UI("sw_closeapp_main")
         self.sw_closeapp_hdd = UI("sw_closeapp_hdd")
         self.sw_closeapp_usb = UI("sw_closeapp_usb")
+        self.sw_show_places = UI("sw_show_places")
         self.sw_autorefresh = UI("sw_autorefresh")
         self.sw_remember_window_size = UI("sw_remember_window_size")
         self.sw_use_dark_theme = UI("sw_use_dark_theme")
@@ -230,6 +239,7 @@ class MainWindow:
         print("{} {}".format("config_closeapp_main", self.UserSettings.config_closeapp_main))
         print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
         print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
+        print("{} {}".format("config_show_places", self.UserSettings.config_show_places))
         print("{} {}".format("config_autorefresh", self.UserSettings.config_autorefresh))
         print("{} {}".format("config_autorefresh_time", self.UserSettings.config_autorefresh_time))
         print("{} {}".format("config_window_remember_size", self.UserSettings.config_window_remember_size))
@@ -302,6 +312,140 @@ class MainWindow:
 
         self.lbl_os.set_label("{}".format(os_name))
 
+    def control_display(self):
+        width = 850 if self.UserSettings.config_show_places else 700
+        height = 650 if self.UserSettings.config_show_places else 550
+        s = 1
+        w = 1920
+        h = 1080
+        try:
+            display = Gdk.Display.get_default()
+            monitor = display.get_primary_monitor()
+            geometry = monitor.get_geometry()
+            w = geometry.width
+            h = geometry.height
+            s = Gdk.Monitor.get_scale_factor(monitor)
+
+            if w > 1920 or h > 1080:
+                width = int(w / 2.24)
+                height = int(h / 1.643)
+
+        except Exception as e:
+            print("Error in control_display: {}".format(e))
+
+        self.window.resize(width, height)
+
+        print("window w:{} h:{} | monitor w:{} h:{} s:{}".format(width, height, w, h, s))
+
+    def set_places(self):
+
+        self.box_places.foreach(lambda child: self.box_places.remove(child))
+
+        saved_places =self.UserSettings.getSavedPlaces()
+        dirs = []
+
+        computer = "computer:///"
+        trash = "trash:///"
+        recent = "recent:///"
+
+        dirs.append({"path": computer, "name": _("Computer"), "icon": "computer-symbolic"})
+        dirs.append({"path": recent, "name": _("Recent"), "icon": "document-open-recent-symbolic"})
+        dirs.append({"path": trash, "name": _("Trash"), "icon": "user-trash-symbolic"})
+
+        home = GLib.get_home_dir()
+        desktop = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)
+        download = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD)
+        documents = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS)
+        pictures = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES)
+        music = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
+        videos = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS)
+        public = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PUBLIC_SHARE)
+
+
+        if home:
+            dirs.append({"path": home, "name": os.path.basename(home), "icon": "user-home-symbolic"})
+        if desktop:
+            dirs.append({"path": desktop, "name": os.path.basename(desktop), "icon": "user-desktop-symbolic"})
+        if download:
+            dirs.append({"path": download, "name": os.path.basename(download), "icon": "folder-download-symbolic"})
+        if documents:
+            dirs.append({"path": documents, "name": os.path.basename(documents), "icon": "folder-documents-symbolic"})
+        if pictures:
+            dirs.append({"path": pictures, "name": os.path.basename(pictures), "icon": "folder-pictures-symbolic"})
+        if music:
+            dirs.append({"path": music, "name": os.path.basename(music), "icon": "folder-music-symbolic"})
+        if videos:
+            dirs.append({"path": videos, "name": os.path.basename(videos), "icon": "folder-videos-symbolic"})
+        if public:
+            dirs.append({"path": public, "name": os.path.basename(public), "icon": "folder-publicshare-symbolic"})
+
+        if dirs:
+            label = Gtk.Label.new()
+            label.set_markup("<b>{}</b>".format(_("Places")))
+            label.set_margin_start(8)
+            label.set_margin_end(8)
+            label.set_halign(Gtk.Align.START)
+            self.box_places.add(label)
+
+        for dir in dirs:
+            icon = Gtk.Image.new_from_icon_name(dir["icon"], Gtk.IconSize.BUTTON)
+            label = Gtk.Label.new()
+            label.set_markup("{}".format(dir["name"]))
+            box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+            box.name = dir["path"]
+            box.pack_start(icon, False, True, 0)
+            box.pack_start(label, False, True, 0)
+            box.set_margin_start(8)
+            box.set_margin_end(8)
+            box.set_margin_top(5)
+            box.set_margin_bottom(5)
+            box.set_spacing(8)
+            listbox = Gtk.ListBox.new()
+            listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+            listbox.connect("row-activated", self.on_place_clicked)
+            listbox.add(box)
+            for row in listbox:
+                row.set_can_focus(False)
+            self.box_places.add(listbox)
+
+        for saved in saved_places:
+            icon = Gtk.Image.new_from_icon_name(saved["icon"], Gtk.IconSize.BUTTON)
+            label = Gtk.Label.new()
+            label.set_markup("{}".format(saved["name"]))
+
+            box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+            box.name = saved["path"]
+            box.pack_start(icon, False, True, 0)
+            box.pack_start(label, False, True, 0)
+            box.set_margin_start(8)
+            box.set_margin_end(8)
+            box.set_margin_top(5)
+            box.set_margin_bottom(5)
+            box.set_spacing(8)
+            listbox = Gtk.ListBox.new()
+            listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+            listbox.connect("row-activated", self.on_place_clicked)
+            listbox.add(box)
+
+            for row in listbox:
+                row.set_can_focus(False)
+
+            self.box_places.add(listbox)
+
+        self.box_places.show_all()
+
+    def control_places_show(self, displaycontrol=False):
+        self.box_places.set_visible(self.UserSettings.config_show_places)
+        if displaycontrol:
+            self.control_display()
+
+    def on_place_clicked(self, listbox, row):
+
+        path = row.get_child().name
+        th = subprocess.Popen("xdg-open '{}' &".format(path), shell=True)
+        th.communicate()
 
     def autorefresh(self):
         if self.UserSettings.config_autorefresh:
@@ -310,6 +454,7 @@ class MainWindow:
 
     def autorefresh_disks(self):
         self.addDisksToGUI()
+        self.set_places()
         print("auto refreshing disks on every {} seconds with glib id: {}".format(
             self.UserSettings.config_autorefresh_time, self.autorefresh_glibid))
         return self.UserSettings.config_autorefresh
@@ -989,8 +1134,8 @@ class MainWindow:
             else:
                 window.resize(self.UserSettings.config_window_width, self.UserSettings.config_window_height)
         else:
-            window.resize(self.UserSettings.default_window_width, self.UserSettings.default_window_height)
-
+            # window.resize(self.UserSettings.default_window_width, self.UserSettings.default_window_height)
+            self.control_display()
 
     # SIGNALS:
     def on_lb_home_row_activated(self, listbox, row):
@@ -1259,6 +1404,7 @@ class MainWindow:
     def on_btn_refresh_clicked(self, button):
         print("Manually refreshing disks")
         self.addDisksToGUI()
+        self.set_places()
 
     def on_sw_closeapp_main_state_set(self, switch, state):
         user_config_closeapp_main = self.UserSettings.config_closeapp_main
@@ -1289,6 +1435,18 @@ class MainWindow:
             try:
                 self.UserSettings.writeConfig(closeappusb=state)
                 self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
+        self.control_defaults()
+
+    def on_sw_show_places_state_set(self, switch, state):
+        user_config_show_places = self.UserSettings.config_show_places
+        if state != user_config_show_places:
+            print("Updating show places state")
+            try:
+                self.UserSettings.writeConfig(showplaces=state)
+                self.user_settings()
+                self.control_places_show(displaycontrol=True)
             except Exception as e:
                 print("{}".format(e))
         self.control_defaults()
@@ -1635,6 +1793,7 @@ class MainWindow:
             self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
+            self.sw_show_places.set_state(self.UserSettings.config_show_places)
             self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
             self.sw_remember_window_size.set_state(self.UserSettings.config_window_remember_size)
             self.sw_use_dark_theme.set_state(self.UserSettings.config_window_use_darktheme)
@@ -1665,6 +1824,7 @@ class MainWindow:
             self.UserSettings.config_closeapp_usb != self.UserSettings.default_closeapp_usb or \
             self.UserSettings.config_autorefresh != self.UserSettings.default_autorefresh or \
             self.UserSettings.config_autorefresh_time != self.UserSettings.default_autorefresh_time or \
+            self.UserSettings.config_show_places != self.UserSettings.default_show_places or \
             self.UserSettings.config_window_remember_size != self.UserSettings.default_window_remember_size or \
             self.UserSettings.config_window_use_darktheme != self.UserSettings.default_window_use_darktheme:
             self.btn_defaults.set_sensitive(True)

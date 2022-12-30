@@ -5,9 +5,22 @@ Created on Fri Oct 28 13:13:13 2022
 
 @author: fatih
 """
+import json
+import os.path
 from pathlib import Path
 import configparser
+import locale
+from locale import gettext as _
 
+# Translation Constants:
+APPNAME = "pardus-mycomputer"
+TRANSLATIONS_PATH = "/usr/share/locale"
+# SYSTEM_LANGUAGE = os.environ.get("LANG")
+
+# Translation functions:
+locale.bindtextdomain(APPNAME, TRANSLATIONS_PATH)
+locale.textdomain(APPNAME)
+# locale.setlocale(locale.LC_ALL, SYSTEM_LANGUAGE)
 
 class UserSettings(object):
     def __init__(self):
@@ -17,6 +30,7 @@ class UserSettings(object):
         self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
         self.user_recent_servers_file = Path.joinpath(self.user_config_dir, Path("servers-recent"))
         self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
+        self.user_saved_places_file = Path.joinpath(self.user_config_dir, Path("places-saved"))
 
         self.config = configparser.ConfigParser(strict=False)
 
@@ -26,6 +40,7 @@ class UserSettings(object):
         self.config_closeapp_usb = None
         self.config_autorefresh = None
         self.config_autorefresh_time = None
+        self.config_show_places = None
 
         # window configs
         self.config_window_remember_size = None
@@ -40,6 +55,7 @@ class UserSettings(object):
         self.default_closeapp_usb = False
         self.default_autorefresh = False
         self.default_autorefresh_time = 1.5
+        self.default_show_places = False
 
         # window defaults
         self.default_window_remember_size = False
@@ -55,7 +71,8 @@ class UserSettings(object):
             'CloseAppHDD': self.default_closeapp_hdd,
             'CloseAppUSB': self.default_closeapp_usb,
             'AutoRefresh': self.default_autorefresh,
-            'AutoRefreshTime': self.default_autorefresh_time
+            'AutoRefreshTime': self.default_autorefresh_time,
+            'ShowPlaces': self.default_show_places
         }
 
         self.config['WINDOW'] = {
@@ -79,6 +96,7 @@ class UserSettings(object):
             self.config_closeapp_usb = self.config.getboolean('MAIN', 'CloseAppUSB')
             self.config_autorefresh = self.config.getboolean('MAIN', 'AutoRefresh')
             self.config_autorefresh_time = self.config.getfloat('MAIN', 'AutoRefreshTime')
+            self.config_show_places = self.config.getboolean('MAIN', 'ShowPlaces')
             self.config_window_remember_size = self.config.getboolean('WINDOW', 'RememberWindowSize')
             self.config_window_fullscreen = self.config.getboolean('WINDOW', 'FullScreen')
             self.config_window_width = self.config.getint('WINDOW', 'Width')
@@ -94,6 +112,7 @@ class UserSettings(object):
             self.config_closeapp_usb = self.default_closeapp_usb
             self.config_autorefresh = self.default_autorefresh
             self.config_autorefresh_time = self.default_autorefresh_time
+            self.config_show_places = self.default_show_places
             self.config_window_remember_size = self.default_window_remember_size
             self.config_window_fullscreen = self.default_window_fullscreen
             self.config_window_width = self.default_window_width
@@ -105,7 +124,7 @@ class UserSettings(object):
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
     def writeConfig(self, closeappmain="", closeapphdd="", closeappusb="", autorefresh="", autorefreshtime="",
-                    rememberwindowsize="", fullscreen="", width="", height="", usedarktheme=""):
+                    showplaces="", rememberwindowsize="", fullscreen="", width="", height="", usedarktheme=""):
         if closeappmain == "":
             closeappmain = self.config_closeapp_main
         if closeapphdd == "":
@@ -116,6 +135,8 @@ class UserSettings(object):
             autorefresh = self.config_autorefresh
         if autorefreshtime == "":
             autorefreshtime = self.config_autorefresh_time
+        if showplaces == "":
+            showplaces = self.config_show_places
         if rememberwindowsize == "":
             rememberwindowsize = self.config_window_remember_size
         if fullscreen == "":
@@ -132,7 +153,8 @@ class UserSettings(object):
             'CloseAppHDD': closeapphdd,
             'CloseAppUSB': closeappusb,
             'AutoRefresh': autorefresh,
-            'AutoRefreshTime': autorefreshtime
+            'AutoRefreshTime': autorefreshtime,
+            'ShowPlaces': showplaces
         }
 
         self.config['WINDOW'] = {
@@ -230,3 +252,29 @@ class UserSettings(object):
                             name = ""
                         servers.append({"uri": uri, "name": name})
         return servers
+
+    def getSavedPlaces(self):
+        # sample saved place
+        # {"path": "/home/fatih/Desktop/Office Folder", "name": "Office Folder", "icon": "folder-symbolic"}
+        places = []
+        if Path.is_file(self.user_saved_places_file):
+            try:
+                with open(self.user_saved_places_file, "r") as servp:
+                    for line in servp.readlines():
+                        place = line.strip("\n").strip()
+                        if not place.startswith("#"):
+                            places.append(json.loads(place))
+            except Exception as e:
+                print("{}".format(e))
+        else:
+            self.createDir(self.user_config_dir)
+            self.user_saved_places_file.touch(exist_ok=True)
+            samplefile = open(self.user_saved_places_file, "w")
+            samplefile.writelines(_("# example line is as below") + "\n")
+            samplefile.writelines(_("# note: remove the hash to make it appear") + "\n")
+            samplefile.writelines(
+                '#{"path": "'+ str(self.user_home) + '", "name": "' + _("Home") +'", "icon": "folder-symbolic"}' + "\n")
+            samplefile.flush()
+            samplefile.close()
+
+        return places
