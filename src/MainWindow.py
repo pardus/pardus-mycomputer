@@ -383,6 +383,7 @@ class MainWindow:
             label.set_markup("<b>{}</b>".format(_("Places")))
             label.set_margin_start(8)
             label.set_margin_end(8)
+            label.set_margin_bottom(5)
             label.set_halign(Gtk.Align.START)
             self.box_places.add(label)
 
