@@ -361,22 +361,21 @@ class MainWindow:
         videos = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS)
         public = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PUBLIC_SHARE)
 
-
-        if home:
+        if home and os.path.isdir(home):
             dirs.append({"path": home, "name": os.path.basename(home), "icon": "user-home-symbolic"})
-        if desktop:
+        if desktop and os.path.isdir(desktop):
             dirs.append({"path": desktop, "name": os.path.basename(desktop), "icon": "user-desktop-symbolic"})
-        if download:
+        if download and os.path.isdir(download):
             dirs.append({"path": download, "name": os.path.basename(download), "icon": "folder-download-symbolic"})
-        if documents:
+        if documents and os.path.isdir(documents):
             dirs.append({"path": documents, "name": os.path.basename(documents), "icon": "folder-documents-symbolic"})
-        if pictures:
+        if pictures and os.path.isdir(pictures):
             dirs.append({"path": pictures, "name": os.path.basename(pictures), "icon": "folder-pictures-symbolic"})
-        if music:
+        if music and os.path.isdir(music):
             dirs.append({"path": music, "name": os.path.basename(music), "icon": "folder-music-symbolic"})
-        if videos:
+        if videos and os.path.isdir(videos):
             dirs.append({"path": videos, "name": os.path.basename(videos), "icon": "folder-videos-symbolic"})
-        if public:
+        if public and os.path.isdir(public):
             dirs.append({"path": public, "name": os.path.basename(public), "icon": "folder-publicshare-symbolic"})
 
         if dirs:
@@ -442,10 +441,8 @@ class MainWindow:
             self.control_display()
 
     def on_place_clicked(self, listbox, row):
-
         path = row.get_child().name
-        th = subprocess.Popen("xdg-open '{}' &".format(path), shell=True)
-        th.communicate()
+        self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=path, from_places=True)
 
     def autorefresh(self):
         if self.UserSettings.config_autorefresh:
@@ -1559,21 +1556,22 @@ class MainWindow:
             button._stack_bookmark.set_visible_child_name("add")
 
 
-    def network_mount_success(self, uri, name):
-        in_list = False
-        for row in self.listbox_recent_servers:
-            if row.get_children()[0].name == "{} {}".format(uri, name).strip():
-                in_list = True
-                print("{} {} already in recent list".format(uri, name).strip())
-        if not in_list:
-            self.add_to_recent_listbox(uri, name)
-            self.UserSettings.addRecentServer(uri, name)
+    def network_mount_success(self, uri, name, from_places=False):
+        if not from_places:
+            in_list = False
+            for row in self.listbox_recent_servers:
+                if row.get_children()[0].name == "{} {}".format(uri, name).strip():
+                    in_list = True
+                    print("{} {} already in recent list".format(uri, name).strip())
+            if not in_list:
+                self.add_to_recent_listbox(uri, name)
+                self.UserSettings.addRecentServer(uri, name)
 
-        self.listbox_recent_servers.show_all()
+            self.listbox_recent_servers.show_all()
+            self.entry_addr.set_text("")
 
         subprocess.run(["xdg-open", uri])
 
-        self.entry_addr.set_text("")
 
     def add_to_recent_listbox(self, uri, name):
         label = Gtk.Label.new()
@@ -1604,7 +1602,7 @@ class MainWindow:
 
         self.UserSettings.removeRecentServer(button.name)
 
-    def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri=""):
+    def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri="", from_places=False):
         def get_uri_name(source_object):
             try:
                 uri = source_object.get_uri()
@@ -1633,21 +1631,25 @@ class MainWindow:
             try:
                 source_object.mount_enclosing_volume_finish(res)
                 uri,name = get_uri_name(source_object)
-                self.network_mount_success(uri, name)
+                self.network_mount_success(uri, name, from_places=from_places)
                 return True
             except GLib.GError as err:
                 if err.code == Gio.IOErrorEnum.ALREADY_MOUNTED:
                     uri, name = get_uri_name(source_object)
-                    self.network_mount_success(uri, name)
+                    self.network_mount_success(uri, name, from_places=from_places)
                     return True
                 elif err.code == Gio.IOErrorEnum.FAILED_HANDLED:
                     print("operation cancelled")
                 else:
-                    self.dialog_mount_error.set_markup("<big><b>{}</b></big>".format(_("Error")))
-                    self.dialog_mount_error.format_secondary_markup("{}".format(_(err.message)))
-                    self.dialog_mount_error.run()
-                    self.dialog_mount_error.hide()
-                    print("{}".format(err.message))
+                    if from_places:
+                        th = subprocess.Popen("xdg-open '{}' &".format(saved_uri), shell=True)
+                        th.communicate()
+                    else:
+                        self.dialog_mount_error.set_markup("<big><b>{}</b></big>".format(_("Error")))
+                        self.dialog_mount_error.format_secondary_markup("{}".format(_(err.message)))
+                        self.dialog_mount_error.run()
+                        self.dialog_mount_error.hide()
+                        print("{}".format(err.message))
 
         def ask_password_cb(mount_operation, message, default_user, default_domain, flags):
             print(message)
