@@ -627,7 +627,7 @@ class MainWindow:
         lbl_volume_name.set_markup("<b>{}</b><small> ( {} )</small>".format(
             name,_("Disk is available, click to mount.")))
         lbl_volume_name.set_halign(Gtk.Align.START)
-        lbl_volume_name.set_ellipsize(Pango.EllipsizeMode.END)
+        lbl_volume_name.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
         pb_volume_size = Gtk.ProgressBar.new()
         pb_volume_size.set_valign(Gtk.Align.CENTER)
