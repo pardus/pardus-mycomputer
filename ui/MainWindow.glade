@@ -93,6 +93,62 @@ Fatih Altun</property>
         <property name="margin-bottom">5</property>
         <property name="orientation">vertical</property>
         <child>
+          <object class="GtkButton" id="menu_appsettings">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_menu_appsettings_clicked" swapped="no"/>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkImage" id="img_menu_appsettings">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">preferences-system-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_menu_appsettings">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">App Settings</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkButton" id="menu_aboutpardus">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -2244,12 +2300,12 @@ Fatih Altun</property>
           <object class="GtkBox" id="box_settings">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">8</property>
-            <property name="margin-end">8</property>
+            <property name="margin-start">34</property>
+            <property name="margin-end">34</property>
             <property name="margin-top">21</property>
             <property name="margin-bottom">8</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">13</property>
+            <property name="spacing">55</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -2549,41 +2605,105 @@ Fatih Altun</property>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="halign">center</property>
+                <property name="spacing">89</property>
                 <child>
                   <object class="GtkButton" id="btn_defaults">
-                    <property name="label" translatable="yes">Restore Defaults</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="halign">end</property>
-                    <property name="hexpand">True</property>
                     <signal name="clicked" handler="on_btn_defaults_clicked" swapped="no"/>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">view-refresh-symbolic</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">Restore Defaults</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="pack-type">end</property>
                     <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_homepage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <signal name="clicked" handler="on_btn_homepage_clicked" swapped="no"/>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">user-home-symbolic</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">Home Page</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">3</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -2640,25 +2760,6 @@ Fatih Altun</property>
           </object>
           <packing>
             <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btn_settings">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="receives-default">True</property>
-            <property name="relief">none</property>
-            <signal name="clicked" handler="on_btn_settings_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage" id="img_settings">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">preferences-system-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="position">3</property>
           </packing>
         </child>
         <child>

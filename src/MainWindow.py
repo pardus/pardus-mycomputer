@@ -151,7 +151,8 @@ class MainWindow:
         self.sw_remember_window_size = UI("sw_remember_window_size")
         self.sw_use_dark_theme = UI("sw_use_dark_theme")
 
-        self.img_settings = UI("img_settings")
+        self.img_menu_appsettings = UI("img_menu_appsettings")
+        self.lbl_menu_appsettings = UI("lbl_menu_appsettings")
 
         # Mount dialog and popovers
         self.dialog_mount = UI("dialog_mount")
@@ -1801,22 +1802,6 @@ class MainWindow:
         self.entry_addr.set_text("{}".format(row.get_children()[0].name.split(" ")[0]))
         self.popover_recent_servers.popdown()
 
-    def on_btn_settings_clicked(self, button):
-        if self.stack_main.get_visible_child_name() == "settings":
-            self.stack_main.set_visible_child_name("home")
-            self.img_settings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
-        elif self.stack_main.get_visible_child_name() == "home":
-            self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
-            self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
-            self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
-            self.sw_hide_places.set_state(self.UserSettings.config_hide_places)
-            self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
-            self.sw_remember_window_size.set_state(self.UserSettings.config_window_remember_size)
-            self.sw_use_dark_theme.set_state(self.UserSettings.config_window_use_darktheme)
-            self.stack_main.set_visible_child_name("settings")
-            self.img_settings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
-            self.control_defaults()
-
     def on_btn_defaults_clicked(self, button):
         old_window_remember_size = self.UserSettings.config_window_remember_size
         self.UserSettings.createDefaultConfig(force=True)
@@ -1849,6 +1834,30 @@ class MainWindow:
             self.btn_defaults.set_sensitive(True)
         else:
             self.btn_defaults.set_sensitive(False)
+
+    def on_btn_homepage_clicked(self, button):
+        self.stack_main.set_visible_child_name("home")
+        self.img_menu_appsettings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
+        self.lbl_menu_appsettings.set_text(_("App Settings"))
+
+    def on_menu_appsettings_clicked(self, button):
+        self.popover_menu.popdown()
+        if self.stack_main.get_visible_child_name() == "settings":
+            self.stack_main.set_visible_child_name("home")
+            self.img_menu_appsettings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
+            self.lbl_menu_appsettings.set_text(_("App Settings"))
+        elif self.stack_main.get_visible_child_name() == "home":
+            self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
+            self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
+            self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
+            self.sw_hide_places.set_state(self.UserSettings.config_hide_places)
+            self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
+            self.sw_remember_window_size.set_state(self.UserSettings.config_window_remember_size)
+            self.sw_use_dark_theme.set_state(self.UserSettings.config_window_use_darktheme)
+            self.stack_main.set_visible_child_name("settings")
+            self.img_menu_appsettings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
+            self.lbl_menu_appsettings.set_text(_("Home Page"))
+            self.control_defaults()
 
     def on_menu_aboutapp_clicked(self, button):
         self.popover_menu.popdown()
