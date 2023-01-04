@@ -5,7 +5,7 @@ import urllib.parse
 import gi
 gi.require_version("Notify", "0.7")
 gi.require_version('Gtk', '3.0')
-from gi.repository import GLib, Gio, Gtk, Notify, Gdk, Pango
+from gi.repository import GLib, Gio, Gtk, Notify, Gdk, Pango, GdkPixbuf
 
 import DiskManager
 
@@ -358,14 +358,61 @@ class MainWindow:
 
         saved_places =self.UserSettings.getSavedPlaces()
         dirs = []
+        locs = []
+
+        label = Gtk.Label.new()
+        label.set_markup("<b>{}</b>".format(_("Places")))
+        label.set_margin_start(8)
+        label.set_margin_end(8)
+        label.set_margin_bottom(5)
+        label.set_halign(Gtk.Align.START)
+        self.box_places.add(label)
+
+        trashcount = Gio.File.new_for_uri("trash:///").query_info(
+            Gio.FILE_ATTRIBUTE_TRASH_ITEM_COUNT, Gio.FileQueryInfoFlags.NONE, None).get_attribute_uint32(
+            Gio.FILE_ATTRIBUTE_TRASH_ITEM_COUNT)
+
+        trashtip = _("Trash")
+        if trashcount == 0:
+            trashtip = _("Trash is empty")
+        elif trashcount == 1:
+            trashtip = _("Trash contains 1 file")
+        elif trashcount > 1:
+            trashtip = "{}".format(_("Trash contains %s files") % trashcount)
 
         computer = "computer:///"
         trash = "trash:///"
         recent = "recent:///"
 
-        dirs.append({"path": computer, "name": _("Computer"), "icon": "computer-symbolic"})
-        dirs.append({"path": recent, "name": _("Recent"), "icon": "document-open-recent-symbolic"})
-        dirs.append({"path": trash, "name": _("Trash"), "icon": "user-trash-symbolic"})
+        locs.append({"path": computer, "name": _("Computer"), "icon": "computer-symbolic",
+                     "tip": _("Browse the computer")})
+        locs.append({"path": recent, "name": _("Recent"), "icon": "document-open-recent-symbolic",
+                     "tip": _("Recent Files")})
+        locs.append({"path": trash, "name": _("Trash"), "icon": "user-trash-symbolic",
+                     "tip": trashtip})
+
+        for loc in locs:
+            icon = Gtk.Image.new_from_icon_name(loc["icon"], Gtk.IconSize.BUTTON)
+            label = Gtk.Label.new()
+            label.set_markup("{}".format(loc["name"]))
+            box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+            box.name = loc
+            box.pack_start(icon, False, True, 0)
+            box.pack_start(label, False, True, 0)
+            box.set_margin_start(8)
+            box.set_margin_end(8)
+            box.set_margin_top(5)
+            box.set_margin_bottom(5)
+            box.set_spacing(8)
+            listbox = Gtk.ListBox.new()
+            listbox.set_tooltip_text(loc["tip"])
+            listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+            listbox.connect("row-activated", self.on_place_clicked)
+            listbox.add(box)
+            for row in listbox:
+                row.set_can_focus(False)
+            self.box_places.add(listbox)
 
         home = GLib.get_home_dir()
         desktop = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)
@@ -377,37 +424,36 @@ class MainWindow:
         public = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PUBLIC_SHARE)
 
         if home and os.path.isdir(home):
-            dirs.append({"path": home, "name": os.path.basename(home), "icon": "user-home-symbolic"})
+            dirs.append({"path": home, "name": os.path.basename(home),
+                         "icon": "user-home-symbolic"})
         if desktop and os.path.isdir(desktop):
-            dirs.append({"path": desktop, "name": os.path.basename(desktop), "icon": "user-desktop-symbolic"})
+            dirs.append({"path": desktop, "name": os.path.basename(desktop),
+                         "icon": "user-desktop-symbolic"})
         if download and os.path.isdir(download):
-            dirs.append({"path": download, "name": os.path.basename(download), "icon": "folder-download-symbolic"})
+            dirs.append({"path": download, "name": os.path.basename(download),
+                         "icon": "folder-download-symbolic"})
         if documents and os.path.isdir(documents):
-            dirs.append({"path": documents, "name": os.path.basename(documents), "icon": "folder-documents-symbolic"})
+            dirs.append({"path": documents, "name": os.path.basename(documents),
+                         "icon": "folder-documents-symbolic"})
         if pictures and os.path.isdir(pictures):
-            dirs.append({"path": pictures, "name": os.path.basename(pictures), "icon": "folder-pictures-symbolic"})
+            dirs.append({"path": pictures, "name": os.path.basename(pictures),
+                         "icon": "folder-pictures-symbolic"})
         if music and os.path.isdir(music):
-            dirs.append({"path": music, "name": os.path.basename(music), "icon": "folder-music-symbolic"})
+            dirs.append({"path": music, "name": os.path.basename(music),
+                         "icon": "folder-music-symbolic"})
         if videos and os.path.isdir(videos):
-            dirs.append({"path": videos, "name": os.path.basename(videos), "icon": "folder-videos-symbolic"})
+            dirs.append({"path": videos, "name": os.path.basename(videos),
+                         "icon": "folder-videos-symbolic"})
         if public and os.path.isdir(public):
-            dirs.append({"path": public, "name": os.path.basename(public), "icon": "folder-publicshare-symbolic"})
-
-        if dirs:
-            label = Gtk.Label.new()
-            label.set_markup("<b>{}</b>".format(_("Places")))
-            label.set_margin_start(8)
-            label.set_margin_end(8)
-            label.set_margin_bottom(5)
-            label.set_halign(Gtk.Align.START)
-            self.box_places.add(label)
+            dirs.append({"path": public, "name": os.path.basename(public),
+                         "icon": "folder-publicshare-symbolic"})
 
         for dir in dirs:
             icon = Gtk.Image.new_from_icon_name(dir["icon"], Gtk.IconSize.BUTTON)
             label = Gtk.Label.new()
             label.set_markup("{}".format(dir["name"]))
             box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-            box.name = dir["path"]
+            box.name = dir
             box.pack_start(icon, False, True, 0)
             box.pack_start(label, False, True, 0)
             box.set_margin_start(8)
@@ -416,6 +462,7 @@ class MainWindow:
             box.set_margin_bottom(5)
             box.set_spacing(8)
             listbox = Gtk.ListBox.new()
+            listbox.set_tooltip_text(dir["path"])
             listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             listbox.get_style_context().add_class("pardus-mycomputer-listbox")
             listbox.connect("row-activated", self.on_place_clicked)
@@ -424,13 +471,17 @@ class MainWindow:
                 row.set_can_focus(False)
             self.box_places.add(listbox)
 
+        if saved_places:
+            separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+            self.box_places.add(separator)
+
         for saved in saved_places:
             icon = Gtk.Image.new_from_icon_name(saved["icon"], Gtk.IconSize.BUTTON)
             label = Gtk.Label.new()
             label.set_markup("{}".format(saved["name"]))
-
+            label.set_ellipsize(Pango.EllipsizeMode.END)
             box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-            box.name = {"path": saved["path"], "name": saved["name"], "icon": saved["icon"]}
+            box.name = saved
             box.pack_start(icon, False, True, 0)
             box.pack_start(label, False, True, 0)
             box.set_margin_start(8)
@@ -440,6 +491,7 @@ class MainWindow:
             box.set_spacing(8)
             listbox = Gtk.ListBox.new()
             listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            listbox.set_tooltip_text(saved["path"])
             listbox.get_style_context().add_class("pardus-mycomputer-listbox")
             listbox.connect("row-activated", self.on_place_clicked)
             listbox.connect("button-press-event", self.on_place_button_press_event)
@@ -449,6 +501,19 @@ class MainWindow:
                 row.set_can_focus(False)
 
             self.box_places.add(listbox)
+
+        # drag_n_drop area
+        liststore = Gtk.ListStore(GdkPixbuf.Pixbuf, str)
+        iconview = Gtk.IconView.new()
+        iconview.set_model(liststore)
+        iconview.set_pixbuf_column(0)
+        iconview.set_text_column(1)
+        iconview.set_vexpand(True)
+        iconview.set_vexpand_set(True)
+        iconview.enable_model_drag_dest([Gtk.TargetEntry.new('text/uri-list', 0, 0)],
+                                             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
+        iconview.connect("drag-data-received", self.drag_data_received)
+        self.box_places.add(iconview)
 
         if dirs:
             icon = Gtk.Image.new_from_icon_name("bookmark-new-symbolic", Gtk.IconSize.BUTTON)
@@ -559,6 +624,15 @@ class MainWindow:
                 self.lbl_place_preview.set_text("{}".format(os.path.basename(path)))
         else:
             self.lbl_place_preview.set_text("{}".format(name))
+
+    def drag_data_received(self, treeview, context, posx, posy, selection, info, timestamp):
+        for select in selection.get_uris():
+            path = "{}".format(urllib.parse.unquote(select.split("file://")[1]))
+            if os.path.isdir(path):
+                icon = "folder-symbolic"
+                name = os.path.basename(path)
+                if self.UserSettings.addSavedPlaces(path, name, icon):
+                    self.set_places()
 
     def on_entry_place_name_changed(self, entry):
         name = entry.get_text().strip()
