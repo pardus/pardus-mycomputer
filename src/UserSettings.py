@@ -182,9 +182,9 @@ class UserSettings(object):
     def addRecentServer(self, uri, name):
         server = "{} {}".format(uri, name).strip()
         def add():
-            with open(self.user_recent_servers_file, "a+") as sf:
+            with open(self.user_recent_servers_file, "r+") as sf:
                 for line in sf:
-                    if server == line:
+                    if server == line.strip("\n").strip():
                         break
                 else:
                     sf.write("{}\n".format(server))
@@ -216,9 +216,9 @@ class UserSettings(object):
     def addSavedServer(self, uri, name):
         server = "{} {}".format(uri, name).strip()
         def add():
-            with open(self.user_saved_servers_file, "a+") as sf:
+            with open(self.user_saved_servers_file, "r+") as sf:
                 for line in sf:
-                    if server == line:
+                    if server == line.strip("\n").strip():
                         break
                 else:
                     sf.write("{}\n".format(server))
@@ -262,7 +262,7 @@ class UserSettings(object):
                 with open(self.user_saved_places_file, "r") as servp:
                     for line in servp.readlines():
                         place = line.strip("\n").strip()
-                        if not place.startswith("#"):
+                        if not place.startswith("#") and place != "":
                             places.append(json.loads(place))
             except Exception as e:
                 print("{}".format(e))
@@ -278,3 +278,29 @@ class UserSettings(object):
             samplefile.close()
 
         return places
+
+    def addSavedPlaces(self, path, name, icon):
+        place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon +'"}'
+        def add():
+            with open(self.user_saved_places_file, "r+") as savep:
+                for line in savep:
+                    if place == line.strip("\n").strip():
+                        print("{} already in places".format(place))
+                        return False
+                savep.write("{}\n".format(place))
+                return True
+        if not Path.is_file(self.user_saved_places_file):
+            self.createDir(self.user_config_dir)
+            self.user_saved_places_file.touch(exist_ok=True)
+            return add()
+        else:
+            return add()
+
+    def removeSavedPlaces(self, place):
+        if Path.is_file(self.user_saved_places_file):
+            with open(self.user_saved_places_file, "r") as f:
+                lines = f.readlines()
+            with open(self.user_saved_places_file, "w") as f:
+                for line in lines:
+                    if line.strip("\n").strip() != place:
+                        f.write(line)

@@ -1,4 +1,6 @@
+import json
 import os, subprocess
+import urllib.parse
 
 import gi
 gi.require_version("Notify", "0.7")
@@ -90,6 +92,14 @@ class MainWindow:
 
         # places
         self.box_places = UI("box_places")
+        self.popover_place_add = UI("popover_place_add")
+        self.popover_place_remove = UI("popover_place_remove")
+        self.fc_place_path = UI("fc_place_path")
+        self.fc_place_path.set_uri("file://{}".format(GLib.get_home_dir()))
+        self.entry_place_icon = UI("entry_place_icon")
+        self.entry_place_name = UI("entry_place_name")
+        self.img_place_preview = UI("img_place_preview")
+        self.lbl_place_preview = UI("lbl_place_preview")
 
         # Home
         self.lbl_home_path = UI("lbl_home_path")
@@ -202,6 +212,7 @@ class MainWindow:
         self.autorefresh_glibid = None
         self.mount_paths = []
         self.net_mounts = []
+        self.place_remove_name = None
         # self.selected_mount_uri = ""
         # self.selected_mount_name = ""
 
@@ -419,7 +430,7 @@ class MainWindow:
             label.set_markup("{}".format(saved["name"]))
 
             box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-            box.name = saved["path"]
+            box.name = {"path": saved["path"], "name": saved["name"], "icon": saved["icon"]}
             box.pack_start(icon, False, True, 0)
             box.pack_start(label, False, True, 0)
             box.set_margin_start(8)
@@ -431,12 +442,39 @@ class MainWindow:
             listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             listbox.get_style_context().add_class("pardus-mycomputer-listbox")
             listbox.connect("row-activated", self.on_place_clicked)
+            listbox.connect("button-press-event", self.on_place_button_press_event)
             listbox.add(box)
 
             for row in listbox:
                 row.set_can_focus(False)
 
             self.box_places.add(listbox)
+
+        if dirs:
+            icon = Gtk.Image.new_from_icon_name("bookmark-new-symbolic", Gtk.IconSize.BUTTON)
+            label = Gtk.Label.new()
+            label.set_markup("{}".format(_("Add new")))
+            box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+
+            box.pack_start(icon, False, True, 0)
+            box.pack_start(label, False, True, 0)
+            box.set_margin_start(8)
+            box.set_margin_end(8)
+            box.set_margin_top(5)
+            box.set_margin_bottom(5)
+            box.set_spacing(8)
+
+            listbox = Gtk.ListBox.new()
+            listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+            listbox.connect("row-activated", self.on_place_add_activated)
+            listbox.add(box)
+            for row in listbox:
+                row.set_can_focus(False)
+
+            self.popover_place_add.set_relative_to(listbox)
+
+            self.box_places.pack_end(listbox, False, True, 21)
 
         self.box_places.show_all()
 
@@ -446,8 +484,101 @@ class MainWindow:
             self.control_display()
 
     def on_place_clicked(self, listbox, row):
-        path = row.get_child().name
+        path = row.get_child().name["path"]
         self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=path, from_places=True)
+
+    def on_place_button_press_event(self, widget, event):
+        self.place_remove_name = json.dumps(widget.get_children()[0].get_child().name)
+        self.popover_place_remove.set_relative_to(widget)
+        if event.type == Gdk.EventType.BUTTON_PRESS:
+            if event.button == 3:
+                # disable auto refreshing because the popover is closing when auto refresh while open
+                if self.autorefresh_glibid:
+                    GLib.source_remove(self.autorefresh_glibid)
+                self.popover_place_remove.popup()
+
+    def on_btn_place_remove_clicked(self, button):
+        if self.place_remove_name:
+            self.UserSettings.removeSavedPlaces(self.place_remove_name)
+            self.popover_place_remove.popdown()
+            self.set_places()
+
+    def on_place_add_activated(self, listbox, row):
+        # disable auto refreshing because the popover is closing when auto refresh while open
+        if self.autorefresh_glibid:
+            GLib.source_remove(self.autorefresh_glibid)
+
+        self.entry_place_name.set_text("")
+        self.entry_place_icon.set_text("")
+
+        try:
+            path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+        except Exception as e:
+            print("{}".format(e))
+            path = None
+
+        if path:
+            self.lbl_place_preview.set_text(os.path.basename(path))
+        else:
+            self.lbl_place_preview.set_text("")
+
+        self.img_place_preview.set_from_icon_name("folder-symbolic", Gtk.IconSize.BUTTON)
+
+        self.popover_place_add.popup()
+
+    def on_btn_place_add_clicked(self, button):
+        try:
+            path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+        except Exception as e:
+            print("{}".format(e))
+            path = None
+
+        icon = self.entry_place_icon.get_text().strip()
+        name = self.entry_place_name.get_text().strip()
+
+
+        if path:
+            if icon == "":
+                icon = "folder-symbolic"
+            if name == "":
+                name = os.path.basename(path)
+            if self.UserSettings.addSavedPlaces(path, name, icon):
+                self.set_places()
+
+            self.popover_place_add.popdown()
+
+    def on_fc_place_path_file_set(self, button):
+        name = self.entry_place_name.get_text().strip()
+        if name == "":
+            try:
+                path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+            except Exception as e:
+                print("{}".format(e))
+                path = None
+            if path:
+                self.lbl_place_preview.set_text("{}".format(os.path.basename(path)))
+        else:
+            self.lbl_place_preview.set_text("{}".format(name))
+
+    def on_entry_place_name_changed(self, entry):
+        name = entry.get_text().strip()
+        if name != "":
+            self.lbl_place_preview.set_text("{}".format(name))
+        else:
+            try:
+                path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+            except Exception as e:
+                print("{}".format(e))
+                path = None
+            if path:
+                self.lbl_place_preview.set_text("{}".format(os.path.basename(path)))
+
+    def on_entry_place_icon_changed(self, entry):
+        icon = entry.get_text().strip()
+        if icon != "":
+            self.img_place_preview.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
+        else:
+            self.img_place_preview.set_from_icon_name("folder-symbolic", Gtk.IconSize.BUTTON)
 
     def autorefresh(self):
         if self.UserSettings.config_autorefresh:
@@ -1400,7 +1531,7 @@ class MainWindow:
         else:
            print("saved drive")
 
-    def on_popover_volume_closed(self, popover):
+    def on_popover_closed(self, popover):
         # auto refresh control of disks
         self.autorefresh()
 
