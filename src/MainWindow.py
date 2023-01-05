@@ -368,17 +368,23 @@ class MainWindow:
         label.set_halign(Gtk.Align.START)
         self.box_places.add(label)
 
-        trashcount = Gio.File.new_for_uri("trash:///").query_info(
-            Gio.FILE_ATTRIBUTE_TRASH_ITEM_COUNT, Gio.FileQueryInfoFlags.NONE, None).get_attribute_uint32(
-            Gio.FILE_ATTRIBUTE_TRASH_ITEM_COUNT)
 
-        trashtip = _("Trash")
+        try:
+            trashcount = Gio.File.new_for_uri("trash:///").query_info(
+                Gio.FILE_ATTRIBUTE_TRASH_ITEM_COUNT, Gio.FileQueryInfoFlags.NONE, None).get_attribute_uint32(
+                Gio.FILE_ATTRIBUTE_TRASH_ITEM_COUNT)
+        except Exception as e:
+            print("{}".format(e))
+            trashcount = -1
+
         if trashcount == 0:
             trashtip = _("Trash is empty")
         elif trashcount == 1:
             trashtip = _("Trash contains 1 file")
         elif trashcount > 1:
             trashtip = "{}".format(_("Trash contains %s files") % trashcount)
+        else:
+            trashtip = _("Trash")
 
         computer = "computer:///"
         trash = "trash:///"
@@ -539,7 +545,7 @@ class MainWindow:
 
             self.popover_place_add.set_relative_to(listbox)
 
-            self.box_places.pack_end(listbox, False, True, 21)
+            self.box_places.pack_end(listbox, False, True, 13)
 
         self.box_places.show_all()
 
@@ -550,6 +556,9 @@ class MainWindow:
 
     def on_place_clicked(self, listbox, row):
         path = row.get_child().name["path"]
+        if path == "trash:///":
+            # update file count of trash
+            self.set_places()
         self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=path, from_places=True)
 
     def on_place_button_press_event(self, widget, event):
@@ -627,12 +636,18 @@ class MainWindow:
 
     def drag_data_received(self, treeview, context, posx, posy, selection, info, timestamp):
         for select in selection.get_uris():
-            path = "{}".format(urllib.parse.unquote(select.split("file://")[1]))
-            if os.path.isdir(path):
+            try:
+                path = "{}".format(urllib.parse.unquote(select.split("file://")[1]))
+            except Exception as e:
+                print("{}".format(e))
+                path = None
+            if path and os.path.isdir(path):
                 icon = "folder-symbolic"
                 name = os.path.basename(path)
                 if self.UserSettings.addSavedPlaces(path, name, icon):
                     self.set_places()
+            else:
+                print("this is not a folder {}".format(select))
 
     def on_entry_place_name_changed(self, entry):
         name = entry.get_text().strip()
