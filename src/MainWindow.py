@@ -562,13 +562,13 @@ class MainWindow:
         self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=path, from_places=True)
 
     def on_place_button_press_event(self, widget, event):
-        self.place_remove_name = json.dumps(widget.get_children()[0].get_child().name)
-        self.popover_place_remove.set_relative_to(widget)
         if event.type == Gdk.EventType.BUTTON_PRESS:
             if event.button == 3:
                 # disable auto refreshing because the popover is closing when auto refresh while open
                 if self.autorefresh_glibid:
                     GLib.source_remove(self.autorefresh_glibid)
+                self.place_remove_name = json.dumps(widget.get_children()[0].get_child().name)
+                self.popover_place_remove.set_relative_to(widget)
                 self.popover_place_remove.popup()
 
     def on_btn_place_remove_clicked(self, button):
