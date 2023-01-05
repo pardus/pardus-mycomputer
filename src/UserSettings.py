@@ -304,3 +304,16 @@ class UserSettings(object):
                 for line in lines:
                     if line.strip("\n").strip() != place:
                         f.write(line)
+
+    def updateSavedPlaces(self, old_place, path, name, icon):
+        if Path.is_file(self.user_saved_places_file):
+            with open(self.user_saved_places_file, "r") as f:
+                lines = f.readlines()
+            with open(self.user_saved_places_file, "w") as f:
+                for line in lines:
+                    if line.strip("\n").strip() != old_place:
+                        f.write(line)
+                    else:
+                        place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon + '"}'
+                        f.write("{}\n".format(place))
+

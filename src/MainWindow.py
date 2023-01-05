@@ -94,13 +94,17 @@ class MainWindow:
         self.box_places = UI("box_places")
         self.popover_place_add = UI("popover_place_add")
         self.popover_place_remove = UI("popover_place_remove")
+        self.popover_place_edit = UI("popover_place_edit")
         self.fc_place_path = UI("fc_place_path")
         self.fc_place_path.set_uri("file://{}".format(GLib.get_home_dir()))
         self.entry_place_icon = UI("entry_place_icon")
         self.entry_place_name = UI("entry_place_name")
         self.img_place_preview = UI("img_place_preview")
         self.lbl_place_preview = UI("lbl_place_preview")
-
+        self.img_place_preview_edit = UI("img_place_preview_edit")
+        self.lbl_place_preview_edit = UI("lbl_place_preview_edit")
+        self.entry_place_icon_edit = UI("entry_place_icon_edit")
+        self.entry_place_name_edit = UI("entry_place_name_edit")
         # Home
         self.lbl_home_path = UI("lbl_home_path")
         self.lbl_home_size = UI("lbl_home_size")
@@ -553,6 +557,8 @@ class MainWindow:
         self.popover_place_remove.set_visible(False)
         self.popover_place_remove.set_relative_to(self.box_places)
         self.popover_place_remove.popdown()
+        self.popover_place_edit.set_visible(False)
+
 
     def control_places_show(self, displaycontrol=False):
         self.box_places.set_visible(not self.UserSettings.config_hide_places)
@@ -572,7 +578,7 @@ class MainWindow:
                 # disable auto refreshing because the popover is closing when auto refresh while open
                 if self.autorefresh_glibid:
                     GLib.source_remove(self.autorefresh_glibid)
-                self.place_remove_name = json.dumps(widget.get_children()[0].get_child().name)
+                self.place_remove_name = json.dumps(widget.get_children()[0].get_child().name, ensure_ascii=False)
                 self.popover_place_remove.set_relative_to(widget)
                 self.popover_place_remove.popup()
 
@@ -588,15 +594,15 @@ class MainWindow:
 
         self.entry_place_name.set_text("")
         self.entry_place_icon.set_text("")
-
+        uri = self.fc_place_path.get_uri()
         try:
-            path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+            path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
         except Exception as e:
             print("{}".format(e))
             path = None
 
         if path:
-            self.lbl_place_preview.set_text(os.path.basename(path))
+            self.lbl_place_preview.set_text(self.get_display_name_from_uri(uri))
         else:
             self.lbl_place_preview.set_text("")
 
@@ -619,28 +625,23 @@ class MainWindow:
             if icon == "":
                 icon = "folder-symbolic"
             if name == "":
-                try:
-                    name = Gio.File.new_for_uri(uri).query_info(
-                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
-                        Gio.FileQueryInfoFlags.NONE, None).get_attribute_as_string(
-                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
-                except:
-                    name = os.path.basename(path)
+                name = self.get_display_name_from_uri(uri)
             if self.UserSettings.addSavedPlaces(path, name, icon):
                 self.set_places()
 
             self.popover_place_add.popdown()
 
     def on_fc_place_path_file_set(self, button):
+        uri = self.fc_place_path.get_uri()
         name = self.entry_place_name.get_text().strip()
         if name == "":
             try:
-                path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
             except Exception as e:
                 print("{}".format(e))
                 path = None
             if path:
-                self.lbl_place_preview.set_text("{}".format(os.path.basename(path)))
+                self.lbl_place_preview.set_text("{}".format(self.get_display_name_from_uri(uri)))
         else:
             self.lbl_place_preview.set_text("{}".format(name))
 
@@ -653,30 +654,24 @@ class MainWindow:
                 path = None
             if path and os.path.isdir(path):
                 icon = "folder-symbolic"
-                try:
-                    name = Gio.File.new_for_uri(uri).query_info(
-                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
-                        Gio.FileQueryInfoFlags.NONE, None).get_attribute_as_string(
-                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
-                except:
-                    name = os.path.basename(path)
-                if self.UserSettings.addSavedPlaces(path, name, icon):
+                if self.UserSettings.addSavedPlaces(path, self.get_display_name_from_uri(uri), icon):
                     self.set_places()
             else:
                 print("this is not a folder {}".format(uri))
 
     def on_entry_place_name_changed(self, entry):
+        uri = self.fc_place_path.get_uri()
         name = entry.get_text().strip()
         if name != "":
             self.lbl_place_preview.set_text("{}".format(name))
         else:
             try:
-                path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
             except Exception as e:
                 print("{}".format(e))
                 path = None
             if path:
-                self.lbl_place_preview.set_text("{}".format(os.path.basename(path)))
+                self.lbl_place_preview.set_text("{}".format(self.get_display_name_from_uri(uri)))
 
     def on_entry_place_icon_changed(self, entry):
         icon = entry.get_text().strip()
@@ -684,6 +679,74 @@ class MainWindow:
             self.img_place_preview.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
         else:
             self.img_place_preview.set_from_icon_name("folder-symbolic", Gtk.IconSize.BUTTON)
+
+    def on_btn_place_edit_clicked(self, button):
+        self.popover_place_edit.popup()
+        edit = json.loads(self.place_remove_name)
+        self.entry_place_name_edit.set_text(edit["name"])
+        self.entry_place_icon_edit.set_text(edit["icon"])
+        self.lbl_place_preview_edit.set_text(edit["name"] )
+        self.img_place_preview_edit.set_from_icon_name(edit["icon"], Gtk.IconSize.BUTTON)
+
+    def on_entry_place_name_edit_changed(self, entry):
+        uri = "file://{}".format(json.loads(self.place_remove_name)["path"])
+        name = entry.get_text().strip()
+        if name != "":
+            self.lbl_place_preview_edit.set_text("{}".format(name))
+        else:
+            try:
+                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+            except Exception as e:
+                print("{}".format(e))
+                path = None
+            if path:
+                self.lbl_place_preview_edit.set_text("{}".format(self.get_display_name_from_uri(uri)))
+
+    def on_entry_place_icon_edit_changed(self, entry):
+        icon = entry.get_text().strip()
+        if icon != "":
+            self.img_place_preview_edit.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
+        else:
+            self.img_place_preview_edit.set_from_icon_name("folder-symbolic", Gtk.IconSize.BUTTON)
+
+    def on_btn_place_update_clicked(self, button):
+        uri = "file://{}".format(json.loads(self.place_remove_name)["path"])
+        try:
+            path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+        except Exception as e:
+            print("{}".format(e))
+            path = None
+
+        icon = self.entry_place_icon_edit.get_text().strip()
+        name = self.entry_place_name_edit.get_text().strip()
+
+        if path:
+            if icon == "":
+                icon = "folder-symbolic"
+            if name == "":
+                try:
+                    name = Gio.File.new_for_uri(uri).query_info(
+                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                        Gio.FileQueryInfoFlags.NONE, None).get_attribute_as_string(
+                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+                except:
+                    name = os.path.basename(path)
+            self.UserSettings.updateSavedPlaces(self.place_remove_name, path, name, icon)
+            self.set_places()
+            self.popover_place_edit.popdown()
+            self.popover_place_remove.popdown()
+
+    def get_display_name_from_uri(self, uri):
+        try:
+            name = Gio.File.new_for_uri(uri).query_info(
+                Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                Gio.FileQueryInfoFlags.NONE, None).get_attribute_as_string(
+                Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+        except Exception as e:
+            print("Exception in get_display_name_from_uri: {}".format(e))
+            path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+            name = os.path.basename(path)
+        return name
 
     def autorefresh(self):
         if self.UserSettings.config_autorefresh:
