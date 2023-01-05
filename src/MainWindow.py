@@ -549,6 +549,11 @@ class MainWindow:
 
         self.box_places.show_all()
 
+        # fix popover show/hide problem 
+        self.popover_place_remove.set_visible(False)
+        self.popover_place_remove.set_relative_to(self.box_places)
+        self.popover_place_remove.popdown()
+
     def control_places_show(self, displaycontrol=False):
         self.box_places.set_visible(not self.UserSettings.config_hide_places)
         if displaycontrol:
@@ -574,7 +579,6 @@ class MainWindow:
     def on_btn_place_remove_clicked(self, button):
         if self.place_remove_name:
             self.UserSettings.removeSavedPlaces(self.place_remove_name)
-            self.popover_place_remove.popdown()
             self.set_places()
 
     def on_place_add_activated(self, listbox, row):
@@ -601,8 +605,9 @@ class MainWindow:
         self.popover_place_add.popup()
 
     def on_btn_place_add_clicked(self, button):
+        uri = self.fc_place_path.get_uri()
         try:
-            path = "{}".format(urllib.parse.unquote(self.fc_place_path.get_uri().split("file://")[1]))
+            path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
         except Exception as e:
             print("{}".format(e))
             path = None
@@ -610,12 +615,17 @@ class MainWindow:
         icon = self.entry_place_icon.get_text().strip()
         name = self.entry_place_name.get_text().strip()
 
-
         if path:
             if icon == "":
                 icon = "folder-symbolic"
             if name == "":
-                name = os.path.basename(path)
+                try:
+                    name = Gio.File.new_for_uri(uri).query_info(
+                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                        Gio.FileQueryInfoFlags.NONE, None).get_attribute_as_string(
+                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+                except:
+                    name = os.path.basename(path)
             if self.UserSettings.addSavedPlaces(path, name, icon):
                 self.set_places()
 
@@ -635,19 +645,25 @@ class MainWindow:
             self.lbl_place_preview.set_text("{}".format(name))
 
     def drag_data_received(self, treeview, context, posx, posy, selection, info, timestamp):
-        for select in selection.get_uris():
+        for uri in selection.get_uris():
             try:
-                path = "{}".format(urllib.parse.unquote(select.split("file://")[1]))
+                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
             except Exception as e:
                 print("{}".format(e))
                 path = None
             if path and os.path.isdir(path):
                 icon = "folder-symbolic"
-                name = os.path.basename(path)
+                try:
+                    name = Gio.File.new_for_uri(uri).query_info(
+                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                        Gio.FileQueryInfoFlags.NONE, None).get_attribute_as_string(
+                        Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+                except:
+                    name = os.path.basename(path)
                 if self.UserSettings.addSavedPlaces(path, name, icon):
                     self.set_places()
             else:
-                print("this is not a folder {}".format(select))
+                print("this is not a folder {}".format(uri))
 
     def on_entry_place_name_changed(self, entry):
         name = entry.get_text().strip()
