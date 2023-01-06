@@ -261,11 +261,15 @@ class UserSettings(object):
             try:
                 with open(self.user_saved_places_file, "r") as servp:
                     for line in servp.readlines():
-                        place = line.strip("\n").strip()
-                        if not place.startswith("#") and place != "":
-                            places.append(json.loads(place))
+                        try:
+                            place = line.strip("\n").strip()
+                            if not place.startswith("#") and place != "":
+                                places.append(json.loads(place))
+                        except Exception as e:
+                            print("getSavedPlaces: {}".format(e))
+                            pass
             except Exception as e:
-                print("{}".format(e))
+                print("getSavedPlaces: {}".format(e))
         else:
             self.createDir(self.user_config_dir)
             self.user_saved_places_file.touch(exist_ok=True)
@@ -285,11 +289,15 @@ class UserSettings(object):
             with open(self.user_saved_places_file, "r+") as savep:
                 for line in savep:
                     if not line.startswith("#"):
-                        linejson = json.loads(line.strip("\n").strip())
-                        if linejson["path"] == path:
-                            print("{} already in places".format(path))
-                            return False
-                savep.write("{}\n".format(place))
+                        try:
+                            linejson = json.loads(line.strip("\n").strip())
+                            if linejson["path"] == path:
+                                print("{} already in places".format(path))
+                                return False
+                        except Exception as e:
+                            print("addSavedPlaces: {}".format(e))
+                            pass
+                savep.writelines("{}\n".format(place))
                 return True
         if not Path.is_file(self.user_saved_places_file):
             self.createDir(self.user_config_dir)
