@@ -284,9 +284,11 @@ class UserSettings(object):
         def add():
             with open(self.user_saved_places_file, "r+") as savep:
                 for line in savep:
-                    if place == line.strip("\n").strip():
-                        print("{} already in places".format(place))
-                        return False
+                    if not line.startswith("#"):
+                        linejson = json.loads(line.strip("\n").strip())
+                        if linejson["path"] == path:
+                            print("{} already in places".format(path))
+                            return False
                 savep.write("{}\n".format(place))
                 return True
         if not Path.is_file(self.user_saved_places_file):
@@ -312,8 +314,10 @@ class UserSettings(object):
             with open(self.user_saved_places_file, "w") as f:
                 for line in lines:
                     if line.strip("\n").strip() != old_place:
+                        # write other lines again to file
                         f.write(line)
                     else:
+                        # edit line to be changed
                         place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon + '"}'
                         f.write("{}\n".format(place))
 
