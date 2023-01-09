@@ -593,61 +593,73 @@ Fatih Altun</property>
     <property name="relative-to">entry_place_icon</property>
     <property name="position">right</property>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="min-content-width">350</property>
-        <property name="min-content-height">300</property>
+        <property name="can-focus">False</property>
+        <property name="margin-top">13</property>
+        <property name="margin-bottom">13</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">13</property>
         <child>
-          <object class="GtkViewport">
+          <object class="GtkSearchEntry" id="search_icons">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="shadow-type">none</property>
+            <property name="can-focus">True</property>
+            <property name="halign">center</property>
+            <property name="primary-icon-name">edit-find-symbolic</property>
+            <property name="primary-icon-activatable">False</property>
+            <property name="primary-icon-sensitive">False</property>
+            <signal name="search-changed" handler="on_search_icons_search_changed" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="min-content-width">350</property>
+            <property name="min-content-height">300</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkViewport">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">13</property>
-                <property name="margin-end">13</property>
-                <property name="margin-top">13</property>
-                <property name="margin-bottom">13</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">13</property>
+                <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkSearchEntry" id="search_icons">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="halign">center</property>
-                    <property name="primary-icon-name">edit-find-symbolic</property>
-                    <property name="primary-icon-activatable">False</property>
-                    <property name="primary-icon-sensitive">False</property>
-                    <signal name="search-changed" handler="on_search_icons_search_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkListBox" id="lb_icons">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="selection-mode">none</property>
-                    <signal name="row-activated" handler="on_lb_icons_row_activated" swapped="no"/>
-                    <style>
-                      <class name="pardus-mycomputer-listbox"/>
-                    </style>
+                    <property name="margin-start">13</property>
+                    <property name="margin-end">13</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkListBox" id="lb_icons">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="selection-mode">none</property>
+                        <signal name="row-activated" handler="on_lb_icons_row_activated" swapped="no"/>
+                        <style>
+                          <class name="pardus-mycomputer-listbox"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
     </child>
