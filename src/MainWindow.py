@@ -384,7 +384,7 @@ class MainWindow:
         self.ls_systemapps.append(list)
 
     def get_controlpanel_desktops(self):
-
+        blacklist = ["synaptic.desktop", "tr.org.pardus.mycomputer.desktop"]
         apps = []
         for app in Gio.DesktopAppInfo.get_all():
 
@@ -402,7 +402,8 @@ class MainWindow:
 
             if os.path.dirname(filename) == "/usr/share/applications" \
                     and executable and not nodisplay and not is_hidden \
-                    and show_in and "settings" in category.lower():
+                    and show_in and "settings" in category.lower() \
+                    and id not in blacklist:
                 apps.append({"id": id, "name": name, "icon": icon,
                              "description": description, "filename": filename,
                              "keywords": keywords, "executable": executable,

@@ -3505,7 +3505,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkToggleButton" id="btn_search">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
             <signal name="toggled" handler="on_btn_search_toggled" swapped="no"/>
