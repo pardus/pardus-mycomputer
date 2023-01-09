@@ -64,6 +64,8 @@ class MainWindow:
 
         self.set_places()
 
+        # self.set_system_settings_section()
+
         cssProvider = Gtk.CssProvider()
         cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../css/style.css")
         screen = Gdk.Screen.get_default()
@@ -105,6 +107,15 @@ class MainWindow:
         self.lbl_place_preview_edit = UI("lbl_place_preview_edit")
         self.entry_place_icon_edit = UI("entry_place_icon_edit")
         self.entry_place_name_edit = UI("entry_place_name_edit")
+
+        # system apps
+        self.ls_systemapps = UI("ls_systemapps")
+        self.iw_systemapps = UI("iw_systemapps")
+        self.lbl_menu_controlpanel = UI("lbl_menu_controlpanel")
+        self.img_menu_controlpanel = UI("img_menu_controlpanel")
+        self.iw_systemapps.set_pixbuf_column(0)
+        self.iw_systemapps.set_text_column(1)
+
         # Home
         self.lbl_home_path = UI("lbl_home_path")
         self.lbl_home_size = UI("lbl_home_size")
@@ -352,6 +363,56 @@ class MainWindow:
         self.window.resize(width, height)
 
         print("window w:{} h:{} | monitor w:{} h:{} s:{}".format(width, height, w, h, s))
+
+    def set_controlpanel_section(self):
+        GLib.idle_add(self.ls_systemapps.clear)
+        apps = self.get_controlpanel_desktops()
+        for app in apps:
+
+            appicon = Gtk.IconTheme.get_default().load_icon(app["icon"] if app["icon"] is not None else "image-missing", 48,
+                                                            Gtk.IconLookupFlags(16))
+            GLib.idle_add(self.add_to_controlpanel_apps, [appicon, app["name"], app["id"]])
+
+    def add_to_controlpanel_apps(self, list):
+        self.ls_systemapps.append(list)
+
+    def get_controlpanel_desktops(self):
+
+        apps = []
+        for app in Gio.DesktopAppInfo.get_all():
+
+            id = app.get_id()
+            name = app.get_name()
+            executable = app.get_executable()
+            nodisplay = app.get_nodisplay()
+            category = app.get_categories()
+            show_in = app.get_show_in()
+            is_hidden = app.get_is_hidden()
+            icon = app.get_string('Icon')
+            description = app.get_description() or app.get_generic_name() or app.get_name()
+            filename = app.get_filename()
+            keywords = " ".join(app.get_keywords())
+
+            if os.path.dirname(filename) == "/usr/share/applications" \
+                    and executable and not nodisplay and not is_hidden \
+                    and show_in and "settings" in category.lower():
+                apps.append({"id": id, "name": name, "icon": icon,
+                             "description": description, "filename": filename,
+                             "keywords": keywords, "executable": executable,
+                             "category": category})
+
+        apps = sorted(dict((v['name'], v) for v in apps).values(),
+                      key=lambda x: locale.strxfrm(x["name"]))
+
+        return apps
+
+    def on_iw_systemapps_item_activated(self, iconview, path):
+        treeiter = self.ls_systemapps.get_iter(path[0])
+        appid = self.ls_systemapps.get(treeiter, 2)[0]
+        try:
+            subprocess.check_call(["gtk-launch", appid])
+        except subprocess.CalledProcessError:
+            print("error opening " + appid)
 
     def set_places(self):
 
@@ -2145,7 +2206,7 @@ class MainWindow:
             self.stack_main.set_visible_child_name("home")
             self.img_menu_appsettings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
             self.lbl_menu_appsettings.set_text(_("App Settings"))
-        elif self.stack_main.get_visible_child_name() == "home":
+        else:
             self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
@@ -2157,6 +2218,26 @@ class MainWindow:
             self.img_menu_appsettings.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
             self.lbl_menu_appsettings.set_text(_("Home Page"))
             self.control_defaults()
+
+            # set other menu button to default
+            self.img_menu_controlpanel.set_from_icon_name("preferences-other-symbolic", Gtk.IconSize.BUTTON)
+            self.lbl_menu_controlpanel.set_text(_("Control Panel"))
+
+    def on_menu_controlpanel_clicked(self, button):
+        self.popover_menu.popdown()
+        self.set_controlpanel_section()
+        if self.stack_main.get_visible_child_name() == "controlpanel":
+            self.stack_main.set_visible_child_name("home")
+            self.img_menu_controlpanel.set_from_icon_name("preferences-other-symbolic", Gtk.IconSize.BUTTON)
+            self.lbl_menu_controlpanel.set_text(_("Control Panel"))
+        else:
+            self.stack_main.set_visible_child_name("controlpanel")
+            self.img_menu_controlpanel.set_from_icon_name("user-home-symbolic", Gtk.IconSize.BUTTON)
+            self.lbl_menu_controlpanel.set_text(_("Home Page"))
+
+            # set other menu button to default
+            self.img_menu_appsettings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
+            self.lbl_menu_appsettings.set_text(_("App Settings"))
 
     def on_menu_aboutapp_clicked(self, button):
         self.popover_menu.popdown()

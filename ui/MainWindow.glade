@@ -81,6 +81,16 @@ Fatih Altun</property>
       </object>
     </child>
   </object>
+  <object class="GtkListStore" id="ls_systemapps">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name appid -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkPopover" id="popover_menu">
     <property name="can-focus">False</property>
     <child>
@@ -95,7 +105,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkButton" id="menu_appsettings">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
             <signal name="clicked" handler="on_menu_appsettings_clicked" swapped="no"/>
@@ -149,6 +159,62 @@ Fatih Altun</property>
           </packing>
         </child>
         <child>
+          <object class="GtkButton" id="menu_controlpanel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_menu_controlpanel_clicked" swapped="no"/>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkImage" id="img_menu_controlpanel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">preferences-other-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_menu_controlpanel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Control Panel</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkButton" id="menu_aboutpardus">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -190,7 +256,7 @@ Fatih Altun</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -201,7 +267,7 @@ Fatih Altun</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -2290,20 +2356,35 @@ Fatih Altun</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <child>
-              <object class="GtkBox" id="box_places">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">8</property>
-                <property name="margin-end">8</property>
-                <property name="margin-top">21</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">5</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">external</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="shadow-type">none</property>
+                    <child>
+                      <object class="GtkBox" id="box_places">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">8</property>
+                        <property name="margin-end">8</property>
+                        <property name="margin-top">21</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
-                <property name="resize">True</property>
+                <property name="resize">False</property>
                 <property name="shrink">True</property>
               </packing>
             </child>
@@ -3313,6 +3394,47 @@ Fatih Altun</property>
             <property name="position">1</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkPaned">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <child>
+                  <object class="GtkIconView" id="iw_systemapps">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="margin">13</property>
+                    <property name="selection-mode">none</property>
+                    <property name="item-orientation">horizontal</property>
+                    <property name="model">ls_systemapps</property>
+                    <property name="item-width">144</property>
+                    <property name="row-spacing">13</property>
+                    <property name="column-spacing">13</property>
+                    <property name="item-padding">8</property>
+                    <property name="activate-on-single-click">True</property>
+                    <signal name="item-activated" handler="on_iw_systemapps_item_activated" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">controlpanel</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child type="titlebar">
@@ -3322,26 +3444,6 @@ Fatih Altun</property>
         <property name="title" translatable="yes">My Computer</property>
         <property name="has-subtitle">False</property>
         <property name="show-close-button">True</property>
-        <child>
-          <object class="GtkButton" id="btn_refresh">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Refresh</property>
-            <property name="relief">none</property>
-            <signal name="clicked" handler="on_btn_refresh_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">view-refresh-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkMenuButton" id="headerbar_menubutton">
             <property name="visible">True</property>
@@ -3359,9 +3461,6 @@ Fatih Altun</property>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkMenuButton" id="header_btn_connect">
@@ -3380,7 +3479,7 @@ Fatih Altun</property>
             </child>
           </object>
           <packing>
-            <property name="position">4</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -3389,6 +3488,27 @@ Fatih Altun</property>
             <property name="can-focus">False</property>
           </object>
           <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_refresh">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Refresh</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_btn_refresh_clicked" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">view-refresh-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
             <property name="position">4</property>
           </packing>
         </child>
