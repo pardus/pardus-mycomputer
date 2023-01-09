@@ -88,6 +88,8 @@ class MainWindow:
         # control places show setting
         self.control_places_show()
 
+        self.btn_search.set_visible(False)
+
     def defineComponents(self):
         def UI(str):
             return self.builder.get_object(str)
@@ -111,10 +113,15 @@ class MainWindow:
         # system apps
         self.ls_systemapps = UI("ls_systemapps")
         self.iw_systemapps = UI("iw_systemapps")
+        self.tmf_systemapps = UI("tmf_systemapps")
+        self.search_systemapps = UI("search_systemapps")
+        self.revealer_systemapps = UI("revealer_systemapps")
         self.lbl_menu_controlpanel = UI("lbl_menu_controlpanel")
         self.img_menu_controlpanel = UI("img_menu_controlpanel")
+        self.btn_search = UI("btn_search")
         self.iw_systemapps.set_pixbuf_column(0)
         self.iw_systemapps.set_text_column(1)
+        self.tmf_systemapps.set_visible_func(self.systemapps_filter_func)
 
         # Home
         self.lbl_home_path = UI("lbl_home_path")
@@ -413,6 +420,12 @@ class MainWindow:
             subprocess.check_call(["gtk-launch", appid])
         except subprocess.CalledProcessError:
             print("error opening " + appid)
+
+    def systemapps_filter_func(self, model, iteration, data):
+        appname = model[iteration][1].lower().strip()
+        search_entry_text = self.search_systemapps.get_text().lower().strip()
+        if search_entry_text in appname:
+            return True
 
     def set_places(self):
 
@@ -2162,6 +2175,15 @@ class MainWindow:
         self.entry_addr.set_text("{}".format(row.get_children()[0].name.split(" ")[0]))
         self.popover_recent_servers.popdown()
 
+    def on_btn_search_toggled(self, button):
+        status = button.get_active()
+        self.revealer_systemapps.set_reveal_child(status)
+        if status:
+            self.search_systemapps.grab_focus()
+
+    def on_search_systemapps_search_changed(self, entry):
+        self.tmf_systemapps.refilter()
+
     def on_btn_defaults_clicked(self, button):
         old_window_remember_size = self.UserSettings.config_window_remember_size
         self.UserSettings.createDefaultConfig(force=True)
@@ -2196,11 +2218,13 @@ class MainWindow:
             self.btn_defaults.set_sensitive(False)
 
     def on_btn_homepage_clicked(self, button):
+        self.btn_search.set_visible(False)
         self.stack_main.set_visible_child_name("home")
         self.img_menu_appsettings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
         self.lbl_menu_appsettings.set_text(_("App Settings"))
 
     def on_menu_appsettings_clicked(self, button):
+        self.btn_search.set_visible(False)
         self.popover_menu.popdown()
         if self.stack_main.get_visible_child_name() == "settings":
             self.stack_main.set_visible_child_name("home")
@@ -2224,6 +2248,7 @@ class MainWindow:
             self.lbl_menu_controlpanel.set_text(_("Control Panel"))
 
     def on_menu_controlpanel_clicked(self, button):
+        self.btn_search.set_visible(True)
         self.popover_menu.popdown()
         self.set_controlpanel_section()
         if self.stack_main.get_visible_child_name() == "controlpanel":

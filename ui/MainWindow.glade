@@ -91,6 +91,9 @@ Fatih Altun</property>
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkTreeModelFilter" id="tmf_systemapps">
+    <property name="child-model">ls_systemapps</property>
+  </object>
   <object class="GtkPopover" id="popover_menu">
     <property name="can-focus">False</property>
     <child>
@@ -3403,25 +3406,60 @@ Fatih Altun</property>
               <placeholder/>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hscrollbar-policy">never</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkIconView" id="iw_systemapps">
+                  <object class="GtkRevealer" id="revealer_systemapps">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkSearchEntry" id="search_systemapps">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="halign">center</property>
+                        <property name="margin-top">13</property>
+                        <property name="primary-icon-name">edit-find-symbolic</property>
+                        <property name="primary-icon-activatable">False</property>
+                        <property name="primary-icon-sensitive">False</property>
+                        <signal name="search-changed" handler="on_search_systemapps_search_changed" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="margin">13</property>
-                    <property name="selection-mode">none</property>
-                    <property name="item-orientation">horizontal</property>
-                    <property name="model">ls_systemapps</property>
-                    <property name="item-width">144</property>
-                    <property name="row-spacing">13</property>
-                    <property name="column-spacing">13</property>
-                    <property name="item-padding">8</property>
-                    <property name="activate-on-single-click">True</property>
-                    <signal name="item-activated" handler="on_iw_systemapps_item_activated" swapped="no"/>
+                    <property name="hscrollbar-policy">never</property>
+                    <child>
+                      <object class="GtkIconView" id="iw_systemapps">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="margin">13</property>
+                        <property name="selection-mode">none</property>
+                        <property name="item-orientation">horizontal</property>
+                        <property name="model">tmf_systemapps</property>
+                        <property name="item-width">144</property>
+                        <property name="row-spacing">13</property>
+                        <property name="column-spacing">13</property>
+                        <property name="item-padding">8</property>
+                        <property name="activate-on-single-click">True</property>
+                        <signal name="item-activated" handler="on_iw_systemapps_item_activated" swapped="no"/>
+                      </object>
+                    </child>
                   </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -3445,6 +3483,46 @@ Fatih Altun</property>
         <property name="has-subtitle">False</property>
         <property name="show-close-button">True</property>
         <child>
+          <object class="GtkButton" id="btn_refresh">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Refresh</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_btn_refresh_clicked" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">view-refresh-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="btn_search">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="relief">none</property>
+            <signal name="toggled" handler="on_btn_search_toggled" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">edit-find-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkMenuButton" id="headerbar_menubutton">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -3461,6 +3539,9 @@ Fatih Altun</property>
               </object>
             </child>
           </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
         </child>
         <child>
           <object class="GtkMenuButton" id="header_btn_connect">
@@ -3479,7 +3560,7 @@ Fatih Altun</property>
             </child>
           </object>
           <packing>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -3488,27 +3569,6 @@ Fatih Altun</property>
             <property name="can-focus">False</property>
           </object>
           <packing>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btn_refresh">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Refresh</property>
-            <property name="relief">none</property>
-            <signal name="clicked" handler="on_btn_refresh_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">view-refresh-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
             <property name="position">4</property>
           </packing>
         </child>
