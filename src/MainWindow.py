@@ -64,6 +64,9 @@ class MainWindow:
 
         self.set_places()
 
+        # set icon list
+        # self.set_icon_list()
+
         # self.set_system_settings_section()
 
         cssProvider = Gtk.CssProvider()
@@ -99,6 +102,7 @@ class MainWindow:
         self.popover_place_add = UI("popover_place_add")
         self.popover_place_remove = UI("popover_place_remove")
         self.popover_place_edit = UI("popover_place_edit")
+        self.popover_listicons = UI("popover_listicons")
         self.fc_place_path = UI("fc_place_path")
         self.fc_place_path.set_uri("file://{}".format(GLib.get_home_dir()))
         self.entry_place_icon = UI("entry_place_icon")
@@ -109,6 +113,9 @@ class MainWindow:
         self.lbl_place_preview_edit = UI("lbl_place_preview_edit")
         self.entry_place_icon_edit = UI("entry_place_icon_edit")
         self.entry_place_name_edit = UI("entry_place_name_edit")
+        self.search_icons = UI("search_icons")
+        self.lb_icons = UI("lb_icons")
+        self.lb_icons.set_filter_func(self.icons_filter_func)
 
         # system apps
         self.ls_systemapps = UI("ls_systemapps")
@@ -370,6 +377,43 @@ class MainWindow:
         self.window.resize(width, height)
 
         print("window w:{} h:{} | monitor w:{} h:{} s:{}".format(width, height, w, h, s))
+
+    def icons_filter_func(self, row):
+        name = row.get_children()[0].name.lower()
+        search = self.search_icons.get_text().lower()
+        if search in name:
+            return True
+
+    def set_icon_list(self):
+        # self.lb_icons.foreach(lambda child: self.lb_icons.remove(child))
+
+        if len(self.lb_icons) == 0:
+
+            list_icons = Gtk.IconTheme.get_default().list_icons()
+            list_icons = sorted(list_icons, key=lambda x: locale.strxfrm(x))
+
+            for licon in list_icons:
+                if Gtk.IconTheme.get_default().lookup_icon(licon, Gtk.IconSize.BUTTON, Gtk.IconLookupFlags(16)):
+                    icon = Gtk.Image.new_from_pixbuf(Gtk.IconTheme.get_default().load_icon(licon, 16, Gtk.IconLookupFlags(16)))
+                    label = Gtk.Label.new()
+                    label.set_markup("{}".format(licon))
+                    label.set_ellipsize(Pango.EllipsizeMode.END)
+                    box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+                    box.name = licon
+                    box.pack_start(icon, False, True, 0)
+                    box.pack_start(label, False, True, 0)
+                    box.set_margin_start(8)
+                    box.set_margin_end(8)
+                    box.set_margin_top(5)
+                    box.set_margin_bottom(5)
+                    box.set_spacing(8)
+                    box.set_tooltip_text(licon)
+
+                    self.lb_icons.add(box)
+
+        GLib.idle_add(self.lb_icons.show_all)
+        self.entry_place_icon.set_icon_sensitive(Gtk.EntryIconPosition.SECONDARY, True)
+
 
     def set_controlpanel_section(self):
         GLib.idle_add(self.ls_systemapps.clear)
@@ -2184,6 +2228,18 @@ class MainWindow:
 
     def on_search_systemapps_search_changed(self, entry):
         self.tmf_systemapps.refilter()
+
+    def on_search_icons_search_changed(self, entry):
+        self.lb_icons.invalidate_filter()
+
+    def on_entry_place_icon_icon_press(self, entry, icon_pos, event):
+        entry.set_icon_sensitive(icon_pos, False)
+        self.popover_listicons.popup()
+        GLib.idle_add(self.set_icon_list)
+
+    def on_lb_icons_row_activated(self, list_box, row):
+        self.popover_listicons.popdown()
+        self.entry_place_icon.set_text(row.get_children()[0].name)
 
     def on_btn_defaults_clicked(self, button):
         old_window_remember_size = self.UserSettings.config_window_remember_size

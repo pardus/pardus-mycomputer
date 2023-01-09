@@ -354,6 +354,7 @@ Fatih Altun</property>
             </child>
             <child>
               <object class="GtkFileChooserButton" id="fc_place_path">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">end</property>
@@ -394,6 +395,7 @@ Fatih Altun</property>
             </child>
             <child>
               <object class="GtkEntry" id="entry_place_name">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="halign">end</property>
@@ -432,16 +434,19 @@ Fatih Altun</property>
             </child>
             <child>
               <object class="GtkEntry" id="entry_place_icon">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
+                <property name="secondary-icon-name">document-open-symbolic</property>
                 <signal name="changed" handler="on_entry_place_icon_changed" swapped="no"/>
+                <signal name="icon-press" handler="on_entry_place_icon_icon_press" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -579,6 +584,70 @@ Fatih Altun</property>
             <property name="fill">True</property>
             <property name="position">6</property>
           </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="popover_listicons">
+    <property name="can-focus">False</property>
+    <property name="relative-to">entry_place_icon</property>
+    <property name="position">right</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="min-content-width">350</property>
+        <property name="min-content-height">300</property>
+        <child>
+          <object class="GtkViewport">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">13</property>
+                <property name="margin-end">13</property>
+                <property name="margin-top">13</property>
+                <property name="margin-bottom">13</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">13</property>
+                <child>
+                  <object class="GtkSearchEntry" id="search_icons">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="halign">center</property>
+                    <property name="primary-icon-name">edit-find-symbolic</property>
+                    <property name="primary-icon-activatable">False</property>
+                    <property name="primary-icon-sensitive">False</property>
+                    <signal name="search-changed" handler="on_search_icons_search_changed" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkListBox" id="lb_icons">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="selection-mode">none</property>
+                    <signal name="row-activated" handler="on_lb_icons_row_activated" swapped="no"/>
+                    <style>
+                      <class name="pardus-mycomputer-listbox"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
@@ -3505,7 +3574,7 @@ Fatih Altun</property>
         <child>
           <object class="GtkToggleButton" id="btn_search">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="relief">none</property>
             <signal name="toggled" handler="on_btn_search_toggled" swapped="no"/>
