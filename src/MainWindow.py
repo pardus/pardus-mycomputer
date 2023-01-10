@@ -385,7 +385,6 @@ class MainWindow:
             return True
 
     def set_icon_list(self):
-        # self.lb_icons.foreach(lambda child: self.lb_icons.remove(child))
 
         if len(self.lb_icons) == 0:
 
@@ -393,23 +392,26 @@ class MainWindow:
             list_icons = sorted(list_icons, key=lambda x: locale.strxfrm(x))
 
             for licon in list_icons:
-                if Gtk.IconTheme.get_default().lookup_icon(licon, Gtk.IconSize.BUTTON, Gtk.IconLookupFlags(16)):
-                    icon = Gtk.Image.new_from_pixbuf(Gtk.IconTheme.get_default().load_icon(licon, 16, Gtk.IconLookupFlags(16)))
-                    label = Gtk.Label.new()
-                    label.set_markup("{}".format(licon))
-                    label.set_ellipsize(Pango.EllipsizeMode.END)
-                    box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-                    box.name = licon
-                    box.pack_start(icon, False, True, 0)
-                    box.pack_start(label, False, True, 0)
-                    box.set_margin_start(8)
-                    box.set_margin_end(8)
-                    box.set_margin_top(5)
-                    box.set_margin_bottom(5)
-                    box.set_spacing(8)
-                    box.set_tooltip_text(licon)
+                if licon.endswith("-symbolic"):
+                    if -1 in Gtk.IconTheme.get_default().get_icon_sizes(licon):
+                        # icon = Gtk.Image.new_from_pixbuf(Gtk.IconTheme.get_default().load_icon(
+                        #     licon, 16, Gtk.IconLookupFlags(16)))
+                        icon = Gtk.Image.new_from_icon_name(licon, Gtk.IconSize.BUTTON)
+                        label = Gtk.Label.new()
+                        label.set_markup("{}".format(licon))
+                        label.set_ellipsize(Pango.EllipsizeMode.END)
+                        box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+                        box.name = licon
+                        box.pack_start(icon, False, True, 0)
+                        box.pack_start(label, False, True, 0)
+                        box.set_margin_start(8)
+                        box.set_margin_end(8)
+                        box.set_margin_top(5)
+                        box.set_margin_bottom(5)
+                        box.set_spacing(8)
+                        box.set_tooltip_text(licon)
 
-                    self.lb_icons.add(box)
+                        self.lb_icons.add(box)
 
         GLib.idle_add(self.lb_icons.show_all)
         self.entry_place_icon.set_icon_sensitive(Gtk.EntryIconPosition.SECONDARY, True)
