@@ -639,6 +639,7 @@ class MainWindow:
         iconview.set_text_column(1)
         iconview.set_vexpand(True)
         iconview.set_vexpand_set(True)
+        iconview.get_style_context().add_class("pardus-mycomputer-iconview")
         iconview.enable_model_drag_dest([Gtk.TargetEntry.new('text/uri-list', 0, 0)],
                                              Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
         iconview.connect("drag-data-received", self.drag_data_received)
