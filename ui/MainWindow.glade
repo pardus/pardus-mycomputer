@@ -814,6 +814,7 @@ Fatih Altun</property>
             </child>
             <child>
               <object class="GtkEntry" id="entry_place_name_edit">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="halign">end</property>
@@ -852,11 +853,14 @@ Fatih Altun</property>
             </child>
             <child>
               <object class="GtkEntry" id="entry_place_icon_edit">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
+                <property name="secondary-icon-name">document-open-symbolic</property>
                 <signal name="changed" handler="on_entry_place_icon_edit_changed" swapped="no"/>
+                <signal name="icon-press" handler="on_entry_place_icon_edit_icon_press" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

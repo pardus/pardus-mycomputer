@@ -413,7 +413,7 @@ class MainWindow:
 
         GLib.idle_add(self.lb_icons.show_all)
         self.entry_place_icon.set_icon_sensitive(Gtk.EntryIconPosition.SECONDARY, True)
-
+        self.entry_place_icon_edit.set_icon_sensitive(Gtk.EntryIconPosition.SECONDARY, True)
 
     def set_controlpanel_section(self):
         GLib.idle_add(self.ls_systemapps.clear)
@@ -2233,13 +2233,22 @@ class MainWindow:
         self.lb_icons.invalidate_filter()
 
     def on_entry_place_icon_icon_press(self, entry, icon_pos, event):
+        self.popover_listicons.set_relative_to(entry)
+        self.popover_listicons.set_position(Gtk.PositionType.RIGHT)
+        entry.set_icon_sensitive(icon_pos, False)
+        self.popover_listicons.popup()
+        GLib.idle_add(self.set_icon_list)
+
+    def on_entry_place_icon_edit_icon_press(self, entry, icon_pos, event):
+        self.popover_listicons.set_relative_to(entry)
+        self.popover_listicons.set_position(Gtk.PositionType.TOP)
         entry.set_icon_sensitive(icon_pos, False)
         self.popover_listicons.popup()
         GLib.idle_add(self.set_icon_list)
 
     def on_lb_icons_row_activated(self, list_box, row):
         self.popover_listicons.popdown()
-        self.entry_place_icon.set_text(row.get_children()[0].name)
+        self.popover_listicons.get_relative_to().set_text(row.get_children()[0].name)
 
     def on_btn_defaults_clicked(self, button):
         old_window_remember_size = self.UserSettings.config_window_remember_size
