@@ -411,9 +411,9 @@ class MainWindow:
                         box.set_spacing(8)
                         box.set_tooltip_text(licon)
 
-                        self.lb_icons.add(box)
+                        GLib.idle_add(self.lb_icons.add, box)
+                        GLib.idle_add(self.lb_icons.show_all)
 
-        GLib.idle_add(self.lb_icons.show_all)
         self.entry_place_icon.set_icon_sensitive(Gtk.EntryIconPosition.SECONDARY, True)
         self.entry_place_icon_edit.set_icon_sensitive(Gtk.EntryIconPosition.SECONDARY, True)
 
