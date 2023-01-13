@@ -2352,27 +2352,98 @@ class MainWindow:
 
     def on_menu_aboutpardus_clicked(self, button):
         self.popover_menu.popdown()
+
+        desktop = self.get_current_desktop()
+
         try:
             subprocess.Popen(["pardus-about"])
         except Exception as e:
             print("{}".format(e))
-            try:
-                subprocess.Popen(["gnome-control-center", "info-overview"])
-            except Exception as e:
-                print("{}".format(e))
+            if "xfce" in desktop:
                 try:
                     subprocess.Popen(["xfce4-about"])
                 except Exception as e:
                     print("{}".format(e))
+                    self.try_open_other_about_apps()
+            elif "gnome" in desktop:
+                try:
+                    subprocess.Popen(["gnome-control-center", "info-overview"])
+                except Exception as e:
+                    print("{}".format(e))
+                    self.try_open_other_about_apps()
+            elif "cinnamon" in desktop:
+                try:
+                    subprocess.Popen(["cinnamon-settings", "info"])
+                except Exception as e:
+                    print("{}".format(e))
+                    self.try_open_other_about_apps()
+            elif "mate" in desktop:
+                try:
+                    subprocess.Popen(["mate-about"])
+                except Exception as e:
+                    print("{}".format(e))
+                    self.try_open_other_about_apps()
+            elif "kde" in desktop:
+                try:
+                    subprocess.Popen(["systemsettings5", "about-distro"])
+                except Exception as e:
+                    print("{}".format(e))
+                    self.try_open_other_about_apps()
+            elif "lxqt" in desktop:
+                try:
+                    subprocess.Popen(["lxqt-about"])
+                except Exception as e:
+                    print("{}".format(e))
+                    self.try_open_other_about_apps()
+            elif "lxde" in desktop:
+                try:
+                    # TODO
+                    # fix this later
+                    # is there an about app in lxde?
+                    subprocess.Popen(["lxtask"])
+                except Exception as e:
+                    print("{}".format(e))
+                    self.try_open_other_about_apps()
+            else:
+                print("no about app found for DE: {}".format(desktop))
+
+    def try_open_other_about_apps(self):
+        print("trying open other about apps too")
+        try:
+            subprocess.Popen(["gnome-control-center", "info-overview"])
+        except Exception as e:
+            print("{}".format(e))
+            try:
+                subprocess.Popen(["xfce4-about"])
+            except Exception as e:
+                print("{}".format(e))
+                try:
+                    subprocess.Popen(["cinnamon-settings", "info"])
+                except Exception as e:
+                    print("{}".format(e))
                     try:
-                        subprocess.Popen(["cinnamon-settings", "info"])
+                        subprocess.Popen(["mate-about"])
                     except Exception as e:
                         print("{}".format(e))
                         try:
-                            subprocess.Popen(["mate-about"])
+                            subprocess.Popen(["systemsettings5", "about-distro"])
                         except Exception as e:
                             print("{}".format(e))
-                            print("no about app found")
+                            try:
+                                subprocess.Popen(["lxqt-about"])
+                            except Exception as e:
+                                print("{}".format(e))
+                                print("no about app found")
+
+    def get_current_desktop(self):
+        if "XDG_CURRENT_DESKTOP" in os.environ:
+            return os.environ["XDG_CURRENT_DESKTOP"].lower()
+        elif "DESKTOP_SESSION" in os.environ:
+            return os.environ["DESKTOP_SESSION"].lower()
+        elif "SESSION" in os.environ:
+            return os.environ["SESSION"].lower()
+        else:
+            return ""
 
     def startProcess(self, params):
         pid, stdin, stdout, stderr = GLib.spawn_async(params, flags=GLib.SpawnFlags.DO_NOT_REAP_CHILD,
