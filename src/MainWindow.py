@@ -718,7 +718,10 @@ class MainWindow:
         self.entry_place_icon.set_text("")
         uri = self.fc_place_path.get_uri()
         try:
-            path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+            if uri.startswith("file://"):
+                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+            else:
+                path = "{}".format(urllib.parse.unquote(uri))
         except Exception as e:
             print("{}".format(e))
             path = None
@@ -735,7 +738,10 @@ class MainWindow:
     def on_btn_place_add_clicked(self, button):
         uri = self.fc_place_path.get_uri()
         try:
-            path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+            if uri.startswith("file://"):
+                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+            else:
+                path = "{}".format(urllib.parse.unquote(uri))
         except Exception as e:
             print("{}".format(e))
             path = None
@@ -758,7 +764,10 @@ class MainWindow:
         name = self.entry_place_name.get_text().strip()
         if name == "":
             try:
-                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+                if uri.startswith("file://"):
+                    path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+                else:
+                    path = "{}".format(urllib.parse.unquote(uri))
             except Exception as e:
                 print("{}".format(e))
                 path = None
@@ -866,8 +875,11 @@ class MainWindow:
                 Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
         except Exception as e:
             print("Exception in get_display_name_from_uri: {}".format(e))
-            path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
-            name = os.path.basename(path)
+            if uri.startswith("file://"):
+                path = "{}".format(urllib.parse.unquote(uri.split("file://")[1]))
+                name = os.path.basename(path)
+            else:
+                name = "{}".format(urllib.parse.unquote(uri))
         return name
 
     def autorefresh(self):
