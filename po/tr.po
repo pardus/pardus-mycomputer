@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 11:13+0300\n"
-"PO-Revision-Date: 2023-01-13 11:13+0300\n"
+"POT-Creation-Date: 2023-01-13 11:23+0300\n"
+"PO-Revision-Date: 2023-01-13 11:23+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -47,8 +47,8 @@ msgid "About App"
 msgstr "Uygulama Hakkında"
 
 #: ui/MainWindow.glade:347
-msgid "Path :"
-msgstr "Yol :"
+msgid "Folder :"
+msgstr "Klasör :"
 
 #: ui/MainWindow.glade:388 ui/MainWindow.glade:807
 msgid "Name :"
@@ -473,6 +473,9 @@ msgstr "Optik sürücüyü çıkarabilirsiniz."
 #: src/MainWindow.py:2420
 msgid "You can eject the phone."
 msgstr "Telefonu çıkarabilirsiniz."
+
+#~ msgid "Path :"
+#~ msgstr "Yol :"
 
 #~ msgid "Show places"
 #~ msgstr "Yerler bölümünü göster"
