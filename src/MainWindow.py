@@ -2406,6 +2406,7 @@ class MainWindow:
                     self.try_open_other_about_apps()
             else:
                 print("no about app found for DE: {}".format(desktop))
+                self.try_open_other_about_apps()
 
     def try_open_other_about_apps(self):
         print("trying open other about apps too")
