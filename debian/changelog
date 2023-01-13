@@ -1,3 +1,31 @@
+pardus-mycomputer (0.5.0) unstable; urgency=medium
+
+  * Add place remove and add buttons to Places section
+  * Add drag_n_drop for add place and add tooltip to places
+  * Update trash file count controls
+  * Update place_button_press_event control
+  * Update added place's get name func
+  * Add edit action to saved places and Improve some funcs
+  * Update add saved place control as only path control
+  * Add except for read savedplace lines
+  * Add control panel section
+  * Add search button to control panel apps
+  * Add blacklist to controlpanel apps
+  * Add widget for icon choose on places
+  * Update icon choose widget ui
+  * Add icon choose widget for edit section too
+  * Add css for places iconview drag area
+  * Update icon list images as only symbolic
+  * Add glib idle to icons listbox
+  * Fix typo
+  * Update pot file
+  * Update Turkish translations
+  * Fix typo
+  * Update pot file
+  * Update Turkish translations
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 13 Jan 2023 11:33:27 +0300
+
 pardus-mycomputer (0.4.1) unstable; urgency=medium
 
   * Add middle ellipsize to mount paths
