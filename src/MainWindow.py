@@ -518,7 +518,7 @@ class MainWindow:
         locs.append({"path": computer, "name": _("Computer"), "icon": "computer-symbolic",
                      "tip": _("Browse the computer")})
         locs.append({"path": recent, "name": _("Recent"), "icon": "document-open-recent-symbolic",
-                     "tip": _("Recent Files")})
+                     "tip": _("Recent files")})
         locs.append({"path": trash, "name": _("Trash"), "icon": "user-trash-symbolic",
                      "tip": trashtip})
 
