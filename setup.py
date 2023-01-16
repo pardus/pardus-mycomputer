@@ -36,7 +36,7 @@ data_files = [
     ("/usr/share/applications/", ["tr.org.pardus.mycomputer.desktop"]),
     ("/usr/share/pardus/pardus-mycomputer/", ["pardus-mycomputer.svg"]),
     ("/usr/share/pardus/pardus-mycomputer/src", [
-        "src/pardus-mycomputer",
+        "src/Main.py",
         "src/MainWindow.py",
         "src/DiskManager.py",
         "src/Unmount.py",

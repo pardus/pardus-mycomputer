@@ -1,2 +1,6 @@
-#!/bin/sh
-/usr/bin/python3 /usr/share/pardus/pardus-mycomputer/src/pardus-mycomputer
+#!/usr/bin/python3
+
+import sys
+sys.path.insert(0, '/usr/share/pardus/pardus-mycomputer/src/')
+import Main
+
