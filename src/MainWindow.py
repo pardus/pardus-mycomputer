@@ -456,7 +456,8 @@ class MainWindow:
 
             if os.path.dirname(filename) == "/usr/share/applications" \
                     and executable and not nodisplay and not is_hidden \
-                    and show_in and "settings" in category.lower() \
+                    and show_in and category is not None \
+                    and "settings" in category.lower() \
                     and id not in blacklist:
                 apps.append({"id": id, "name": name, "icon": icon,
                              "description": description, "filename": filename,
