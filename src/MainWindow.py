@@ -421,9 +421,17 @@ class MainWindow:
         GLib.idle_add(self.ls_systemapps.clear)
         apps = self.get_controlpanel_desktops()
         for app in apps:
+            try:
+                appicon = Gtk.IconTheme.get_default().load_icon(
+                    app["icon"] if app["icon"] is not None else "image-missing",
+                    48, Gtk.IconLookupFlags(16))
+            except:
+                try:
+                    appicon = GdkPixbuf.Pixbuf.new_from_file_at_size(app["icon"], 48, 48)
+                except:
+                    appicon = Gtk.IconTheme.get_default().load_icon(
+                        "image-missing", 48, Gtk.IconLookupFlags(16))
 
-            appicon = Gtk.IconTheme.get_default().load_icon(app["icon"] if app["icon"] is not None else "image-missing", 48,
-                                                            Gtk.IconLookupFlags(16))
             GLib.idle_add(self.add_to_controlpanel_apps, [appicon, app["name"], app["id"]])
 
     def add_to_controlpanel_apps(self, list):
