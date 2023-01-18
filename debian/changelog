@@ -1,3 +1,28 @@
+pardus-mycomputer (0.6.0) unstable; urgency=medium
+
+  [ Fatih Altun ]
+  * Add support for non-local files to new shortcut place
+  * Add desktop env controls to menu_aboutpardus function
+  * Add additional about try for unknown desktops
+
+  [ Hakan Dündar ]
+  * Fixed process name of the application
+  * Minor visual improvements for disk info. UI
+
+  [ Fatih Altun ]
+  * Fix desktop app icon error on control panel
+  * Add +x to Main, DiskManager
+  * Fix desktop app category error
+
+  [ Hakan Dündar ]
+  * Minor visual improvements for disk info. UI
+
+  [ Fatih Altun ]
+  * Update pot file
+  * Update Turkish translations
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Wed, 18 Jan 2023 17:38:01 +0300
+
 pardus-mycomputer (0.5.0) unstable; urgency=medium
 
   * Add place remove and add buttons to Places section
