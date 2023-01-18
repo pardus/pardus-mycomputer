@@ -1177,7 +1177,7 @@ Fatih Altun</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Device Model</property>
                         <attributes>
-                          <attribute name="weight" value="medium"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
@@ -1204,7 +1204,7 @@ Fatih Altun</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Device Path</property>
                         <attributes>
-                          <attribute name="weight" value="medium"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
@@ -1220,7 +1220,7 @@ Fatih Altun</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Mountpoint</property>
                         <attributes>
-                          <attribute name="weight" value="medium"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
@@ -1236,7 +1236,7 @@ Fatih Altun</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Filesystem</property>
                         <attributes>
-                          <attribute name="weight" value="medium"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
@@ -1263,7 +1263,7 @@ Fatih Altun</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Used</property>
                         <attributes>
-                          <attribute name="weight" value="medium"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
@@ -1279,7 +1279,7 @@ Fatih Altun</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Free</property>
                         <attributes>
-                          <attribute name="weight" value="medium"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
@@ -1295,7 +1295,7 @@ Fatih Altun</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Total</property>
                         <attributes>
-                          <attribute name="weight" value="medium"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
