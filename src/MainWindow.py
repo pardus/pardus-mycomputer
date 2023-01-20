@@ -925,7 +925,7 @@ class MainWindow:
                     display_name = ""
         else:
             mount = volume.get_mount()
-            display_name = self.get_display_name(mount)
+            display_name = self.get_display_name(mount, vl._is_removable)
             if display_name == "":
                 try:
                     display_name = volume.get_name()
@@ -968,7 +968,7 @@ class MainWindow:
             if row_volume._main_type == "network":
                 display_name = vl.get_name()
             else:
-                display_name = self.get_display_name(gm)
+                display_name = self.get_display_name(gm, row_volume._is_removable)
                 if display_name == "":
                     display_name = vl.get_name()
 
@@ -1062,7 +1062,7 @@ class MainWindow:
             if main_type == "network":
                 name = vl.get_name()
             else:
-                name = self.get_display_name(vl.get_mount())
+                name = self.get_display_name(vl.get_mount(), is_removable)
                 if name == "":
                     name = vl.get_name()
 
@@ -1252,6 +1252,8 @@ class MainWindow:
         row._lbl_volume_name = lbl_volume_name
         row._lbl_volume_size_info = lbl_volume_size_info
         row._pb_volume_size = pb_volume_size
+
+        row._is_removable = is_removable
 
         row._mount_uri = mount_uri
         row._mount_name = mount_name
@@ -1536,13 +1538,21 @@ class MainWindow:
                 self.add_to_recent_listbox(uri, name)
             self.listbox_recent_servers.show_all()
 
-    def get_display_name(self, mount):
-        try:
-            name = mount.get_root().query_info(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, Gio.FileQueryInfoFlags.NONE,
-                                           None).get_attribute_as_string(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
-        except:
-            name = ""
-
+    def get_display_name(self, mount, is_removable=True):
+        if is_removable:
+            try:
+                name = mount.get_root().query_info(
+                    Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                    Gio.FileQueryInfoFlags.NONE,
+                    None).get_attribute_as_string(
+                    Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+            except:
+                name = ""
+        else:
+            try:
+                name = mount.get_name()
+            except:
+                name = ""
         return name
 
     # Window methods:
@@ -1645,7 +1655,7 @@ class MainWindow:
             except:
                 display_name = ""
         else:
-            display_name = self.get_display_name(mount)
+            display_name = self.get_display_name(mount, button._is_removable)
         if display_name != "":
             body = "{}\n({})".format(body, display_name)
 
@@ -1679,7 +1689,7 @@ class MainWindow:
                 elif button._type == "phone":
                     body = _("Phone is unmounting.")
 
-            display_name = self.get_display_name(mount)
+            display_name = self.get_display_name(mount, button._is_removable)
             if display_name != "":
                 body = "{}\n({})".format(body, display_name)
 
@@ -2518,7 +2528,7 @@ class MainWindow:
             except:
                 display_name = ""
         else:
-            display_name = self.get_display_name(mount)
+            display_name = self.get_display_name(mount, self.actioned_volume._is_removable)
         if display_name != "":
             body = "{}\n({})".format(body, display_name)
 
@@ -2574,7 +2584,7 @@ class MainWindow:
 
         mount = self.actioned_volume._volume.get_mount()
 
-        display_name = self.get_display_name(mount)
+        display_name = self.get_display_name(mount, self.actioned_volume._is_removable)
         if display_name != "":
             body = "{}\n({})".format(body, display_name)
 
