@@ -29,7 +29,7 @@ def get_file_info(file, network=False):
     return obj
 
 def get_uuid_from_dev(dev_path):
-    process = subprocess.run(f"lsblk -o PATH,UUID | grep {dev_path}", shell=True, capture_output=True)
+    process = subprocess.run(f"lsblk -o PATH,UUID --raw | grep {dev_path}", shell=True, capture_output=True)
 
     if process.returncode != 0:
         return ""
