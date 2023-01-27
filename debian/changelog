@@ -1,3 +1,18 @@
+pardus-mycomputer (0.6.1) unstable; urgency=medium
+
+  [ Fatih Altun ]
+  * Fix display name of hard drives
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translations
+
+  [ Fatih Altun ]
+  * Add raw param to get_uuid_from_dev
+  * Update screenshots
+  * Update README.md
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Sat, 28 Jan 2023 01:10:20 +0300
+
 pardus-mycomputer (0.6.0) unstable; urgency=medium
 
   [ Fatih Altun ]
