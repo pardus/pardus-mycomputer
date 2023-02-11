@@ -1271,34 +1271,42 @@ class MainWindow:
         self.showVolumeSizes(row)
 
     def getGraphicsCards(self):
-        lspci = subprocess.Popen(["lspci"], stdout=subprocess.PIPE)
-        graphics_cards = subprocess.Popen(['grep', 'VGA'], stdin=lspci.stdout,
+        lspci = subprocess.Popen(["lspci", "-k"], stdout=subprocess.PIPE)
+        graphics_cards = subprocess.Popen(['grep', "-A", "2", "-i", 'VGA'], stdin=lspci.stdout,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         lspci.stdout.close()
         (out,err) = graphics_cards.communicate()
 
-        gc = out.decode("ascii").rsplit('\n')
-        gc.pop(len(gc)-1)
+        gc = out.decode("ascii").rsplit("--")
+        cikti = []
         for i, g in enumerate(gc):
-            gc[i] = g.rsplit(": ")[1]
-            gc[i] = gc[i].rsplit("]")[0] + "]"
-        return gc
+            gc[i] = g.rsplit("\n")
+            for i2, g2, in enumerate(gc[i]):
+                if g2 == '':
+                    continue
+                else:
+                    if g2.find("VGA") != -1 or g2.find("Kernel") != -1:
+                        cikti.append(g2.rsplit(": ")[1])
+        return cikti
 
     def addGraphicsCardsToGUI(self):
         glist = self.getGraphicsCards()
-        for g in glist:
+        i = 0
+        while i <= len(glist)/2:
             listbox = Gtk.Box.new(Gtk.Orientation.VERTICAL,3)
-            #listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-            #listbox.connect("row-activated", self.a)
-            #listbox.set_selection_mode(False) 
             listbox.get_style_context().add_class("pardus-mycomputer-listbox")
             lab = Gtk.Label.new()
-            lab.set_text(g)
+            lab.set_text(glist[i])
             lab.set_selectable(False)
+            lab2 = Gtk.Label.new()
+            lab2.set_text(glist[i+1])
+            lab2.set_selectable(False)
             img = Gtk.Image.new_from_icon_name("computer", 5)
             listbox.add(img)
             listbox.add(lab)
+            listbox.add(lab2)
             self.box_cards.add(listbox)
+            i = i + 2
         self.box_cards.show_all()
 
     def addDisksToGUI(self):
