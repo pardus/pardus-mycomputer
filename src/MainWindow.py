@@ -8,6 +8,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GLib, Gio, Gtk, Notify, Gdk, Pango, GdkPixbuf
 
 import DiskManager
+import subprocess
 
 from UserSettings import UserSettings
 
@@ -61,7 +62,10 @@ class MainWindow:
 
         # Add Disks to GUI
         self.addDisksToGUI()
-
+        
+        # Add Graphics cards to GUI
+        self.addGraphicsCardsToGUI()
+        
         self.set_places()
 
         # set icon list
@@ -150,6 +154,8 @@ class MainWindow:
         self.box_drives = UI("box_drives")
         # Removables
         self.box_removables = UI("box_removables")
+        # Graphics Cards
+        self.box_cards = UI("box_cards")
 
         # Popover
         self.popover_volume = UI("popover_volume")
@@ -1263,6 +1269,37 @@ class MainWindow:
         # Disable asking mount on app startup
         # self.tryMountVolume(row)
         self.showVolumeSizes(row)
+
+    def getGraphicsCards(self):
+        lspci = subprocess.Popen(["lspci"], stdout=subprocess.PIPE)
+        graphics_cards = subprocess.Popen(['grep', 'VGA'], stdin=lspci.stdout,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        lspci.stdout.close()
+        (out,err) = graphics_cards.communicate()
+
+        gc = out.decode("ascii").rsplit('\n')
+        gc.pop(len(gc)-1)
+        for i, g in enumerate(gc):
+            gc[i] = g.rsplit(": ")[1]
+            gc[i] = gc[i].rsplit("]")[0] + "]"
+        return gc
+
+    def addGraphicsCardsToGUI(self):
+        glist = self.getGraphicsCards()
+        for g in glist:
+            listbox = Gtk.Box.new(Gtk.Orientation.VERTICAL,3)
+            #listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            #listbox.connect("row-activated", self.a)
+            #listbox.set_selection_mode(False) 
+            listbox.get_style_context().add_class("pardus-mycomputer-listbox")
+            lab = Gtk.Label.new()
+            lab.set_text(g)
+            lab.set_selectable(False)
+            img = Gtk.Image.new_from_icon_name("computer", 5)
+            listbox.add(img)
+            listbox.add(lab)
+            self.box_cards.add(listbox)
+        self.box_cards.show_all()
 
     def addDisksToGUI(self):
         # Home:
