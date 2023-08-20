@@ -2,8 +2,8 @@ Source: pardus-mycomputer
 Section: utils
 Priority: optional
 Maintainer: Fatih Altun <fatih.altun@pardus.org.tr>
-Build-Depends: debhelper (>= 10), dh-python, python3-all, python3-setuptools
-Standards-Version: 4.3.0
+Build-Depends: debhelper-compat (= 13), dh-python, python3-all, python3-setuptools
+Standards-Version: 4.6.1
 Homepage: https://github.com/pardus/pardus-mycomputer
 
 Package: pardus-mycomputer
@@ -16,7 +16,8 @@ Depends: ${misc:Depends},
          gir1.2-gtk-3.0,
          gir1.2-notify-0.7,
          gir1.2-pango-1.0
-Recommends: gvfs-fuse
+Recommends: gvfs-fuse,
+            libglib2.0-bin
 Description: My Computer, shows general information about your computer.
  My Computer, shows general information about your computer.
 
