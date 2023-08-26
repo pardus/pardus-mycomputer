@@ -60,7 +60,7 @@ msgstr "İsim :"
 
 #: ui/MainWindow.glade:428 ui/MainWindow.glade:847
 msgid "Icon :"
-msgstr "İkon :"
+msgstr "Simge :"
 
 #: ui/MainWindow.glade:480 ui/MainWindow.glade:899
 msgid "Preview :"
@@ -478,20 +478,3 @@ msgstr "Optik sürücüyü çıkarabilirsiniz."
 msgid "You can eject the phone."
 msgstr "Telefonu çıkarabilirsiniz."
 
-#~ msgid "Path :"
-#~ msgstr "Yol :"
-
-#~ msgid "Show places"
-#~ msgstr "Yerler bölümünü göster"
-
-#~ msgid "Save"
-#~ msgstr "Kaydet"
-
-#~ msgid "Auto refresh disks"
-#~ msgstr "Diskleri otomatik yenile"
-
-#~ msgid "Refresh time (seconds)"
-#~ msgstr "Yenileme süresi (saniye)"
-
-#~ msgid "Details"
-#~ msgstr "Detaylar"
