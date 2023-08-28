@@ -48,7 +48,10 @@ data_files = [
     ("/usr/share/pardus/pardus-mycomputer/css/", ["css/style.css"]),
     ("/etc/xdg/autostart", ["autostart/pardus-mycomputer-add-to-desktop.desktop"]),
     ("/usr/bin/", ["pardus-mycomputer"]),
-    ("/usr/share/icons/hicolor/scalable/apps/", ["pardus-mycomputer.svg"])
+    ("/usr/share/icons/hicolor/scalable/apps/", [
+        "pardus-mycomputer.svg",
+        "pardus-mycomputer-emblem-pardus-symbolic.svg"
+    ])
 ] + create_mo_files()
 
 setup(
