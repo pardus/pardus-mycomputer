@@ -323,8 +323,8 @@ class MainWindow:
 
 
         if os_id == "pardus":
-            self.img_os.set_from_icon_name("emblem-pardus-symbolic", Gtk.IconSize.BUTTON)
-            self.img_os_menu.set_from_icon_name("emblem-pardus-symbolic", Gtk.IconSize.BUTTON)
+            self.img_os.set_from_icon_name("pardus-mycomputer-emblem-pardus-symbolic", Gtk.IconSize.BUTTON)
+            self.img_os_menu.set_from_icon_name("pardus-mycomputer-emblem-pardus-symbolic", Gtk.IconSize.BUTTON)
             self.lbl_os_menu.set_label("{}".format(_("About Pardus")))
         else:
             try:
