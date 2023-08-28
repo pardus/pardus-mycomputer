@@ -1,3 +1,14 @@
+pardus-mycomputer (0.6.3) unstable; urgency=medium
+
+  [ Sabri Ünal ]
+  * data: Update Turkish translation
+
+  [ Fatih Altun ]
+  * Add pardus-mycomputer-emblem-pardus-symbolic
+  * Add missing icon to setup.py
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Mon, 28 Aug 2023 18:22:10 +0300
+
 pardus-mycomputer (0.6.2) unstable; urgency=medium
 
   * Update README.md
