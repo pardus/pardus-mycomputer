@@ -354,7 +354,7 @@ class MainWindow:
         self.lbl_os.set_label("{}".format(os_name))
 
     def control_display(self):
-        width = 700 if self.UserSettings.config_hide_places else 850
+        width = 800 if self.UserSettings.config_hide_places else 950
         height = 550 if self.UserSettings.config_hide_places else 650
         s = 1
         w = 1920
