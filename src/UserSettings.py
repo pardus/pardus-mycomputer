@@ -11,6 +11,10 @@ from pathlib import Path
 import configparser
 import locale
 from locale import gettext as _
+import subprocess
+
+import gi
+from gi.repository import GLib
 
 # Translation Constants:
 APPNAME = "pardus-mycomputer"
@@ -31,6 +35,8 @@ class UserSettings(object):
         self.user_recent_servers_file = Path.joinpath(self.user_config_dir, Path("servers-recent"))
         self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
         self.user_saved_places_file = Path.joinpath(self.user_config_dir, Path("places-saved"))
+
+        self.desktop_file = "tr.org.pardus.mycomputer.desktop"
 
         self.config = configparser.ConfigParser(strict=False)
 
@@ -56,6 +62,7 @@ class UserSettings(object):
         self.default_autorefresh = False
         self.default_autorefresh_time = 1.5
         self.default_hide_places = False
+        self.default_hide_desktopicon = False
 
         # window defaults
         self.default_window_remember_size = False
@@ -72,7 +79,8 @@ class UserSettings(object):
             'CloseAppUSB': self.default_closeapp_usb,
             'AutoRefresh': self.default_autorefresh,
             'AutoRefreshTime': self.default_autorefresh_time,
-            'HidePlaces': self.default_hide_places
+            'HidePlaces': self.default_hide_places,
+            'HideDesktopIcon': self.default_hide_desktopicon
         }
 
         self.config['WINDOW'] = {
@@ -97,6 +105,7 @@ class UserSettings(object):
             self.config_autorefresh = self.config.getboolean('MAIN', 'AutoRefresh')
             self.config_autorefresh_time = self.config.getfloat('MAIN', 'AutoRefreshTime')
             self.config_hide_places = self.config.getboolean('MAIN', 'HidePlaces')
+            self.config_hide_desktopicon = self.config.getboolean('MAIN', 'HideDesktopIcon')
             self.config_window_remember_size = self.config.getboolean('WINDOW', 'RememberWindowSize')
             self.config_window_fullscreen = self.config.getboolean('WINDOW', 'FullScreen')
             self.config_window_width = self.config.getint('WINDOW', 'Width')
@@ -113,6 +122,7 @@ class UserSettings(object):
             self.config_autorefresh = self.default_autorefresh
             self.config_autorefresh_time = self.default_autorefresh_time
             self.config_hide_places = self.default_hide_places
+            self.config_hide_desktopicon = self.default_hide_desktopicon
             self.config_window_remember_size = self.default_window_remember_size
             self.config_window_fullscreen = self.default_window_fullscreen
             self.config_window_width = self.default_window_width
@@ -124,7 +134,8 @@ class UserSettings(object):
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
     def writeConfig(self, closeappmain="", closeapphdd="", closeappusb="", autorefresh="", autorefreshtime="",
-                    hideplaces="", rememberwindowsize="", fullscreen="", width="", height="", usedarktheme=""):
+                    hideplaces="", hidedesktopicon ="", rememberwindowsize="", fullscreen="",
+                    width="", height="", usedarktheme=""):
         if closeappmain == "":
             closeappmain = self.config_closeapp_main
         if closeapphdd == "":
@@ -135,6 +146,8 @@ class UserSettings(object):
             autorefresh = self.config_autorefresh
         if autorefreshtime == "":
             autorefreshtime = self.config_autorefresh_time
+        if hidedesktopicon == "":
+            hidedesktopicon = self.config_hide_desktopicon
         if hideplaces == "":
             hideplaces = self.config_hide_places
         if rememberwindowsize == "":
@@ -154,7 +167,8 @@ class UserSettings(object):
             'CloseAppUSB': closeappusb,
             'AutoRefresh': autorefresh,
             'AutoRefreshTime': autorefreshtime,
-            'HidePlaces': hideplaces
+            'HidePlaces': hideplaces,
+            'HideDesktopIcon': hidedesktopicon
         }
 
         self.config['WINDOW'] = {
@@ -329,3 +343,15 @@ class UserSettings(object):
                         place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon + '"}'
                         f.write("{}\n".format(place))
 
+    def set_hide_desktopicon(self, state):
+        if state:
+            subprocess.call(["/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
+            if os.path.exists(os.path.join(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP),
+                              self.desktop_file)):
+                os.remove(os.path.join(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP),
+                              self.desktop_file))
+        else:
+            if Path.joinpath(self.user_config_dir, Path("desktop")).exists():
+                Path.joinpath(self.user_config_dir, Path("desktop")).unlink(missing_ok=True)
+
+            subprocess.call(["/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])

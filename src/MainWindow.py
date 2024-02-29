@@ -189,6 +189,7 @@ class MainWindow:
         self.sw_autorefresh = UI("sw_autorefresh")
         self.sw_remember_window_size = UI("sw_remember_window_size")
         self.sw_use_dark_theme = UI("sw_use_dark_theme")
+        self.sw_hide_desktopicon = UI("sw_hide_desktopicon")
 
         self.img_menu_appsettings = UI("img_menu_appsettings")
         self.lbl_menu_appsettings = UI("lbl_menu_appsettings")
@@ -270,15 +271,20 @@ class MainWindow:
             print("{} {}".format("Desktop file copying to",
                                  GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)))
             try:
-                subprocess.Popen(["/bin/bash",
-                                  "/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
+                subprocess.call(["/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
             except Exception as e:
                 print("{}".format(e))
-                try:
-                    subprocess.Popen(["/usr/bin/bash",
-                                      "/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
-                except Exception as e:
-                    print("{}".format(e))
+
+    def control_desktopicon(self):
+        if not os.path.exists(os.path.join(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP),
+                                       self.UserSettings.desktop_file)):
+            if not self.UserSettings.config_hide_desktopicon:
+                self.UserSettings.writeConfig(hidedesktopicon=True)
+                self.user_settings()
+        else:
+            if self.UserSettings.config_hide_desktopicon:
+                self.UserSettings.writeConfig(hidedesktopicon=False)
+                self.user_settings()
 
     def user_settings(self):
         self.UserSettings = UserSettings()
@@ -289,6 +295,7 @@ class MainWindow:
         print("{} {}".format("config_closeapp_hdd", self.UserSettings.config_closeapp_hdd))
         print("{} {}".format("config_closeapp_usb", self.UserSettings.config_closeapp_usb))
         print("{} {}".format("config_hide_places", self.UserSettings.config_hide_places))
+        print("{} {}".format("config_hide_desktopicon", self.UserSettings.config_hide_desktopicon))
         print("{} {}".format("config_autorefresh", self.UserSettings.config_autorefresh))
         print("{} {}".format("config_autorefresh_time", self.UserSettings.config_autorefresh_time))
         print("{} {}".format("config_window_remember_size", self.UserSettings.config_window_remember_size))
@@ -1954,6 +1961,18 @@ class MainWindow:
                 print("{}".format(e))
         self.control_defaults()
 
+    def on_sw_hide_desktopicon_state_set(self, switch, state):
+        user_config_hide_desktopicon = self.UserSettings.config_hide_desktopicon
+        if state != user_config_hide_desktopicon:
+            print("Updating hide desktop icon state")
+            try:
+                self.UserSettings.writeConfig(hidedesktopicon=state)
+                self.user_settings()
+                self.UserSettings.set_hide_desktopicon(state)
+            except Exception as e:
+                print("{}".format(e))
+        self.control_defaults()
+
     # Popover Menu Buttons:
     def on_button_mount_on_startup_clicked(self, button):
         DiskManager.set_automounted(button._device, button.get_active())
@@ -2297,6 +2316,7 @@ class MainWindow:
         self.UserSettings.createDefaultConfig(force=True)
         self.user_settings()
         self.sw_hide_places.set_state(self.UserSettings.config_hide_places)
+        self.sw_hide_desktopicon.set_state(self.UserSettings.config_hide_desktopicon)
         self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
         self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
         self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
@@ -2311,6 +2331,7 @@ class MainWindow:
 
         self.set_places()
         self.control_places_show(displaycontrol=True)
+        self.UserSettings.set_hide_desktopicon(self.UserSettings.default_hide_desktopicon)
 
     def control_defaults(self):
         if self.UserSettings.config_closeapp_main != self.UserSettings.default_closeapp_main or \
@@ -2319,6 +2340,7 @@ class MainWindow:
             self.UserSettings.config_autorefresh != self.UserSettings.default_autorefresh or \
             self.UserSettings.config_autorefresh_time != self.UserSettings.default_autorefresh_time or \
             self.UserSettings.config_hide_places != self.UserSettings.default_hide_places or \
+            self.UserSettings.config_hide_desktopicon != self.UserSettings.default_hide_desktopicon or \
             self.UserSettings.config_window_remember_size != self.UserSettings.default_window_remember_size or \
             self.UserSettings.config_window_use_darktheme != self.UserSettings.default_window_use_darktheme:
             self.btn_defaults.set_sensitive(True)
@@ -2339,10 +2361,12 @@ class MainWindow:
             self.img_menu_appsettings.set_from_icon_name("preferences-system-symbolic", Gtk.IconSize.BUTTON)
             self.lbl_menu_appsettings.set_text(_("App Settings"))
         else:
+            self.control_desktopicon()
             self.sw_closeapp_main.set_state(self.UserSettings.config_closeapp_main)
             self.sw_closeapp_hdd.set_state(self.UserSettings.config_closeapp_hdd)
             self.sw_closeapp_usb.set_state(self.UserSettings.config_closeapp_usb)
             self.sw_hide_places.set_state(self.UserSettings.config_hide_places)
+            self.sw_hide_desktopicon.set_state(self.UserSettings.config_hide_desktopicon)
             self.sw_autorefresh.set_state(self.UserSettings.config_autorefresh)
             self.sw_remember_window_size.set_state(self.UserSettings.config_window_remember_size)
             self.sw_use_dark_theme.set_state(self.UserSettings.config_window_use_darktheme)
