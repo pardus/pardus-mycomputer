@@ -1,480 +1,482 @@
 #
 # Emin Fedar <emin.fedar@pardus.org.tr>, 2022.
-# Fatih Altun <fatih.altun@pardus.org.tr>, 2022-2023.
+# Fatih Altun <fatih.altun@pardus.org.tr>, 2022-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-18 16:27+0300\n"
-"PO-Revision-Date: 2023-01-18 16:28+0300\n"
+"POT-Creation-Date: 2024-02-29 13:23+0300\n"
+"PO-Revision-Date: 2024-02-29 13:23+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Gtranslator 3.38.0\n"
-
-#: ui/MainWindow.glade:14
-msgid "About Pardus My Computer"
-msgstr "Pardus Bilgisayarım Hakkında"
 
 #: ui/MainWindow.glade:20
 msgid "UI for information and management of disks on your computer."
 msgstr "Diskleriniz için bilgi ve yönetim arayüzü."
 
-#: ui/MainWindow.glade:22
-msgid "Website"
-msgstr "Website"
-
-#: ui/MainWindow.glade:136 src/MainWindow.py:2314 src/MainWindow.py:2322
-#: src/MainWindow.py:2355
+#: ui/MainWindow.glade:135 src/MainWindow.py:2356 src/MainWindow.py:2364
+#: src/MainWindow.py:2398
 msgid "App Settings"
 msgstr "Uygulama Ayarları"
 
-#: ui/MainWindow.glade:192 src/MainWindow.py:2338 src/MainWindow.py:2347
+#: ui/MainWindow.glade:191 src/MainWindow.py:2381 src/MainWindow.py:2390
 msgid "Control Panel"
 msgstr "Denetim Masası"
 
-#: ui/MainWindow.glade:248 src/MainWindow.py:328
+#: ui/MainWindow.glade:247 src/MainWindow.py:345
 msgid "About Pardus"
 msgstr "Pardus Hakkında"
 
-#: ui/MainWindow.glade:304
+#: ui/MainWindow.glade:303
 msgid "About App"
 msgstr "Uygulama Hakkında"
 
-#: ui/MainWindow.glade:347
+#: ui/MainWindow.glade:346
 msgid "Folder :"
 msgstr "Klasör :"
 
-#: ui/MainWindow.glade:364
+#: ui/MainWindow.glade:363
 msgid "Select Folder"
 msgstr "Klasör Seçin"
 
-#: ui/MainWindow.glade:389 ui/MainWindow.glade:808
+#: ui/MainWindow.glade:388 ui/MainWindow.glade:807
 msgid "Name :"
 msgstr "İsim :"
 
-#: ui/MainWindow.glade:428 ui/MainWindow.glade:847
+#: ui/MainWindow.glade:427 ui/MainWindow.glade:846
 msgid "Icon :"
 msgstr "Simge :"
 
-#: ui/MainWindow.glade:480 ui/MainWindow.glade:899
+#: ui/MainWindow.glade:479 ui/MainWindow.glade:898
 msgid "Preview :"
 msgstr "Önizleme :"
 
-#: ui/MainWindow.glade:572
+#: ui/MainWindow.glade:571
 msgid "Add"
 msgstr "Ekle"
 
-#: ui/MainWindow.glade:709
+#: ui/MainWindow.glade:708
 msgid "Remove Shortcut"
 msgstr "Kısayolu Kaldır"
 
-#: ui/MainWindow.glade:765
+#: ui/MainWindow.glade:764
 msgid "Edit Shortcut"
 msgstr "Kısayolu Düzenle"
 
-#: ui/MainWindow.glade:991
+#: ui/MainWindow.glade:990
 msgid "Update"
 msgstr "Güncelle"
 
 #. Translators: Server as any successfully connected network address
-#: ui/MainWindow.glade:1045
+#: ui/MainWindow.glade:1044
 msgid "No recent servers found"
 msgstr "Son bağlanılan sunucu bulunamadı"
 
-#: ui/MainWindow.glade:1072
+#: ui/MainWindow.glade:1071
 msgid "Recent Servers"
 msgstr "Son Bağlanılan Sunucular"
 
-#: ui/MainWindow.glade:1178
+#: ui/MainWindow.glade:1177
 msgid "Device Model"
 msgstr "Cihaz Modeli"
 
-#: ui/MainWindow.glade:1205
+#: ui/MainWindow.glade:1204
 msgid "Device Path"
 msgstr "Cihaz Yolu"
 
-#: ui/MainWindow.glade:1221
+#: ui/MainWindow.glade:1220
 msgid "Mountpoint"
 msgstr "Bağlama Yolu"
 
-#: ui/MainWindow.glade:1237
+#: ui/MainWindow.glade:1236
 msgid "Filesystem"
 msgstr "Dosya Sistemi"
 
-#: ui/MainWindow.glade:1264
+#: ui/MainWindow.glade:1263
 msgid "Used"
 msgstr "Kullanılan"
 
-#: ui/MainWindow.glade:1280
+#: ui/MainWindow.glade:1279
 msgid "Free"
 msgstr "Boş"
 
-#: ui/MainWindow.glade:1296
+#: ui/MainWindow.glade:1295
 msgid "Total"
 msgstr "Toplam"
 
-#: ui/MainWindow.glade:1634
+#: ui/MainWindow.glade:1633
 msgid "Ok"
 msgstr "Tamam"
 
-#: ui/MainWindow.glade:1724
+#: ui/MainWindow.glade:1723
 msgid "message"
 msgstr "mesaj"
 
-#: ui/MainWindow.glade:1752
+#: ui/MainWindow.glade:1751
 msgid "Connect As"
 msgstr "Olarak Bağlan"
 
-#: ui/MainWindow.glade:1768
+#: ui/MainWindow.glade:1767
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: ui/MainWindow.glade:1785
+#: ui/MainWindow.glade:1784
 msgid "Registered User"
 msgstr "Kayıtlı Kullanıcı"
 
-#: ui/MainWindow.glade:1831
+#: ui/MainWindow.glade:1830
 msgid "Username:"
 msgstr "Kullanıcı Adı:"
 
-#: ui/MainWindow.glade:1870
+#: ui/MainWindow.glade:1869
 msgid "Domain:"
 msgstr "Alan:"
 
-#: ui/MainWindow.glade:1909
+#: ui/MainWindow.glade:1908
 msgid "Password:"
 msgstr "Parola:"
 
-#: ui/MainWindow.glade:1957
+#: ui/MainWindow.glade:1956
 msgid "Forget password immediately"
 msgstr "Parolayı anında unut"
 
-#: ui/MainWindow.glade:1973
+#: ui/MainWindow.glade:1972
 msgid "Remember password after you logout"
 msgstr "Parolayı çıkış yapana kadar anımsa"
 
-#: ui/MainWindow.glade:1989
+#: ui/MainWindow.glade:1988
 msgid "Remember forever"
 msgstr "Sürekli anımsa"
 
-#: ui/MainWindow.glade:2027
+#: ui/MainWindow.glade:2026
 msgid "Cancel"
 msgstr "İptal Et"
 
-#: ui/MainWindow.glade:2036 ui/MainWindow.glade:2149
+#: ui/MainWindow.glade:2035 ui/MainWindow.glade:2148
 msgid "Connect"
 msgstr "Bağlan"
 
-#: ui/MainWindow.glade:2073
+#: ui/MainWindow.glade:2072
 msgid "Connect to Server"
 msgstr "Sunucuya Bağlan"
 
-#: ui/MainWindow.glade:2101
+#: ui/MainWindow.glade:2100
 msgid "Enter server address…"
 msgstr "Sunucu adresini girin..."
 
-#: ui/MainWindow.glade:2189
+#: ui/MainWindow.glade:2188
 msgid "Server Addresses"
 msgstr "Sunucu Adresleri"
 
-#: ui/MainWindow.glade:2208
+#: ui/MainWindow.glade:2207
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
 "Sunucu adresleri, bir protokol ön eki ve bir adresten oluşur. Örnekler:"
 
-#: ui/MainWindow.glade:2251
+#: ui/MainWindow.glade:2250
 msgid "Available Protocols"
 msgstr "Kullanılabilir Protokoller"
 
-#: ui/MainWindow.glade:2267
+#: ui/MainWindow.glade:2266
 msgid "Prefix"
 msgstr "Ön ek"
 
-#: ui/MainWindow.glade:2283
+#: ui/MainWindow.glade:2282
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: ui/MainWindow.glade:2295
+#: ui/MainWindow.glade:2294
 msgid "afp://"
 msgstr "afp://"
 
-#: ui/MainWindow.glade:2307
+#: ui/MainWindow.glade:2306
 msgid "File Transfer Protocol"
 msgstr "Dosya Transfer Protokolü (FTP)"
 
-#: ui/MainWindow.glade:2319
+#: ui/MainWindow.glade:2318
 msgid "ftp:// or ftps://"
 msgstr "ftp:// veya ftps://"
 
-#: ui/MainWindow.glade:2331
+#: ui/MainWindow.glade:2330
 msgid "Network File System"
 msgstr "Ağ Dosya Sistemi (NFS)"
 
-#: ui/MainWindow.glade:2343
+#: ui/MainWindow.glade:2342
 msgid "Samba"
 msgstr "Samba"
 
-#: ui/MainWindow.glade:2355
+#: ui/MainWindow.glade:2354
 msgid "SSH File Transfer Protocol"
 msgstr "SSH Dosya Aktarım Protokolü"
 
-#: ui/MainWindow.glade:2367
+#: ui/MainWindow.glade:2366
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: ui/MainWindow.glade:2379
+#: ui/MainWindow.glade:2378
 msgid "nfs://"
 msgstr "nfs://"
 
-#: ui/MainWindow.glade:2391
+#: ui/MainWindow.glade:2390
 msgid "smb://"
 msgstr "smb://"
 
-#: ui/MainWindow.glade:2403
+#: ui/MainWindow.glade:2402
 msgid "sftp:// or ssh://"
 msgstr "sftp:// veya ssh://"
 
-#: ui/MainWindow.glade:2415
+#: ui/MainWindow.glade:2414
 msgid "dav:// or davs://"
 msgstr "dav:// veya davs://"
 
-#: ui/MainWindow.glade:2600
+#: ui/MainWindow.glade:2599
 msgid "Home"
 msgstr "Ev"
 
-#: ui/MainWindow.glade:2721
+#: ui/MainWindow.glade:2720
 msgid "Root"
 msgstr "Kök Dizin"
 
-#: ui/MainWindow.glade:2794 src/MainWindow.py:984
+#: ui/MainWindow.glade:2793 src/MainWindow.py:1001
 msgid "is free of"
 msgstr "boş, toplam"
 
-#: ui/MainWindow.glade:2910
+#: ui/MainWindow.glade:2908
 msgid "Hard Drives"
 msgstr "Sabit Diskler"
 
-#: ui/MainWindow.glade:2991
+#: ui/MainWindow.glade:2989
 msgid "Removable Drives"
 msgstr "Çıkarılabilir Diskler"
 
-#: ui/MainWindow.glade:3100
+#: ui/MainWindow.glade:3098
 msgid "Hide places section"
 msgstr "Yerler bölümünü gizle"
 
-#: ui/MainWindow.glade:3140
+#: ui/MainWindow.glade:3138
 msgid "Close app when Main directories are opened"
 msgstr "Ana dizinler açıldığında uygulamayı kapat"
 
-#: ui/MainWindow.glade:3180
+#: ui/MainWindow.glade:3178
 msgid "Close app when Hard Drives are opened"
 msgstr "Sabit Diskler açıldığında uygulamayı kapat"
 
-#: ui/MainWindow.glade:3220
+#: ui/MainWindow.glade:3218
 msgid "Close app when Removable Drives are opened"
 msgstr "Çıkarılabilir Diskler açıldığında uygulamayı kapat"
 
-#: ui/MainWindow.glade:3260
+#: ui/MainWindow.glade:3258
 msgid "Auto refresh disks (refresh time: 1.5 seconds)"
 msgstr "Diskleri otomatik yenile (yenileme süresi: 1,5 saniye)"
 
-#: ui/MainWindow.glade:3300
+#: ui/MainWindow.glade:3298
 msgid "Remember window size"
 msgstr "Pencere boyutunu hatırla"
 
-#: ui/MainWindow.glade:3340
+#: ui/MainWindow.glade:3338
+msgid "Hide Icon on Desktop"
+msgstr "Masaüstünde Simgesini Gizle"
+
+#: ui/MainWindow.glade:3378
 msgid "Use dark theme"
 msgstr "Koyu tema kullan"
 
-#: ui/MainWindow.glade:3409
+#: ui/MainWindow.glade:3447
 msgid "Restore Defaults"
 msgstr "Varsayılanları Geri Yükle"
 
-#: ui/MainWindow.glade:3454 src/MainWindow.py:2333 src/MainWindow.py:2351
+#: ui/MainWindow.glade:3492 src/MainWindow.py:2376 src/MainWindow.py:2394
 msgid "Home Page"
 msgstr "Ana Sayfa"
 
-#: ui/MainWindow.glade:3569
+#: ui/MainWindow.glade:3607
 msgid "My Computer"
 msgstr "Bilgisayarım"
 
-#: ui/MainWindow.glade:3577
+#: ui/MainWindow.glade:3615
 msgid "Refresh"
 msgstr "Yenile"
 
-#: src/MainWindow.py:227
+#: src/MainWindow.py:230
 msgid "Pardus My Computer"
 msgstr "Pardus Bilgisayarım"
 
-#: src/MainWindow.py:313
+#: src/MainWindow.py:234
+msgid "About Pardus My Computer"
+msgstr "Pardus Bilgisayarım Hakkında"
+
+#: src/MainWindow.py:330
 msgid "Unknown (/etc/os-release syntax error)"
 msgstr "Bilinmeyen (/etc/os-release söz dizimi hatası)"
 
-#: src/MainWindow.py:322
+#: src/MainWindow.py:339
 msgid "Unknown (/etc/os-release file not exists)"
 msgstr "Bilinmeyen (/etc/os-release dosyası mevcut değil)"
 
-#: src/MainWindow.py:350
+#: src/MainWindow.py:367
 msgid "About"
 msgstr "Hakkında"
 
-#: src/MainWindow.py:352
+#: src/MainWindow.py:369
 msgid "About System"
 msgstr "Sistem Hakkında"
 
-#: src/MainWindow.py:498
+#: src/MainWindow.py:515
 msgid "Places"
 msgstr "Yerler"
 
-#: src/MainWindow.py:515
+#: src/MainWindow.py:532
 msgid "Trash is empty"
 msgstr "Çöp boş"
 
-#: src/MainWindow.py:517
+#: src/MainWindow.py:534
 msgid "Trash contains 1 file"
 msgstr "Çöp kutusunda 1 dosya var"
 
-#: src/MainWindow.py:519
+#: src/MainWindow.py:536
 #, python-format
 msgid "Trash contains %s files"
 msgstr "Çöp kutusunda %s dosya var"
 
-#: src/MainWindow.py:521 src/MainWindow.py:531
+#: src/MainWindow.py:538 src/MainWindow.py:548
 msgid "Trash"
 msgstr "Çöp"
 
-#: src/MainWindow.py:527
+#: src/MainWindow.py:544
 msgid "Computer"
 msgstr "Bilgisayar"
 
-#: src/MainWindow.py:528
+#: src/MainWindow.py:545
 msgid "Browse the computer"
 msgstr "Bilgisayara göz at"
 
-#: src/MainWindow.py:529
+#: src/MainWindow.py:546
 msgid "Recent"
 msgstr "Son Kullanılan"
 
-#: src/MainWindow.py:530
+#: src/MainWindow.py:547
 msgid "Recent files"
 msgstr "Son dosyalar"
 
-#: src/MainWindow.py:662
+#: src/MainWindow.py:679
 msgid "Add new"
 msgstr "Yeni ekle"
 
-#: src/MainWindow.py:1071
+#: src/MainWindow.py:1088
 msgid "Disk is available, click to mount."
 msgstr "Disk kullanılabilir, bağlamak için tıklayın."
 
-#: src/MainWindow.py:1098
+#: src/MainWindow.py:1115
 msgid "Mount"
 msgstr "Bağla"
 
-#: src/MainWindow.py:1115
+#: src/MainWindow.py:1132
 msgid "Unmount"
 msgstr "Bağı Çöz"
 
-#: src/MainWindow.py:1143
+#: src/MainWindow.py:1160
 msgid "Eject"
 msgstr "Çıkart"
 
-#: src/MainWindow.py:1168
+#: src/MainWindow.py:1185
 msgid "Add Bookmark"
 msgstr "Yer İmi Ekle"
 
-#: src/MainWindow.py:1179
+#: src/MainWindow.py:1196
 msgid "Remove Bookmark"
 msgstr "Yer İmini Kaldır"
 
-#: src/MainWindow.py:1216
+#: src/MainWindow.py:1233
 msgid "Information"
 msgstr "Bilgi"
 
-#: src/MainWindow.py:1617 src/MainWindow.py:1668
+#: src/MainWindow.py:1644 src/MainWindow.py:1695
 msgid "Please wait"
 msgstr "Lütfen bekleyin"
 
-#: src/MainWindow.py:1620
+#: src/MainWindow.py:1647
 msgid "Network device is unmounting."
 msgstr "Ağ cihazı kaldırılıyor."
 
-#: src/MainWindow.py:1627
+#: src/MainWindow.py:1654
 msgid "Disk is unmounting."
 msgstr "Disk kaldırılıyor."
 
-#: src/MainWindow.py:1631 src/MainWindow.py:1671
+#: src/MainWindow.py:1658 src/MainWindow.py:1698
 msgid "USB disk is unmounting."
 msgstr "USB disk kaldırılıyor."
 
-#: src/MainWindow.py:1633 src/MainWindow.py:1673
+#: src/MainWindow.py:1660 src/MainWindow.py:1700
 msgid "Card drive is unmounting."
 msgstr "Kart sürücüsü kaldırılıyor."
 
-#: src/MainWindow.py:1635 src/MainWindow.py:1675
+#: src/MainWindow.py:1662 src/MainWindow.py:1702
 msgid "Optical disk is unmounting."
 msgstr "Optik disk kaldırılıyor."
 
-#: src/MainWindow.py:1638 src/MainWindow.py:1678
+#: src/MainWindow.py:1665 src/MainWindow.py:1705
 msgid "Optical drive is unmounting."
 msgstr "Optik sürücü kaldırılıyor."
 
-#: src/MainWindow.py:1640 src/MainWindow.py:1680
+#: src/MainWindow.py:1667 src/MainWindow.py:1707
 msgid "Phone is unmounting."
 msgstr "Telefon kaldırılıyor."
 
-#: src/MainWindow.py:1694 src/MainWindow.py:2572
+#: src/MainWindow.py:1721 src/MainWindow.py:2615
 msgid "Device ejected."
 msgstr "Cihaz çıkartıldı."
 
-#: src/MainWindow.py:1808
+#: src/MainWindow.py:1835
 msgid "Format"
 msgstr "Biçimlendir"
 
-#: src/MainWindow.py:1816
+#: src/MainWindow.py:1843
 msgid "Mount on Startup"
 msgstr "Başlangıçta Bağlı Gelsin"
 
-#: src/MainWindow.py:2105
+#: src/MainWindow.py:2144
 msgid "Error"
 msgstr "Hata"
 
-#: src/MainWindow.py:2491
+#: src/MainWindow.py:2534
 msgid "Unmounting process is done"
 msgstr "Kaldırma işlemi tamamlandı"
 
-#: src/MainWindow.py:2495
+#: src/MainWindow.py:2538
 msgid "You can eject the network device."
 msgstr "Ağ cihazını çıkarabilirsiniz."
 
-#: src/MainWindow.py:2500
+#: src/MainWindow.py:2543
 msgid "You can eject the disk."
 msgstr "Diski çıkarabilirsiniz."
 
-#: src/MainWindow.py:2504
+#: src/MainWindow.py:2547
 msgid "You can eject the USB disk."
 msgstr "USB diski çıkarabilirsiniz."
 
-#: src/MainWindow.py:2506
+#: src/MainWindow.py:2549
 msgid "You can eject the card drive."
 msgstr "Kart sürücüsünü çıkarabilirsiniz."
 
-#: src/MainWindow.py:2508
+#: src/MainWindow.py:2551
 msgid "You can eject the optical disk."
 msgstr "Optik diski çıkarabilirsiniz."
 
-#: src/MainWindow.py:2511
+#: src/MainWindow.py:2554
 msgid "You can eject the optical drive."
 msgstr "Optik sürücüyü çıkarabilirsiniz."
 
-#: src/MainWindow.py:2513
+#: src/MainWindow.py:2556
 msgid "You can eject the phone."
 msgstr "Telefonu çıkarabilirsiniz."
 
+#~ msgid "Website"
+#~ msgstr "Website"
