@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-29 13:23+0300\n"
+"POT-Creation-Date: 2024-03-19 10:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,462 +17,467 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ui/MainWindow.glade:20
-msgid "UI for information and management of disks on your computer."
-msgstr ""
-
-#: ui/MainWindow.glade:135 src/MainWindow.py:2356 src/MainWindow.py:2364
-#: src/MainWindow.py:2398
+#: ui/MainWindow.glade:91 src/MainWindow.py:2354 src/MainWindow.py:2362
+#: src/MainWindow.py:2397
 msgid "App Settings"
 msgstr ""
 
-#: ui/MainWindow.glade:191 src/MainWindow.py:2381 src/MainWindow.py:2390
+#: ui/MainWindow.glade:147 src/MainWindow.py:2380 src/MainWindow.py:2389
 msgid "Control Panel"
 msgstr ""
 
-#: ui/MainWindow.glade:247 src/MainWindow.py:345
+#: ui/MainWindow.glade:203 src/MainWindow.py:343
 msgid "About Pardus"
 msgstr ""
 
-#: ui/MainWindow.glade:303
+#: ui/MainWindow.glade:259
 msgid "About App"
 msgstr ""
 
-#: ui/MainWindow.glade:346
+#: ui/MainWindow.glade:302
 msgid "Folder :"
 msgstr ""
 
-#: ui/MainWindow.glade:363
+#: ui/MainWindow.glade:319
 msgid "Select Folder"
 msgstr ""
 
-#: ui/MainWindow.glade:388 ui/MainWindow.glade:807
+#: ui/MainWindow.glade:344 ui/MainWindow.glade:763
 msgid "Name :"
 msgstr ""
 
-#: ui/MainWindow.glade:427 ui/MainWindow.glade:846
+#: ui/MainWindow.glade:383 ui/MainWindow.glade:802
 msgid "Icon :"
 msgstr ""
 
-#: ui/MainWindow.glade:479 ui/MainWindow.glade:898
+#: ui/MainWindow.glade:435 ui/MainWindow.glade:854
 msgid "Preview :"
 msgstr ""
 
-#: ui/MainWindow.glade:571
+#: ui/MainWindow.glade:527
 msgid "Add"
 msgstr ""
 
-#: ui/MainWindow.glade:708
+#: ui/MainWindow.glade:664
 msgid "Remove Shortcut"
 msgstr ""
 
-#: ui/MainWindow.glade:764
+#: ui/MainWindow.glade:720
 msgid "Edit Shortcut"
 msgstr ""
 
-#: ui/MainWindow.glade:990
+#: ui/MainWindow.glade:946
 msgid "Update"
 msgstr ""
 
 #. Translators: Server as any successfully connected network address
-#: ui/MainWindow.glade:1044
+#: ui/MainWindow.glade:1000
 msgid "No recent servers found"
 msgstr ""
 
-#: ui/MainWindow.glade:1071
+#: ui/MainWindow.glade:1027
 msgid "Recent Servers"
 msgstr ""
 
-#: ui/MainWindow.glade:1177
+#: ui/MainWindow.glade:1133
 msgid "Device Model"
 msgstr ""
 
-#: ui/MainWindow.glade:1204
+#: ui/MainWindow.glade:1160
 msgid "Device Path"
 msgstr ""
 
-#: ui/MainWindow.glade:1220
+#: ui/MainWindow.glade:1176
 msgid "Mountpoint"
 msgstr ""
 
-#: ui/MainWindow.glade:1236
+#: ui/MainWindow.glade:1192
 msgid "Filesystem"
 msgstr ""
 
-#: ui/MainWindow.glade:1263
+#: ui/MainWindow.glade:1219
 msgid "Used"
 msgstr ""
 
-#: ui/MainWindow.glade:1279
+#: ui/MainWindow.glade:1235
 msgid "Free"
 msgstr ""
 
-#: ui/MainWindow.glade:1295
+#: ui/MainWindow.glade:1251
 msgid "Total"
 msgstr ""
 
-#: ui/MainWindow.glade:1633
+#: ui/MainWindow.glade:1574
+msgid "UI for information and management of disks on your computer."
+msgstr ""
+
+#. Name Surname <example@examplemail.com>
+#: ui/MainWindow.glade:1578
+msgid "translator-credits"
+msgstr ""
+
+#: ui/MainWindow.glade:1634
 msgid "Ok"
 msgstr ""
 
-#: ui/MainWindow.glade:1723
+#: ui/MainWindow.glade:1724
 msgid "message"
 msgstr ""
 
-#: ui/MainWindow.glade:1751
+#: ui/MainWindow.glade:1752
 msgid "Connect As"
 msgstr ""
 
-#: ui/MainWindow.glade:1767
+#: ui/MainWindow.glade:1768
 msgid "Anonymous"
 msgstr ""
 
-#: ui/MainWindow.glade:1784
+#: ui/MainWindow.glade:1785
 msgid "Registered User"
 msgstr ""
 
-#: ui/MainWindow.glade:1830
+#: ui/MainWindow.glade:1831
 msgid "Username:"
 msgstr ""
 
-#: ui/MainWindow.glade:1869
+#: ui/MainWindow.glade:1870
 msgid "Domain:"
 msgstr ""
 
-#: ui/MainWindow.glade:1908
+#: ui/MainWindow.glade:1909
 msgid "Password:"
 msgstr ""
 
-#: ui/MainWindow.glade:1956
+#: ui/MainWindow.glade:1957
 msgid "Forget password immediately"
 msgstr ""
 
-#: ui/MainWindow.glade:1972
+#: ui/MainWindow.glade:1973
 msgid "Remember password after you logout"
 msgstr ""
 
-#: ui/MainWindow.glade:1988
+#: ui/MainWindow.glade:1989
 msgid "Remember forever"
 msgstr ""
 
-#: ui/MainWindow.glade:2026
+#: ui/MainWindow.glade:2027
 msgid "Cancel"
 msgstr ""
 
-#: ui/MainWindow.glade:2035 ui/MainWindow.glade:2148
+#: ui/MainWindow.glade:2036 ui/MainWindow.glade:2149
 msgid "Connect"
 msgstr ""
 
-#: ui/MainWindow.glade:2072
+#: ui/MainWindow.glade:2073
 msgid "Connect to Server"
 msgstr ""
 
-#: ui/MainWindow.glade:2100
+#: ui/MainWindow.glade:2101
 msgid "Enter server address…"
 msgstr ""
 
-#: ui/MainWindow.glade:2188
+#: ui/MainWindow.glade:2189
 msgid "Server Addresses"
 msgstr ""
 
-#: ui/MainWindow.glade:2207
+#: ui/MainWindow.glade:2208
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
 
-#: ui/MainWindow.glade:2250
+#: ui/MainWindow.glade:2251
 msgid "Available Protocols"
 msgstr ""
 
-#: ui/MainWindow.glade:2266
+#: ui/MainWindow.glade:2267
 msgid "Prefix"
 msgstr ""
 
-#: ui/MainWindow.glade:2282
+#: ui/MainWindow.glade:2283
 msgid "AppleTalk"
 msgstr ""
 
-#: ui/MainWindow.glade:2294
+#: ui/MainWindow.glade:2295
 msgid "afp://"
 msgstr ""
 
-#: ui/MainWindow.glade:2306
+#: ui/MainWindow.glade:2307
 msgid "File Transfer Protocol"
 msgstr ""
 
-#: ui/MainWindow.glade:2318
+#: ui/MainWindow.glade:2319
 msgid "ftp:// or ftps://"
 msgstr ""
 
-#: ui/MainWindow.glade:2330
+#: ui/MainWindow.glade:2331
 msgid "Network File System"
 msgstr ""
 
-#: ui/MainWindow.glade:2342
+#: ui/MainWindow.glade:2343
 msgid "Samba"
 msgstr ""
 
-#: ui/MainWindow.glade:2354
+#: ui/MainWindow.glade:2355
 msgid "SSH File Transfer Protocol"
 msgstr ""
 
-#: ui/MainWindow.glade:2366
+#: ui/MainWindow.glade:2367
 msgid "WebDAV"
 msgstr ""
 
-#: ui/MainWindow.glade:2378
+#: ui/MainWindow.glade:2379
 msgid "nfs://"
 msgstr ""
 
-#: ui/MainWindow.glade:2390
+#: ui/MainWindow.glade:2391
 msgid "smb://"
 msgstr ""
 
-#: ui/MainWindow.glade:2402
+#: ui/MainWindow.glade:2403
 msgid "sftp:// or ssh://"
 msgstr ""
 
-#: ui/MainWindow.glade:2414
+#: ui/MainWindow.glade:2415
 msgid "dav:// or davs://"
 msgstr ""
 
-#: ui/MainWindow.glade:2599
+#: ui/MainWindow.glade:2600
 msgid "Home"
 msgstr ""
 
-#: ui/MainWindow.glade:2720
+#: ui/MainWindow.glade:2721
 msgid "Root"
 msgstr ""
 
-#: ui/MainWindow.glade:2793 src/MainWindow.py:1001
+#: ui/MainWindow.glade:2794 src/MainWindow.py:999
 msgid "is free of"
 msgstr ""
 
-#: ui/MainWindow.glade:2908
+#: ui/MainWindow.glade:2909
 msgid "Hard Drives"
 msgstr ""
 
-#: ui/MainWindow.glade:2989
+#: ui/MainWindow.glade:2990
 msgid "Removable Drives"
 msgstr ""
 
-#: ui/MainWindow.glade:3098
+#: ui/MainWindow.glade:3099
 msgid "Hide places section"
 msgstr ""
 
-#: ui/MainWindow.glade:3138
+#: ui/MainWindow.glade:3139
 msgid "Close app when Main directories are opened"
 msgstr ""
 
-#: ui/MainWindow.glade:3178
+#: ui/MainWindow.glade:3179
 msgid "Close app when Hard Drives are opened"
 msgstr ""
 
-#: ui/MainWindow.glade:3218
+#: ui/MainWindow.glade:3219
 msgid "Close app when Removable Drives are opened"
 msgstr ""
 
-#: ui/MainWindow.glade:3258
+#: ui/MainWindow.glade:3259
 msgid "Auto refresh disks (refresh time: 1.5 seconds)"
 msgstr ""
 
-#: ui/MainWindow.glade:3298
+#: ui/MainWindow.glade:3299
 msgid "Remember window size"
 msgstr ""
 
-#: ui/MainWindow.glade:3338
+#: ui/MainWindow.glade:3339
 msgid "Hide Icon on Desktop"
 msgstr ""
 
-#: ui/MainWindow.glade:3378
+#: ui/MainWindow.glade:3379
 msgid "Use dark theme"
 msgstr ""
 
-#: ui/MainWindow.glade:3447
+#: ui/MainWindow.glade:3448
 msgid "Restore Defaults"
 msgstr ""
 
-#: ui/MainWindow.glade:3492 src/MainWindow.py:2376 src/MainWindow.py:2394
+#: ui/MainWindow.glade:3493 src/MainWindow.py:2375 src/MainWindow.py:2393
 msgid "Home Page"
 msgstr ""
 
-#: ui/MainWindow.glade:3607
+#: ui/MainWindow.glade:3608
 msgid "My Computer"
 msgstr ""
 
-#: ui/MainWindow.glade:3615
+#: ui/MainWindow.glade:3616
 msgid "Refresh"
 msgstr ""
 
-#: src/MainWindow.py:230
+#: src/MainWindow.py:228
 msgid "Pardus My Computer"
 msgstr ""
 
-#: src/MainWindow.py:234
+#: src/MainWindow.py:232
 msgid "About Pardus My Computer"
 msgstr ""
 
-#: src/MainWindow.py:330
+#: src/MainWindow.py:328
 msgid "Unknown (/etc/os-release syntax error)"
 msgstr ""
 
-#: src/MainWindow.py:339
+#: src/MainWindow.py:337
 msgid "Unknown (/etc/os-release file not exists)"
 msgstr ""
 
-#: src/MainWindow.py:367
+#: src/MainWindow.py:365
 msgid "About"
 msgstr ""
 
-#: src/MainWindow.py:369
+#: src/MainWindow.py:367
 msgid "About System"
 msgstr ""
 
-#: src/MainWindow.py:515
+#: src/MainWindow.py:513
 msgid "Places"
 msgstr ""
 
-#: src/MainWindow.py:532
+#: src/MainWindow.py:530
 msgid "Trash is empty"
 msgstr ""
 
-#: src/MainWindow.py:534
+#: src/MainWindow.py:532
 msgid "Trash contains 1 file"
 msgstr ""
 
-#: src/MainWindow.py:536
+#: src/MainWindow.py:534
 #, python-format
 msgid "Trash contains %s files"
 msgstr ""
 
-#: src/MainWindow.py:538 src/MainWindow.py:548
+#: src/MainWindow.py:536 src/MainWindow.py:546
 msgid "Trash"
 msgstr ""
 
-#: src/MainWindow.py:544
+#: src/MainWindow.py:542
 msgid "Computer"
 msgstr ""
 
-#: src/MainWindow.py:545
+#: src/MainWindow.py:543
 msgid "Browse the computer"
 msgstr ""
 
-#: src/MainWindow.py:546
+#: src/MainWindow.py:544
 msgid "Recent"
 msgstr ""
 
-#: src/MainWindow.py:547
+#: src/MainWindow.py:545
 msgid "Recent files"
 msgstr ""
 
-#: src/MainWindow.py:679
+#: src/MainWindow.py:677
 msgid "Add new"
 msgstr ""
 
-#: src/MainWindow.py:1088
+#: src/MainWindow.py:1086
 msgid "Disk is available, click to mount."
 msgstr ""
 
-#: src/MainWindow.py:1115
+#: src/MainWindow.py:1113
 msgid "Mount"
 msgstr ""
 
-#: src/MainWindow.py:1132
+#: src/MainWindow.py:1130
 msgid "Unmount"
 msgstr ""
 
-#: src/MainWindow.py:1160
+#: src/MainWindow.py:1158
 msgid "Eject"
 msgstr ""
 
-#: src/MainWindow.py:1185
+#: src/MainWindow.py:1183
 msgid "Add Bookmark"
 msgstr ""
 
-#: src/MainWindow.py:1196
+#: src/MainWindow.py:1194
 msgid "Remove Bookmark"
 msgstr ""
 
-#: src/MainWindow.py:1233
+#: src/MainWindow.py:1231
 msgid "Information"
 msgstr ""
 
-#: src/MainWindow.py:1644 src/MainWindow.py:1695
+#: src/MainWindow.py:1642 src/MainWindow.py:1693
 msgid "Please wait"
 msgstr ""
 
-#: src/MainWindow.py:1647
+#: src/MainWindow.py:1645
 msgid "Network device is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:1654
+#: src/MainWindow.py:1652
 msgid "Disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:1658 src/MainWindow.py:1698
+#: src/MainWindow.py:1656 src/MainWindow.py:1696
 msgid "USB disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:1660 src/MainWindow.py:1700
+#: src/MainWindow.py:1658 src/MainWindow.py:1698
 msgid "Card drive is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:1662 src/MainWindow.py:1702
+#: src/MainWindow.py:1660 src/MainWindow.py:1700
 msgid "Optical disk is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:1665 src/MainWindow.py:1705
+#: src/MainWindow.py:1663 src/MainWindow.py:1703
 msgid "Optical drive is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:1667 src/MainWindow.py:1707
+#: src/MainWindow.py:1665 src/MainWindow.py:1705
 msgid "Phone is unmounting."
 msgstr ""
 
-#: src/MainWindow.py:1721 src/MainWindow.py:2615
+#: src/MainWindow.py:1719 src/MainWindow.py:2614
 msgid "Device ejected."
 msgstr ""
 
-#: src/MainWindow.py:1835
+#: src/MainWindow.py:1833
 msgid "Format"
 msgstr ""
 
-#: src/MainWindow.py:1843
+#: src/MainWindow.py:1841
 msgid "Mount on Startup"
 msgstr ""
 
-#: src/MainWindow.py:2144
+#: src/MainWindow.py:2142
 msgid "Error"
 msgstr ""
 
-#: src/MainWindow.py:2534
+#: src/MainWindow.py:2533
 msgid "Unmounting process is done"
 msgstr ""
 
-#: src/MainWindow.py:2538
+#: src/MainWindow.py:2537
 msgid "You can eject the network device."
 msgstr ""
 
-#: src/MainWindow.py:2543
+#: src/MainWindow.py:2542
 msgid "You can eject the disk."
 msgstr ""
 
-#: src/MainWindow.py:2547
+#: src/MainWindow.py:2546
 msgid "You can eject the USB disk."
 msgstr ""
 
-#: src/MainWindow.py:2549
+#: src/MainWindow.py:2548
 msgid "You can eject the card drive."
 msgstr ""
 
-#: src/MainWindow.py:2551
+#: src/MainWindow.py:2550
 msgid "You can eject the optical disk."
 msgstr ""
 
-#: src/MainWindow.py:2554
+#: src/MainWindow.py:2553
 msgid "You can eject the optical drive."
 msgstr ""
 
-#: src/MainWindow.py:2556
+#: src/MainWindow.py:2555
 msgid "You can eject the phone."
 msgstr ""
