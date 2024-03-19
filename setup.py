@@ -56,7 +56,7 @@ data_files = [
 
 setup(
     name="pardus-mycomputer",
-    version="0.1.0",
+    version="0.6.3",
     packages=find_packages(),
     scripts=["pardus-mycomputer"],
     install_requires=["PyGObject"],
