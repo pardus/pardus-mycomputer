@@ -32,6 +32,8 @@ class UserSettings(object):
         self.user_home = Path.home()
         self.xdg_config_home = Path(os.environ.get("XDG_CONFIG_HOME", str(self.user_home) + "/.config")) 
         self.user_config_dir = Path.joinpath(self.xdg_config_home, Path("pardus-mycomputer"))
+        if not os.path.exists(self.user_config_dir):
+            self.user_config_dir = Path.joinpath(self.xdg_config_home, Path("pardus/pardus-mycomputer"))
         self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
         self.user_recent_servers_file = Path.joinpath(self.user_config_dir, Path("servers-recent"))
         self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
