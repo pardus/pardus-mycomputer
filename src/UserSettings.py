@@ -28,9 +28,7 @@ locale.textdomain(APPNAME)
 
 class UserSettings(object):
     def __init__(self):
-
-        self.user_home = Path.home()
-        self.user_config_dir = Path.joinpath(self.user_home, Path(".config/pardus-mycomputer"))
+        self.user_config_dir = Path.joinpath(Path(GLib.get_user_config_dir()), Path("pardus-mycomputer"))
         self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
         self.user_recent_servers_file = Path.joinpath(self.user_config_dir, Path("servers-recent"))
         self.user_saved_servers_file = Path.joinpath(self.user_config_dir, Path("servers-saved"))
