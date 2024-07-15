@@ -1,5 +1,6 @@
 import json
 import os, subprocess
+from pathlib import Path
 import urllib.parse
 
 import gi
@@ -265,9 +266,8 @@ class MainWindow:
 
     def add_to_desktop(self):
         # Copy app's desktop file to user's desktop path on first run
-        user_home = GLib.get_home_dir()
-        user_desktopcontrol_file = os.path.join(user_home, ".config/pardus-mycomputer/desktop")
-        if not os.path.isfile(user_desktopcontrol_file):
+        user_desktopcontrol_file = Path.joinpath(self.UserSettings.user_config_dir, Path("desktop"))
+        if not Path(user_desktopcontrol_file).exists() and not self.UserSettings.config_hide_desktopicon:
             print("{} {}".format("Desktop file copying to",
                                  GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)))
             try:

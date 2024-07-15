@@ -4,9 +4,11 @@ user_desktop=`xdg-user-dir DESKTOP`
 user_desktop_file="$user_desktop/tr.org.pardus.mycomputer.desktop"
 root_desktop_file="/usr/share/applications/tr.org.pardus.mycomputer.desktop"
 
-config_dir="$HOME/.config/pardus-mycomputer/"
+config_dir="$HOME/.config/pardus-mycomputer"
+if ! [[ -d "$config_dir" ]]; then
+  config_dir="$HOME/.config/pardus/pardus-mycomputer"
+fi
 config_file="$config_dir/desktop"
-
 
 if ! [[ -f "$config_file" ]]; then
 	if ! [[ -d "$config_dir" ]]; then

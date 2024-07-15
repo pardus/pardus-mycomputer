@@ -47,6 +47,7 @@ class UserSettings(object):
         self.config_autorefresh = None
         self.config_autorefresh_time = None
         self.config_hide_places = None
+        self.config_hide_desktopicon = None
 
         # window configs
         self.config_window_remember_size = None
