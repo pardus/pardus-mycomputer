@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 10:29+0300\n"
+"POT-Creation-Date: 2024-07-15 19:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -241,7 +241,7 @@ msgstr ""
 msgid "dav:// or davs://"
 msgstr ""
 
-#: ui/MainWindow.glade:2600
+#: ui/MainWindow.glade:2600 src/UserSettings.py:295
 msgid "Home"
 msgstr ""
 
@@ -309,11 +309,11 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
-#: src/MainWindow.py:228
+#: src/MainWindow.py:229
 msgid "Pardus My Computer"
 msgstr ""
 
-#: src/MainWindow.py:232
+#: src/MainWindow.py:233
 msgid "About Pardus My Computer"
 msgstr ""
 
@@ -480,4 +480,12 @@ msgstr ""
 
 #: src/MainWindow.py:2555
 msgid "You can eject the phone."
+msgstr ""
+
+#: src/UserSettings.py:292
+msgid "# example line is as below"
+msgstr ""
+
+#: src/UserSettings.py:293
+msgid "# note: remove the hash to make it appear"
 msgstr ""
