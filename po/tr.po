@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 10:29+0300\n"
-"PO-Revision-Date: 2024-03-19 10:30+0300\n"
+"POT-Creation-Date: 2024-07-15 19:29+0300\n"
+"PO-Revision-Date: 2024-07-15 19:31+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -242,7 +242,7 @@ msgstr "sftp:// veya ssh://"
 msgid "dav:// or davs://"
 msgstr "dav:// veya davs://"
 
-#: ui/MainWindow.glade:2600
+#: ui/MainWindow.glade:2600 src/UserSettings.py:295
 msgid "Home"
 msgstr "Ev"
 
@@ -310,11 +310,11 @@ msgstr "Bilgisayarım"
 msgid "Refresh"
 msgstr "Yenile"
 
-#: src/MainWindow.py:228
+#: src/MainWindow.py:229
 msgid "Pardus My Computer"
 msgstr "Pardus Bilgisayarım"
 
-#: src/MainWindow.py:232
+#: src/MainWindow.py:233
 msgid "About Pardus My Computer"
 msgstr "Pardus Bilgisayarım Hakkında"
 
@@ -482,6 +482,14 @@ msgstr "Optik sürücüyü çıkarabilirsiniz."
 #: src/MainWindow.py:2555
 msgid "You can eject the phone."
 msgstr "Telefonu çıkarabilirsiniz."
+
+#: src/UserSettings.py:292
+msgid "# example line is as below"
+msgstr "# örnek satır aşağıdaki gibidir"
+
+#: src/UserSettings.py:293
+msgid "# note: remove the hash to make it appear"
+msgstr "# not: görünmesini sağlamak için kare işareti kaldırın"
 
 #~ msgid "Website"
 #~ msgstr "Website"
