@@ -291,7 +291,7 @@ class UserSettings(object):
             samplefile.writelines(_("# example line is as below") + "\n")
             samplefile.writelines(_("# note: remove the hash to make it appear") + "\n")
             samplefile.writelines(
-                '#{"path": "'+ str(self.user_home) + '", "name": "' + _("Home") +'", "icon": "folder-symbolic"}' + "\n")
+                '#{"path": "' + GLib.get_home_dir() + '", "name": "' + _("Home") +'", "icon": "folder-symbolic"}' + "\n")
             samplefile.flush()
             samplefile.close()
 
