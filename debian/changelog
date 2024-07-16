@@ -1,3 +1,40 @@
+pardus-mycomputer (0.7.0) unstable; urgency=medium
+
+  [ bariscodefx ]
+  * ported xfce about dialog fix from pardus-software
+
+  [ Fatih Altun ]
+  * Add hide desktop icon to settings
+  * Update pot file
+  * Update Turkish translations
+  * Fix translators structure
+  * Update transient and some default values of about window
+  * Update pot file
+  * Update Turkish translations
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translations
+
+  [ sulincix ]
+  * fix kde wayland wrong icon issue
+
+  [ vilez ]
+  * feat: better support for XDG Base Directory
+  * update config dir
+
+  [ Fatih Altun ]
+  * Use GLib instead of getenv
+  * Fix get home dir
+  * Add UserSettings to po/files
+  * Update config dir for desktop file too
+  * Update pot file
+  * Update Turkish translations
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translations
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Tue, 16 Jul 2024 12:31:34 +0300
+
 pardus-mycomputer (0.6.3) unstable; urgency=medium
 
   [ Sabri Ünal ]
