@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 10:29+0300\n"
-"PO-Revision-Date: 2024-03-20 18:27+0000\n"
+"POT-Creation-Date: 2024-07-15 19:29+0300\n"
+"PO-Revision-Date: 2024-07-16 00:56+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: ui/MainWindow.glade:91 src/MainWindow.py:2354 src/MainWindow.py:2362
 #: src/MainWindow.py:2397
@@ -244,7 +244,7 @@ msgstr "sftp:// ou ssh://"
 msgid "dav:// or davs://"
 msgstr "dav:// ou davs://"
 
-#: ui/MainWindow.glade:2600
+#: ui/MainWindow.glade:2600 src/UserSettings.py:295
 msgid "Home"
 msgstr "Pasta pessoal"
 
@@ -312,11 +312,11 @@ msgstr "Meu Computador"
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: src/MainWindow.py:228
+#: src/MainWindow.py:229
 msgid "Pardus My Computer"
 msgstr "Meu Computador Pardus"
 
-#: src/MainWindow.py:232
+#: src/MainWindow.py:233
 msgid "About Pardus My Computer"
 msgstr "Acerca do Meu Computador Pardus"
 
@@ -484,6 +484,14 @@ msgstr "Pode ejetar a unidade ótica."
 #: src/MainWindow.py:2555
 msgid "You can eject the phone."
 msgstr "Pode ejetar o telefone."
+
+#: src/UserSettings.py:292
+msgid "# example line is as below"
+msgstr "# exemplo de linha é como abaixo"
+
+#: src/UserSettings.py:293
+msgid "# note: remove the hash to make it appear"
+msgstr "# nota: remover o sinal cardinal para o fazer aparecer"
 
 #~ msgid "Website"
 #~ msgstr "Website"
