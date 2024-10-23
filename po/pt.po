@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-15 19:29+0300\n"
-"PO-Revision-Date: 2024-07-16 00:56+0100\n"
+"PO-Revision-Date: 2024-10-23 01:12+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ui/MainWindow.glade:91 src/MainWindow.py:2354 src/MainWindow.py:2362
 #: src/MainWindow.py:2397
@@ -266,7 +266,7 @@ msgstr "Unidades removíveis"
 
 #: ui/MainWindow.glade:3099
 msgid "Hide places section"
-msgstr "Ocultar seção de locais"
+msgstr "Ocultar secção de locais"
 
 #: ui/MainWindow.glade:3139
 msgid "Close app when Main directories are opened"
@@ -423,7 +423,7 @@ msgstr "O disco USB está a ser desmontado."
 
 #: src/MainWindow.py:1658 src/MainWindow.py:1698
 msgid "Card drive is unmounting."
-msgstr "A unidade do cartão está a ser desmontada."
+msgstr "O cartão está a ser desmontado."
 
 #: src/MainWindow.py:1660 src/MainWindow.py:1700
 msgid "Optical disk is unmounting."
