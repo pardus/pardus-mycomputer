@@ -950,7 +950,7 @@ class MainWindow:
                     except:
                         display_name = ""
 
-        self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(display_name))
+        self.dlg_lbl_name.set_markup("<b><big>{}</big></b>".format(GLib.markup_escape_text(display_name, -1)))
         self.dlg_lbl_model.set_label(name)
 
         file_info = DiskManager.get_file_info(mount_point, network=True if vl._main_type == "network" else False)
@@ -994,7 +994,8 @@ class MainWindow:
 
                 # Show values on UI
                 row_volume._lbl_volume_name.set_markup(
-                    f'<b>{display_name}</b> <span size="small">( { mount_point } )</span>')
+                    f'<b>{GLib.markup_escape_text(display_name, -1)}</b>'
+                    f'<span size="small">( { GLib.markup_escape_text(mount_point, -1) } )</span>')
                 row_volume._lbl_volume_size_info.set_markup("<span size='small'><b>{:.2f} GB</b> {} {:.2f} GB</span>".format(
                     free_kb/1000/1000, _("is free of"),total_kb/1000/1000))
                 row_volume._pb_volume_size.set_fraction(file_info["usage_percent"])
@@ -1083,7 +1084,7 @@ class MainWindow:
 
         lbl_volume_name = Gtk.Label.new()
         lbl_volume_name.set_markup("<b>{}</b><small> ( {} )</small>".format(
-            name,_("Disk is available, click to mount.")))
+            GLib.markup_escape_text(name, -1),_("Disk is available, click to mount.")))
         lbl_volume_name.set_halign(Gtk.Align.START)
         lbl_volume_name.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
