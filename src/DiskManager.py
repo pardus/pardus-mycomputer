@@ -2,18 +2,30 @@ import os, subprocess
 
 def get_file_info(file, network=False):
 
+    values = None
+    command = ["df", file, "--block-size=1000", "-T"]
+
     if network:
         try:
-            process = subprocess.check_output(f"df '{file}' --block-size=1000 -T | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$5,$7; exit}}'", shell=True, timeout=1)
+            process = subprocess.check_output(command, timeout=1)
         except subprocess.TimeoutExpired:
             print("timeout error on {}".format(file))
             return None
     else:
-        process = subprocess.check_output(f"df '{file}' --block-size=1000 -T | awk 'NR==1 {{next}} {{print $1,$2,$3,$4,$5,$7; exit}}'", shell=True)
+        process = subprocess.check_output(command)
 
-    if len(process.decode("utf-8").strip().split(" ")) == 6:
+    lines = process.decode().splitlines()
+
+    if len(lines) > 1:
+        data = lines[1].split()
+        if len(data) > 6:
+            values = data[0], data[1], data[2], data[3], data[4], data[6]
+        else:
+            values = None
+
+    if values is not None:
         keys = ["device", "fstype", "total_kb", "usage_kb", "free_kb", "mountpoint"]
-        obj = dict(zip(keys, process.decode("utf-8").strip().split(" ")))
+        obj = dict(zip(keys, values))
         try:
             obj["usage_percent"] = (int(obj['total_kb']) - int(obj['free_kb'])) / int(obj['total_kb'])
         except:
