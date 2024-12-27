@@ -1,3 +1,13 @@
+pardus-mycomputer (0.7.2) unstable; urgency=medium
+
+  * Fix subprocess on get_file_info func
+  * Add exception to subprocess
+  * Add GLib markup_escape_text to device name
+  * Reformat DiskManager.py
+  * Reformat code
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 27 Dec 2024 21:50:54 +0300
+
 pardus-mycomputer (0.7.1) unstable; urgency=medium
 
   [ Hugo Carvalho ]
