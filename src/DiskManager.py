@@ -11,8 +11,15 @@ def get_file_info(file, network=False):
         except subprocess.TimeoutExpired:
             print("timeout error on {}".format(file))
             return None
+        except subprocess.CalledProcessError:
+            print("CalledProcessError error on {}".format(file))
+            return None
     else:
-        process = subprocess.check_output(command)
+        try:
+            process = subprocess.check_output(command)
+        except Exception as e:
+            print("get_file_info subprocess error: {}".format(file))
+            return None
 
     lines = process.decode().splitlines()
 
