@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+import subprocess
+
 from setuptools import setup, find_packages
-import os, subprocess
 
 
 def create_mo_files():
@@ -31,28 +33,34 @@ if os.path.exists(changelog):
     f.write(version)
     f.close()
 
-
 data_files = [
-    ("/usr/share/applications/", ["tr.org.pardus.mycomputer.desktop"]),
-    ("/usr/share/pardus/pardus-mycomputer/", ["pardus-mycomputer.svg"]),
-    ("/usr/share/pardus/pardus-mycomputer/src", [
-        "src/Main.py",
-        "src/MainWindow.py",
-        "src/DiskManager.py",
-        "src/Unmount.py",
-        "src/UserSettings.py",
-        "src/__version__"
-    ]),
-    ("/usr/share/pardus/pardus-mycomputer/ui", ["ui/MainWindow.glade"]),
-    ("/usr/share/pardus/pardus-mycomputer/autostart/", ["autostart/pardus-mycomputer-add-to-desktop"]),
-    ("/usr/share/pardus/pardus-mycomputer/css/", ["css/style.css"]),
-    ("/etc/xdg/autostart", ["autostart/pardus-mycomputer-add-to-desktop.desktop"]),
-    ("/usr/bin/", ["pardus-mycomputer"]),
-    ("/usr/share/icons/hicolor/scalable/apps/", [
-        "pardus-mycomputer.svg",
-        "pardus-mycomputer-emblem-pardus-symbolic.svg"
-    ])
-] + create_mo_files()
+                 ("/usr/share/applications/",
+                  ["tr.org.pardus.mycomputer.desktop"]),
+                 ("/usr/share/pardus/pardus-mycomputer/",
+                  ["pardus-mycomputer.svg"]),
+                 ("/usr/share/pardus/pardus-mycomputer/src", [
+                     "src/Main.py",
+                     "src/MainWindow.py",
+                     "src/DiskManager.py",
+                     "src/Unmount.py",
+                     "src/UserSettings.py",
+                     "src/__version__"
+                 ]),
+                 ("/usr/share/pardus/pardus-mycomputer/ui",
+                  ["ui/MainWindow.glade"]),
+                 ("/usr/share/pardus/pardus-mycomputer/autostart/",
+                  ["autostart/pardus-mycomputer-add-to-desktop"]),
+                 ("/usr/share/pardus/pardus-mycomputer/css/",
+                  ["css/style.css"]),
+                 ("/etc/xdg/autostart",
+                  ["autostart/pardus-mycomputer-add-to-desktop.desktop"]),
+                 ("/usr/bin/",
+                  ["pardus-mycomputer"]),
+                 ("/usr/share/icons/hicolor/scalable/apps/", [
+                     "pardus-mycomputer.svg",
+                     "pardus-mycomputer-emblem-pardus-symbolic.svg"
+                 ])
+             ] + create_mo_files()
 
 setup(
     name="pardus-mycomputer",

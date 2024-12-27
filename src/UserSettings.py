@@ -5,15 +5,14 @@ Created on Fri Oct 28 13:13:13 2022
 
 @author: fatih
 """
-import json
-import os.path
-from pathlib import Path
 import configparser
+import json
 import locale
-from locale import gettext as _
+import os.path
 import subprocess
+from locale import gettext as _
+from pathlib import Path
 
-import gi
 from gi.repository import GLib
 
 # Translation Constants:
@@ -24,6 +23,8 @@ TRANSLATIONS_PATH = "/usr/share/locale"
 # Translation functions:
 locale.bindtextdomain(APPNAME, TRANSLATIONS_PATH)
 locale.textdomain(APPNAME)
+
+
 # locale.setlocale(locale.LC_ALL, SYSTEM_LANGUAGE)
 
 class UserSettings(object):
@@ -71,7 +72,6 @@ class UserSettings(object):
         self.default_window_width = 700
         self.default_window_height = 550
         self.default_window_use_darktheme = False
-
 
     def createDefaultConfig(self, force=False):
         self.config['MAIN'] = {
@@ -135,7 +135,7 @@ class UserSettings(object):
                 print("self.createDefaultConfig(force=True) : {}".format(e))
 
     def writeConfig(self, closeappmain="", closeapphdd="", closeappusb="", autorefresh="", autorefreshtime="",
-                    hideplaces="", hidedesktopicon ="", rememberwindowsize="", fullscreen="",
+                    hideplaces="", hidedesktopicon="", rememberwindowsize="", fullscreen="",
                     width="", height="", usedarktheme=""):
         if closeappmain == "":
             closeappmain = self.config_closeapp_main
@@ -196,6 +196,7 @@ class UserSettings(object):
 
     def addRecentServer(self, uri, name):
         server = "{} {}".format(uri, name).strip()
+
         def add():
             with open(self.user_recent_servers_file, "r+") as sf:
                 for line in sf:
@@ -203,6 +204,7 @@ class UserSettings(object):
                         break
                 else:
                     sf.write("{}\n".format(server))
+
         if not Path.is_file(self.user_recent_servers_file):
             self.createDir(self.user_config_dir)
             self.user_recent_servers_file.touch(exist_ok=True)
@@ -230,6 +232,7 @@ class UserSettings(object):
 
     def addSavedServer(self, uri, name):
         server = "{} {}".format(uri, name).strip()
+
         def add():
             with open(self.user_saved_servers_file, "r+") as sf:
                 for line in sf:
@@ -237,6 +240,7 @@ class UserSettings(object):
                         break
                 else:
                     sf.write("{}\n".format(server))
+
         if not Path.is_file(self.user_saved_servers_file):
             self.createDir(self.user_config_dir)
             self.user_saved_servers_file.touch(exist_ok=True)
@@ -292,14 +296,16 @@ class UserSettings(object):
             samplefile.writelines(_("# example line is as below") + "\n")
             samplefile.writelines(_("# note: remove the hash to make it appear") + "\n")
             samplefile.writelines(
-                '#{"path": "' + GLib.get_home_dir() + '", "name": "' + _("Home") +'", "icon": "folder-symbolic"}' + "\n")
+                '#{"path": "' + GLib.get_home_dir() + '", "name": "' + _(
+                    "Home") + '", "icon": "folder-symbolic"}' + "\n")
             samplefile.flush()
             samplefile.close()
 
         return places
 
     def addSavedPlaces(self, path, name, icon):
-        place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon +'"}'
+        place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon + '"}'
+
         def add():
             with open(self.user_saved_places_file, "r+") as savep:
                 for line in savep:
@@ -314,6 +320,7 @@ class UserSettings(object):
                             pass
                 savep.writelines("{}\n".format(place))
                 return True
+
         if not Path.is_file(self.user_saved_places_file):
             self.createDir(self.user_config_dir)
             self.user_saved_places_file.touch(exist_ok=True)
@@ -348,9 +355,9 @@ class UserSettings(object):
         if state:
             subprocess.call(["/usr/share/pardus/pardus-mycomputer/autostart/pardus-mycomputer-add-to-desktop"])
             if os.path.exists(os.path.join(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP),
-                              self.desktop_file)):
+                                           self.desktop_file)):
                 os.remove(os.path.join(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP),
-                              self.desktop_file))
+                                       self.desktop_file))
         else:
             if Path.joinpath(self.user_config_dir, Path("desktop")).exists():
                 Path.joinpath(self.user_config_dir, Path("desktop")).unlink(missing_ok=True)
