@@ -1,7 +1,7 @@
-import os, subprocess
+import subprocess
+
 
 def get_file_info(file, network=False):
-
     values = None
     command = ["df", file, "--block-size=1000", "-T"]
 
@@ -47,42 +47,48 @@ def get_file_info(file, network=False):
 
     return obj
 
+
 def get_uuid_from_dev(dev_path):
     process = subprocess.run(f"lsblk -o PATH,UUID --raw | grep {dev_path}", shell=True, capture_output=True)
 
     if process.returncode != 0:
         return ""
-    
+
     uuid = process.stdout.decode("utf-8").strip().split(" ")[1]
     return uuid
 
+
 def is_drive_automounted(dev_path):
     uuid = get_uuid_from_dev(dev_path)
-    
-    process = subprocess.run(f'grep -E "{dev_path}|{uuid}" /etc/fstab | grep -v -E "#.*({dev_path}|{uuid})"', shell=True, capture_output=True)
+
+    process = subprocess.run(f'grep -E "{dev_path}|{uuid}" /etc/fstab | grep -v -E "#.*({dev_path}|{uuid})"',
+                             shell=True, capture_output=True)
 
     if process.returncode != 0:
         return False
-    
+
     return True
+
 
 def set_automounted(dev_path, value):
     if value and not is_drive_automounted(dev_path):
-        partition = dev_path.split("/")[-1] # /dev/sda1 -> sda1
+        partition = dev_path.split("/")[-1]  # /dev/sda1 -> sda1
         fstab_string = f"{dev_path} /mnt/{partition} auto nosuid,nodev,nofail,x-gvfs-show 0 0"
 
         process = subprocess.run(f'echo "{fstab_string}" | pkexec tee -a /etc/fstab', shell=True)
 
     elif not value and is_drive_automounted(dev_path):
-        partition = dev_path.split("/")[:-1] # /dev/sda1 -> sda1
+        partition = dev_path.split("/")[:-1]  # /dev/sda1 -> sda1
         uuid = get_uuid_from_dev(dev_path)
 
-        dev_path_backslashes = dev_path.replace("/","\/")
+        dev_path_backslashes = dev_path.replace("/", "\/")
         cmd = f"pkexec sed -ri 's/.*({dev_path_backslashes}|{uuid}).*//g' /etc/fstab"
         process = subprocess.run(cmd, shell=True)
-        
+
+
 def get_filesystem_of_partition(partition_path):
-    process = subprocess.run(f'lsblk -o TYPE,PATH,FSTYPE -r | grep " {partition_path} "', shell=True, capture_output=True)
+    process = subprocess.run(f'lsblk -o TYPE,PATH,FSTYPE -r | grep " {partition_path} "', shell=True,
+                             capture_output=True)
 
     output = process.stdout.decode("utf-8").strip()
     if output == "":
