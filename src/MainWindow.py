@@ -1620,7 +1620,8 @@ class MainWindow:
             if isinstance(mount, str):
                 self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=mount)
             else:
-                subprocess.run(["xdg-open", mount.get_root().get_path()])
+
+                subprocess.Popen(["xdg-open", mount.get_root().get_path()])
 
     def on_btn_unmount_clicked(self, button):
         self.actioned_volume = button
@@ -1768,12 +1769,12 @@ class MainWindow:
             if isinstance(mount, str):
                 self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=mount)
             else:
-                th = subprocess.Popen("xdg-open '{}' &".format(mount.get_root().get_path()), shell=True)
-                th.communicate()
+
+                subprocess.Popen(["xdg-open", mount.get_root().get_path()])
 
                 # some times phone's disk usage infos not showing on first mount,
                 # we can update this values on phone row clicked
-                # fix this late
+                # fix this later
                 if row._type == "phone":
                     self.showVolumeSizes(row)
 
@@ -2122,8 +2123,8 @@ class MainWindow:
                     print("operation cancelled")
                 else:
                     if from_places:
-                        th = subprocess.Popen("xdg-open '{}' &".format(saved_uri), shell=True)
-                        th.communicate()
+
+                        subprocess.Popen(["xdg-open", saved_uri])
                         if self.UserSettings.config_closeapp_main:
                             self.on_window_delete_event(self.window)
                     else:
