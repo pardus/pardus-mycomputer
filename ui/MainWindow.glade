@@ -2518,9 +2518,8 @@ Fatih Altun &lt;fatih.altun@pardus.org.tr&gt;</property>
                         <property name="can-focus">False</property>
                         <property name="margin-start">8</property>
                         <property name="margin-end">8</property>
-                        <property name="margin-top">21</property>
+                        <property name="margin-top">13</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">5</property>
                         <child>
                           <placeholder/>
                         </child>
