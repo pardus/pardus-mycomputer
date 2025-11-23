@@ -173,6 +173,62 @@
           </packing>
         </child>
         <child>
+          <object class="GtkButton" id="menu_refresh">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_menu_refresh_clicked" swapped="no"/>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">view-refresh-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Refresh</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkButton" id="menu_aboutpardus">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -214,7 +270,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="position">6</property>
           </packing>
         </child>
         <child>
@@ -225,7 +281,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="position">7</property>
           </packing>
         </child>
         <child>
@@ -3607,25 +3663,48 @@ Fatih Altun &lt;fatih.altun@pardus.org.tr&gt;</property>
         <property name="can-focus">False</property>
         <property name="title" translatable="yes">My Computer</property>
         <property name="has-subtitle">False</property>
+        <property name="spacing">8</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton" id="btn_refresh">
+          <object class="GtkMenuButton" id="header_btn_connect">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Refresh</property>
+            <property name="margin-start">5</property>
             <property name="relief">none</property>
-            <signal name="clicked" handler="on_btn_refresh_clicked" swapped="no"/>
+            <property name="popover">popover_connect</property>
+            <child>
+              <object class="GtkImage" id="img_connect">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">network-server-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="headerbar_menubutton">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="relief">none</property>
+            <property name="popover">popover_menu</property>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="icon-name">view-refresh-symbolic</property>
+                <property name="icon-name">open-menu-symbolic</property>
               </object>
             </child>
           </object>
           <packing>
             <property name="pack-type">end</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -3645,47 +3724,6 @@ Fatih Altun &lt;fatih.altun@pardus.org.tr&gt;</property>
           </object>
           <packing>
             <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="headerbar_menubutton">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="relief">none</property>
-            <property name="popover">popover_menu</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="pixel-size">24</property>
-                <property name="icon-name">pardus-mycomputer</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="header_btn_connect">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="relief">none</property>
-            <property name="popover">popover_connect</property>
-            <child>
-              <object class="GtkImage" id="img_connect">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">network-server-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
             <property name="position">3</property>
           </packing>
         </child>

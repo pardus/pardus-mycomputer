@@ -1862,7 +1862,8 @@ class MainWindow:
         # auto refresh control of disks
         self.autorefresh()
 
-    def on_btn_refresh_clicked(self, button):
+    def on_menu_refresh_clicked(self, button):
+        self.popover_menu.popdown()
         print("Manually refreshing disks")
         self.addDisksToGUI()
         self.set_places()
