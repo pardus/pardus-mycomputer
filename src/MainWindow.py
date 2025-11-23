@@ -1711,7 +1711,7 @@ class MainWindow:
             def on_ejected(volume, task):
                 try:
                     volume.eject_with_operation_finish(task)
-                    self.notify(summary, body, "emblem-ok-symbolic")
+                    self.notify(summary, body, "object-select-symbolic")
                     print("{} successfully ejected".format(body))
                     self.mount_inprogress = False
                     if self.actioned_volume._is_removable:
@@ -2555,7 +2555,7 @@ class MainWindow:
         def on_unmounted(mount, task):
             try:
                 mount.unmount_with_operation_finish(task)
-                self.notify(summary, body, "emblem-ok-symbolic")
+                self.notify(summary, body, "object-select-symbolic")
                 print("{} successfully unmounted".format(display_name))
                 return True
             except Exception as e:
@@ -2609,7 +2609,7 @@ class MainWindow:
         def on_ejected(volume, task):
             try:
                 volume.eject_with_operation_finish(task)
-                self.notify(summary, body, "emblem-ok-symbolic")
+                self.notify(summary, body, "object-select-symbolic")
                 print("{} successfully ejected".format(display_name))
                 return True
             except Exception as e:
