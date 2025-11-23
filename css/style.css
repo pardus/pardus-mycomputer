@@ -1,13 +1,13 @@
 .pardus-mycomputer-listbox{
 background-color:transparent;
-border-radius:5px;
+border-radius:8px;
 }
 .pardus-mycomputer-iconview{
 background-color:transparent;
 }
 
 .pardus-mycomputer-listbox row:hover, row:selected{
-border-radius:5px;
+border-radius:8px;
 }
 
 .pardus-mycomputer-progress-90 progress{
