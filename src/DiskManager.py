@@ -49,51 +49,62 @@ def get_file_info(file, network=False):
 
 
 def get_uuid_from_dev(dev_path):
-    process = subprocess.run(f"lsblk -o PATH,UUID --raw | grep {dev_path}", shell=True, capture_output=True)
-
-    if process.returncode != 0:
+    result = subprocess.run(["lsblk", "-o", "PATH,UUID", "--raw"], capture_output=True, text=True)
+    if result.returncode != 0:
         return ""
-
-    uuid = process.stdout.decode("utf-8").strip().split(" ")[1]
-    return uuid
+    for line in result.stdout.splitlines():
+        parts = line.strip().split()
+        if len(parts) >= 2 and parts[0] == dev_path:
+            return parts[1]
+    return ""
 
 
 def is_drive_automounted(dev_path):
     uuid = get_uuid_from_dev(dev_path)
-
-    process = subprocess.run(f'grep -E "{dev_path}|{uuid}" /etc/fstab | grep -v -E "#.*({dev_path}|{uuid})"',
-                             shell=True, capture_output=True)
-
-    if process.returncode != 0:
+    try:
+        with open("/etc/fstab", "r") as f:
+            for line in f:
+                if line.strip().startswith('#'):
+                    continue
+                if dev_path in line or (uuid and uuid in line):
+                    return True
+    except Exception:
         return False
-
-    return True
+    return False
 
 
 def set_automounted(dev_path, value):
     if value and not is_drive_automounted(dev_path):
-        partition = dev_path.split("/")[-1]  # /dev/sda1 -> sda1
-        fstab_string = f"{dev_path} /mnt/{partition} auto nosuid,nodev,nofail,x-gvfs-show 0 0"
+        partition = dev_path.split("/")[-1] # /dev/sda1 -> sda1
+        fstab_string = f"{dev_path} /mnt/{partition} auto nosuid,nodev,nofail,x-gvfs-show 0 0\n"
 
-        process = subprocess.run(f'echo "{fstab_string}" | pkexec tee -a /etc/fstab', shell=True)
+        subprocess.run(["pkexec", "tee", "-a", "/etc/fstab"], input=fstab_string, text=True)
 
     elif not value and is_drive_automounted(dev_path):
-        partition = dev_path.split("/")[:-1]  # /dev/sda1 -> sda1
         uuid = get_uuid_from_dev(dev_path)
 
-        dev_path_backslashes = dev_path.replace("/", "\/")
-        cmd = f"pkexec sed -ri 's/.*({dev_path_backslashes}|{uuid}).*//g' /etc/fstab"
-        process = subprocess.run(cmd, shell=True)
+        try:
+            with open("/etc/fstab", "r") as f:
+                lines = [l for l in f if dev_path not in l and (not uuid or uuid not in l)]
+            tmpfile = "/tmp/fstab.tmp"
+            with open(tmpfile, "w") as tf:
+                tf.writelines(lines)
+            subprocess.run(["pkexec", "mv", tmpfile, "/etc/fstab"])
+        except Exception:
+            pass
 
 
 def get_filesystem_of_partition(partition_path):
-    process = subprocess.run(f'lsblk -o TYPE,PATH,FSTYPE -r | grep " {partition_path} "', shell=True,
-                             capture_output=True)
 
-    output = process.stdout.decode("utf-8").strip()
-    if output == "":
+    result = subprocess.run(["lsblk", "-o", "TYPE,PATH,FSTYPE", "-r"], capture_output=True, text=True)
+    if result.returncode != 0:
         return "-"
-    return output.split(" ")[2]
+    for line in result.stdout.splitlines():
+        parts = line.strip().split()
+        if len(parts) >= 3 and parts[1] == partition_path:
+            return parts[2]
+
+    return "-"
 
 # import subprocess, threading
 #
