@@ -1,3 +1,30 @@
+pardus-mycomputer (0.8.0) unstable; urgency=medium
+
+  [ wraith4081 ]
+  * FIX: Arbitrary Code Injection in the saved places
+
+  [ Ayaz YİĞİT ]
+  * Fransızca Çeviri Dosyası
+
+  [ busra ]
+  * set icon size PARDUS-1229
+  * Change disk usage text format PARDUS-1229
+
+  [ Büşra ÇAĞLIYAN ]
+  * feat: add async home directory size calculation PARDUS-1229
+  * refactor: replace asyncio disk size calculation with GLib async PARDUS-1229
+  * update translations PARDUS-1229
+  * ui: update disk usage labels and remove bold styling PARDUS-1361
+  * update translations PARDUS-1361
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translations
+
+  [ Fatih Altun ]
+  * Update French translations for various strings
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 06 Mar 2026 14:32:15 +0300
+
 pardus-mycomputer (0.7.5) unstable; urgency=medium
 
   * Update app icon
