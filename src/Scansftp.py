@@ -1,6 +1,8 @@
 from scapy.all import ARP, Ether, srp
 import netifaces
 import ipaddress
+import paramiko
+import socket
 
 # a function that retrieves the network address of the connected interface
 def get_local_network():
@@ -20,8 +22,7 @@ def get_local_network():
     return str(network)
 
 
-
-def arp_scan(network):
+def scan_devices(network):
     ether = Ether(dst="ff:ff:ff:ff:ff:ff")  # Broadcast Ethernet frame
     arp = ARP(pdst=network)  # ARP package
 
@@ -36,7 +37,40 @@ def arp_scan(network):
 
     return devices
 
-#network = get_local_network()
-#print(network)
-#print(arp_scan(network))
+
+def is_sftp_server(host, port=22, timeout=3):
+    # Checking if the SSH port is open
+    try:
+        sock = socket.create_connection((host, port), timeout=timeout)
+        sock.close()
+    except (socket.timeout, ConnectionRefusedError, OSError):
+        return False
+
+    # Sending a fake credential results in an    AuthenticationException → This means SFTP exists
+    transport = paramiko.Transport((host, port))
+    transport.banner_timeout = timeout
+
+    try:
+        transport.connect(
+            username='__probe__',
+            password='__probe__'
+        )
+        return True
+
+    except paramiko.AuthenticationException:
+        return True   # an authentication error means the SFTP service is active
+
+    except paramiko.SSHException:
+        return False  # SSH handshake failed
+
+    except Exception:
+        return False
+
+#netaddress = get_local_network()
+#devices = scan_devices(netaddress)
+#for d in devices:
+#    if is_sftp_server(d['ip']):
+#        print(f"{d} -- SFTP VAR")
+#    else:
+#        print(f"{d} -- SFTP YOK")
 
