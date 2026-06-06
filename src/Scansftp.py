@@ -1,8 +1,10 @@
-from scapy.all import ARP, Ether, srp
-import netifaces
-import ipaddress
-import paramiko
+import subprocess
 import socket
+import ipaddress
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
+import paramiko
+import netifaces
 
 # a function that retrieves the network address of the connected interface
 def get_local_network():
@@ -22,23 +24,23 @@ def get_local_network():
     return str(network)
 
 
-def scan_devices(network):
-    ether = Ether(dst="ff:ff:ff:ff:ff:ff")  # Broadcast Ethernet frame
-    arp = ARP(pdst=network)  # ARP package
+def get_ip_neigh():
+    ips = set()
+    try:
+        out = subprocess.check_output(["ip", "neigh"]).decode()
+        for line in out.splitlines():
+            parts = line.split()
+            if len(parts) > 0:
+                ip = parts[0]
+                if ip.count(".") == 3:  # IPv4 basic filter
+                    ips.add(ip)
+    except Exception as e:
+        print("ip neigh error:", e)
 
-    packet = ether / arp
-
-    result = srp(packet, timeout=2, verbose=0)[0]  # send package
-
-    devices = []
-
-    for sent, received in result:
-        devices.append({"ip": received.psrc})
-
-    return devices
+    return ips
 
 
-def is_sftp_server(host, port=22, timeout=3):
+def check_ssh_sftp(host, port=22, timeout=3):
     # Checking if the SSH port is open
     try:
         sock = socket.create_connection((host, port), timeout=timeout)
@@ -66,11 +68,34 @@ def is_sftp_server(host, port=22, timeout=3):
     except Exception:
         return False
 
+# scan devices
+def scan(network, max_threads=30, delay=0.02):
+    net = ipaddress.ip_network(network, strict=False)
+    results = []
+
+    def worker(ip):
+        ip = str(ip)
+        if check_ssh_sftp(ip):  # this address is being checked to see if it is an SSH server
+            return ip
+        return None
+
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+        futures = []
+
+        for ip in net.hosts():
+            futures.append(executor.submit(worker, ip))
+            time.sleep(delay)
+
+        for f in as_completed(futures):
+            res = f.result()
+            if res:
+                results.append(res)
+
+    return results
+
+
 #netaddress = get_local_network()
-#devices = scan_devices(netaddress)
-#for d in devices:
-#    if is_sftp_server(d['ip']):
-#        print(f"{d} -- SFTP VAR")
-#    else:
-#        print(f"{d} -- SFTP YOK")
+#hosts = scan(netaddress)
+#for h in hosts:
+#    print(h)
 
