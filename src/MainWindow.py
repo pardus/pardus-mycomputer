@@ -2115,6 +2115,7 @@ class MainWindow:
     # sftp scan function
     def on_sftp_scan(self, button):
         self.sftp_stack.set_visible_child_name('page1')
+        self.btn_sftp_scan.set_sensitive(False)
         # Start background thread
         threading.Thread(target=self.scan_process, daemon=True).start()
 
@@ -2137,6 +2138,7 @@ class MainWindow:
 
         self.sftp_stack.set_visible_child_name('page0')
         self.sftp_listbox.show_all()
+        self.btn_sftp_scan.set_sensitive(True)
 
     def make_sftp_listbox_button(self, label_text, on_clicked=None):
         # Create row
