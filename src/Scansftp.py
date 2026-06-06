@@ -69,7 +69,7 @@ def check_ssh_sftp(host, port=22, timeout=3):
         return False
 
 # scan devices
-def scan(network, max_threads=30, delay=0.02):
+def scan_devices(network, max_threads=30, delay=0.02):
     net = ipaddress.ip_network(network, strict=False)
     results = []
 
@@ -91,6 +91,7 @@ def scan(network, max_threads=30, delay=0.02):
             if res:
                 results.append(res)
 
+    print(results)
     return results
 
 

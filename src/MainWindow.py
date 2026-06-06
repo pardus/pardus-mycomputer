@@ -2115,7 +2115,7 @@ class MainWindow:
     # sftp scan function
     def on_sftp_scan(self, button):
         self.sftp_stack.set_visible_child_name('page1')
-        # Arka plan thread başlat
+        # Start background thread
         threading.Thread(target=self.scan_process, daemon=True).start()
 
     def scan_process(self):
@@ -2123,12 +2123,11 @@ class MainWindow:
             netaddress = Scansftp.get_local_network()
             scanned_devices = Scansftp.scan_devices(netaddress)
         except Exception as e:
-            #GLib.idle_add(self._on_scan_done, None, e)
             return
         GLib.idle_add(self.sftp_listboxadd, scanned_devices)
 
     def sftp_listboxadd(self, scanned_devices):
-        # Listeyi güncelle
+        # Update the list
         self.sftp_listbox.foreach(lambda w: self.sftp_listbox.remove(w))
         self.sftp_listbox.set_hexpand(True)
         self.sftp_listbox.set_vexpand(True)
@@ -2140,18 +2139,16 @@ class MainWindow:
         self.sftp_listbox.show_all()
 
     def make_sftp_listbox_button(self, label_text, on_clicked=None):
-        # Row oluştur
+        # Create row
         row = Gtk.ListBoxRow()
 
-        # Button oluştur. Align/halign ile düzenleme yapabilirsiniz.
+        # Create a button. You can edit it using align/halign
         btn = Gtk.Button(label=label_text)
         btn.set_hexpand(True)
         btn.set_halign(Gtk.Align.FILL)
 
-        # Eğer callback verildiyse bağla; handler'a (button, user_data) gönderecek şekilde sar
         if on_clicked is not None:
             btn.connect("clicked", on_clicked)
-        # Button'u row içine ekle
         row.add(btn)
         return row
 
