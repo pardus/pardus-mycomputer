@@ -14,6 +14,8 @@ import DiskManager
 
 from UserSettings import UserSettings
 
+import Scansftp  # sftp scan function library
+
 import locale
 from locale import gettext as _
 
@@ -213,6 +215,8 @@ class MainWindow:
         self.box_user_domain_pass = UI("box_user_domain_pass")
         self.box_anonym = UI("box_anonym")
         self.btn_mount_connect = UI("btn_mount_connect")
+        self.btn_sftp_scan = UI("btn_sftp_scan")  # sftp scan button
+        self.sftp_listbox = UI("sftp_listbox")  # sftp list box
         self.mount_password_options = UI("mount_password_options")
         self.mount_anonym_options = UI("mount_anonym_options")
         self.popover_connect = UI("popover_connect")
@@ -2096,6 +2100,38 @@ class MainWindow:
         box.name = "{} {}".format(uri, name).strip()
         self.listbox_recent_servers.add(box)
 
+
+    # sftp scan function
+    def on_sftp_scan(self, button):
+        netaddress = Scansftp.get_local_network()
+        scanned_devices = Scansftp.scan_devices(netaddress)
+        for d in scanned_devices:
+            if Scansftp.is_sftp_server(d['ip']):
+                linebutton = self.make_sftp_listbox_button(d['ip'], on_clicked=self.server_entry_settext)
+                self.sftp_listbox.add(linebutton)
+        self.sftp_listbox.show_all()
+
+    def make_sftp_listbox_button(self, label_text, on_clicked=None):
+        # Row oluştur
+        row = Gtk.ListBoxRow()
+
+        # Button oluştur. Align/halign ile düzenleme yapabilirsiniz.
+        btn = Gtk.Button(label=label_text)
+        btn.set_hexpand(True)
+        btn.set_halign(Gtk.Align.FILL)
+
+        # Eğer callback verildiyse bağla; handler'a (button, user_data) gönderecek şekilde sar
+        if on_clicked is not None:
+            btn.connect("clicked", on_clicked)
+        # Button'u row içine ekle
+        row.add(btn)
+        return row
+
+    def server_entry_settext(self, button):
+        ip = button.get_label()
+        self.entry_addr.set_text("sftp://"+ip)
+
+
     def remove_from_recent_clicked(self, button):
         for row in self.listbox_recent_servers:
             if row.get_children()[0].name == button.name:
@@ -2103,7 +2139,7 @@ class MainWindow:
 
         self.UserSettings.removeRecentServer(button.name)
 
-    def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri="", from_places=False):
+    def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri="", from_places=False, scan_req=False):
         def get_uri_name(source_object):
             try:
                 uri = source_object.get_uri()
@@ -2234,7 +2270,12 @@ class MainWindow:
         if not from_saved:
 
             self.popover_connect.popdown()
-            addr = self.entry_addr.get_text()
+            if scan_req == False:
+                print("scan_req False")
+                addr = self.entry_addr.get_text()
+            else:
+                print("scan_req True")
+                addr = scan_req
 
             file = Gio.File.new_for_commandline_arg(addr)
             mount_operation = Gio.MountOperation()
