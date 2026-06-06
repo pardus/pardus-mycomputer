@@ -14,6 +14,7 @@ import DiskManager
 
 from UserSettings import UserSettings
 
+import threading
 import Scansftp  # sftp scan function library
 
 import locale
@@ -217,6 +218,8 @@ class MainWindow:
         self.btn_mount_connect = UI("btn_mount_connect")
         self.btn_sftp_scan = UI("btn_sftp_scan")  # sftp scan button
         self.sftp_listbox = UI("sftp_listbox")  # sftp list box
+        self.sftp_stack = UI("sftp_stack")  # sftp stack panel
+        self.scrolledwindow = UI("scrolledwindow")
         self.mount_password_options = UI("mount_password_options")
         self.mount_anonym_options = UI("mount_anonym_options")
         self.popover_connect = UI("popover_connect")
@@ -2100,15 +2103,40 @@ class MainWindow:
         box.name = "{} {}".format(uri, name).strip()
         self.listbox_recent_servers.add(box)
 
+    def remove_from_recent_clicked(self, button):
+        for row in self.listbox_recent_servers:
+            if row.get_children()[0].name == button.name:
+                self.listbox_recent_servers.remove(row)
+
+        self.UserSettings.removeRecentServer(button.name)
+
+
 
     # sftp scan function
     def on_sftp_scan(self, button):
-        netaddress = Scansftp.get_local_network()
-        scanned_devices = Scansftp.scan_devices(netaddress)
+        self.sftp_stack.set_visible_child_name('page1')
+        # Arka plan thread başlat
+        threading.Thread(target=self.scan_process, daemon=True).start()
+
+    def scan_process(self):
+        try:
+            netaddress = Scansftp.get_local_network()
+            scanned_devices = Scansftp.scan_devices(netaddress)
+        except Exception as e:
+            #GLib.idle_add(self._on_scan_done, None, e)
+            return
+        GLib.idle_add(self.sftp_listboxadd, scanned_devices)
+
+    def sftp_listboxadd(self, scanned_devices):
+        # Listeyi güncelle
+        self.sftp_listbox.foreach(lambda w: self.sftp_listbox.remove(w))
+        self.sftp_listbox.set_hexpand(True)
+        self.sftp_listbox.set_vexpand(True)
         for d in scanned_devices:
-            if Scansftp.is_sftp_server(d['ip']):
-                linebutton = self.make_sftp_listbox_button(d['ip'], on_clicked=self.server_entry_settext)
-                self.sftp_listbox.add(linebutton)
+            row = self.make_sftp_listbox_button(d, on_clicked=self.server_entry_settext)
+            self.sftp_listbox.add(row)
+
+        self.sftp_stack.set_visible_child_name('page0')
         self.sftp_listbox.show_all()
 
     def make_sftp_listbox_button(self, label_text, on_clicked=None):
@@ -2128,18 +2156,11 @@ class MainWindow:
         return row
 
     def server_entry_settext(self, button):
-        ip = button.get_label()
+        ip = button.get_label().strip()
         self.entry_addr.set_text("sftp://"+ip)
 
 
-    def remove_from_recent_clicked(self, button):
-        for row in self.listbox_recent_servers:
-            if row.get_children()[0].name == button.name:
-                self.listbox_recent_servers.remove(row)
-
-        self.UserSettings.removeRecentServer(button.name)
-
-    def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri="", from_places=False, scan_req=False):
+    def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri="", from_places=False):
         def get_uri_name(source_object):
             try:
                 uri = source_object.get_uri()
@@ -2270,12 +2291,7 @@ class MainWindow:
         if not from_saved:
 
             self.popover_connect.popdown()
-            if scan_req == False:
-                print("scan_req False")
-                addr = self.entry_addr.get_text()
-            else:
-                print("scan_req True")
-                addr = scan_req
+            addr = self.entry_addr.get_text()
 
             file = Gio.File.new_for_commandline_arg(addr)
             mount_operation = Gio.MountOperation()
