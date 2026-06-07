@@ -518,7 +518,7 @@ msgid "Find the servers connected to the network:"
 msgstr "Ağa bağlı sunucuları bulun:"
 
 #: ui/MainWindow.glade:2248
-msgid "Scanning the SFTP servers on the network.."
+msgid "Scanning the SFTP servers on the network..."
 msgstr "Ağdaki SFTP sunucuları taranıyor..."
 
 #: ui/MainWindow.glade:2344
