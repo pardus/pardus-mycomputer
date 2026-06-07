@@ -521,10 +521,6 @@ msgstr "Ağa bağlı sunucuları bulun:"
 msgid "Scanning the SFTP servers on the network.."
 msgstr "Ağdaki SFTP sunucuları taranıyor..."
 
-#: ui/MainWindow.glade:2320
-msgid "Scan"
-msgstr "Tara"
-
 #: ui/MainWindow.glade:2344
 msgid "Scan"
 msgstr "Tara"
