@@ -45,6 +45,7 @@ data_files = [
                      "src/DiskManager.py",
                      "src/Unmount.py",
                      "src/UserSettings.py",
+                     "src/Scansftp.py",
                      "src/__version__"
                  ]),
                  ("/usr/share/pardus/pardus-mycomputer/ui",

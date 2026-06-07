@@ -14,6 +14,9 @@ import DiskManager
 
 from UserSettings import UserSettings
 
+import threading
+import Scansftp  # sftp scan function library
+
 import locale
 from locale import gettext as _
 
@@ -213,6 +216,10 @@ class MainWindow:
         self.box_user_domain_pass = UI("box_user_domain_pass")
         self.box_anonym = UI("box_anonym")
         self.btn_mount_connect = UI("btn_mount_connect")
+        self.btn_sftp_scan = UI("btn_sftp_scan")  # sftp scan button
+        self.sftp_listbox = UI("sftp_listbox")  # sftp list box
+        self.sftp_stack = UI("sftp_stack")  # sftp stack panel
+        self.scrolledwindow = UI("scrolledwindow")
         self.mount_password_options = UI("mount_password_options")
         self.mount_anonym_options = UI("mount_anonym_options")
         self.popover_connect = UI("popover_connect")
@@ -2102,6 +2109,55 @@ class MainWindow:
                 self.listbox_recent_servers.remove(row)
 
         self.UserSettings.removeRecentServer(button.name)
+
+
+
+    # sftp scan function
+    def on_sftp_scan(self, button):
+        self.sftp_stack.set_visible_child_name('page1')
+        self.btn_sftp_scan.set_sensitive(False)
+        # Start background thread
+        threading.Thread(target=self.scan_process, daemon=True).start()
+
+    def scan_process(self):
+        try:
+            netaddress = Scansftp.get_local_network()
+            scanned_devices = Scansftp.scan_devices(netaddress)
+        except Exception as e:
+            return
+        GLib.idle_add(self.sftp_listboxadd, scanned_devices)
+
+    def sftp_listboxadd(self, scanned_devices):
+        # Update the list
+        self.sftp_listbox.foreach(lambda w: self.sftp_listbox.remove(w))
+        self.sftp_listbox.set_hexpand(True)
+        self.sftp_listbox.set_vexpand(True)
+        for d in scanned_devices:
+            row = self.make_sftp_listbox_button(d, on_clicked=self.server_entry_settext)
+            self.sftp_listbox.add(row)
+
+        self.sftp_stack.set_visible_child_name('page0')
+        self.sftp_listbox.show_all()
+        self.btn_sftp_scan.set_sensitive(True)
+
+    def make_sftp_listbox_button(self, label_text, on_clicked=None):
+        # Create row
+        row = Gtk.ListBoxRow()
+
+        # Create a button. You can edit it using align/halign
+        btn = Gtk.Button(label=label_text)
+        btn.set_hexpand(True)
+        btn.set_halign(Gtk.Align.FILL)
+
+        if on_clicked is not None:
+            btn.connect("clicked", on_clicked)
+        row.add(btn)
+        return row
+
+    def server_entry_settext(self, button):
+        ip = button.get_label().strip()
+        self.entry_addr.set_text("sftp://"+ip)
+
 
     def on_btn_mount_connect_clicked(self, button, from_saved=False, saved_uri="", from_places=False):
         def get_uri_name(source_object):
