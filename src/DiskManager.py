@@ -1,4 +1,6 @@
+import os
 import subprocess
+import tempfile
 
 
 def get_file_info(file, network=False):
@@ -17,7 +19,7 @@ def get_file_info(file, network=False):
     else:
         try:
             process = subprocess.check_output(command)
-        except Exception as e:
+        except Exception:
             print("get_file_info subprocess error: {}".format(file))
             return None
 
@@ -34,77 +36,195 @@ def get_file_info(file, network=False):
         keys = ["device", "fstype", "total_kb", "usage_kb", "free_kb", "mountpoint"]
         obj = dict(zip(keys, values))
         try:
-            obj["usage_percent"] = (int(obj['total_kb']) - int(obj['free_kb'])) / int(obj['total_kb'])
-        except:
+            obj["usage_percent"] = (int(obj["total_kb"]) - int(obj["free_kb"])) / int(obj["total_kb"])
+        except Exception:
             obj["usage_percent"] = 0
         try:
-            obj["free_percent"] = int(obj['free_kb']) / int(obj['total_kb'])
-        except:
+            obj["free_percent"] = int(obj["free_kb"]) / int(obj["total_kb"])
+        except Exception:
             obj["free_percent"] = 0
     else:
-        obj = {"device": "", "fstype": "", "total_kb": 0, "usage_kb": 0, "free_kb": 0, "mountpoint": "",
-               "usage_percent": 0, "free_percent": 0}
+        obj = {
+            "device": "",
+            "fstype": "",
+            "total_kb": 0,
+            "usage_kb": 0,
+            "free_kb": 0,
+            "mountpoint": "",
+            "usage_percent": 0,
+            "free_percent": 0,
+        }
 
     return obj
 
 
+def is_valid_device_path(dev_path):
+    if not isinstance(dev_path, str):
+        return False
+
+    if not dev_path.startswith("/dev/"):
+        return False
+
+    if any(ch in dev_path for ch in ("\n", "\r", "\t", "\0")):
+        return False
+
+    if not os.path.exists(dev_path):
+        return False
+
+    return True
+
+
+def write_fstab_safely(lines):
+    tmpfile = None
+
+    try:
+        fd, tmpfile = tempfile.mkstemp(
+            prefix="pardus-mycomputer-fstab-",
+            suffix=".tmp",
+            dir="/tmp",
+            text=True,
+        )
+
+        with os.fdopen(fd, "w") as tf:
+            tf.writelines(lines)
+            tf.flush()
+            os.fsync(tf.fileno())
+
+        subprocess.run(
+            [
+                "pkexec",
+                "install",
+                "-o",
+                "root",
+                "-g",
+                "root",
+                "-m",
+                "644",
+                tmpfile,
+                "/etc/fstab",
+            ],
+            check=True,
+        )
+
+    finally:
+        if tmpfile:
+            try:
+                os.unlink(tmpfile)
+            except FileNotFoundError:
+                pass
+
+
 def get_uuid_from_dev(dev_path):
-    result = subprocess.run(["lsblk", "-o", "PATH,UUID", "--raw"], capture_output=True, text=True)
+    result = subprocess.run(
+        ["lsblk", "-o", "PATH,UUID", "--raw"],
+        capture_output=True,
+        text=True,
+    )
+
     if result.returncode != 0:
         return ""
+
     for line in result.stdout.splitlines():
         parts = line.strip().split()
         if len(parts) >= 2 and parts[0] == dev_path:
             return parts[1]
+
     return ""
+
+
+def fstab_line_matches_device(line, dev_path, uuid=""):
+    stripped = line.strip()
+
+    if not stripped:
+        return False
+
+    if stripped.startswith("#"):
+        return False
+
+    parts = stripped.split()
+
+    if not parts:
+        return False
+
+    source = parts[0]
+
+    if source == dev_path:
+        return True
+
+    if uuid and uuid in source:
+        return True
+
+    return False
 
 
 def is_drive_automounted(dev_path):
     uuid = get_uuid_from_dev(dev_path)
+
     try:
         with open("/etc/fstab", "r") as f:
             for line in f:
-                if line.strip().startswith('#'):
-                    continue
-                if dev_path in line or (uuid and uuid in line):
+                if fstab_line_matches_device(line, dev_path, uuid):
                     return True
     except Exception:
         return False
+
     return False
 
 
 def set_automounted(dev_path, value):
+    if not is_valid_device_path(dev_path):
+        print("Invalid device path: {}".format(dev_path))
+        return
+
     if value and not is_drive_automounted(dev_path):
-        partition = dev_path.split("/")[-1] # /dev/sda1 -> sda1
+        partition = dev_path.split("/")[-1]  # /dev/sda1 -> sda1
         fstab_string = f"{dev_path} /mnt/{partition} auto nosuid,nodev,nofail,x-gvfs-show 0 0\n"
 
-        subprocess.run(["pkexec", "tee", "-a", "/etc/fstab"], input=fstab_string, text=True)
+        try:
+            subprocess.run(
+                ["pkexec", "tee", "-a", "/etc/fstab"],
+                input=fstab_string,
+                text=True,
+                stdout=subprocess.DEVNULL,
+                check=True,
+            )
+        except Exception as e:
+            print("set_automounted append error: {}".format(e))
 
     elif not value and is_drive_automounted(dev_path):
         uuid = get_uuid_from_dev(dev_path)
 
         try:
             with open("/etc/fstab", "r") as f:
-                lines = [l for l in f if dev_path not in l and (not uuid or uuid not in l)]
-            tmpfile = "/tmp/fstab.tmp"
-            with open(tmpfile, "w") as tf:
-                tf.writelines(lines)
-            subprocess.run(["pkexec", "mv", tmpfile, "/etc/fstab"])
-        except Exception:
-            pass
+                lines = [
+                    line
+                    for line in f
+                    if not fstab_line_matches_device(line, dev_path, uuid)
+                ]
+
+            write_fstab_safely(lines)
+
+        except Exception as e:
+            print("set_automounted remove error: {}".format(e))
 
 
 def get_filesystem_of_partition(partition_path):
+    result = subprocess.run(
+        ["lsblk", "-o", "TYPE,PATH,FSTYPE", "-r"],
+        capture_output=True,
+        text=True,
+    )
 
-    result = subprocess.run(["lsblk", "-o", "TYPE,PATH,FSTYPE", "-r"], capture_output=True, text=True)
     if result.returncode != 0:
         return "-"
+
     for line in result.stdout.splitlines():
         parts = line.strip().split()
         if len(parts) >= 3 and parts[1] == partition_path:
             return parts[2]
 
     return "-"
+
 
 # import subprocess, threading
 #
