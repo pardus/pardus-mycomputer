@@ -236,6 +236,7 @@ class MainWindow:
         self.quickaccess_listbox = UI("quickaccess_listbox")
         self.quickaccess_addbtn = UI("quickaccess_addbtn")
         self.quickaccess_addnew_btn = UI("quickaccess_addnew_btn")
+        self.quickaccess_scrolled_window = UI("quickaccess_scrolled_window")
 
         # About dialog
         self.dialog_about = UI("dialog_about")
@@ -2691,6 +2692,9 @@ class MainWindow:
         if len(quickaccesslist) == 0:
             self.stack_quickaccess.set_visible_child_name("page2")
         else:
+            self.quickaccess_scrolled_window.set_min_content_height(200)  # the height of the list window is being adjusted in pixels
+            for fileslist in self.quickaccess_jsondata["quickaccess"]:
+                self.quickaccess_listbox.add(self.quickaccess_create_row(fileslist))
             self.stack_quickaccess.set_visible_child_name("page1")
 
 
@@ -2715,7 +2719,79 @@ class MainWindow:
             self.quickaccess_jsondata["quickaccess"].append(filepath)
             with open(self.quickaccess_file, "w", encoding="utf-8") as f:  # writing to metadata file
                 json.dump(self.quickaccess_jsondata, f, indent=4, ensure_ascii=False)
+
+            # clear listbox
+            for row in self.quickaccess_listbox.get_children():
+                self.quickaccess_listbox.remove(row)
+
+            # reload json
+            with open(self.quickaccess_file, "r") as jsdata:
+                self.quickaccess_jsondata = json.load(jsdata)
+            for fileslist in self.quickaccess_jsondata["quickaccess"]:  # rewriting listbox
+                self.quickaccess_listbox.add(self.quickaccess_create_row(fileslist))
+            self.quickaccess_listbox.show_all()
             self.stack_quickaccess.set_visible_child_name("page1")
         else:
-            print("No file selected (cancelled).")
+            print("No file selected (cancelled)")
         dialog.destroy()
+
+
+    def quickaccess_create_row(self, fullpath):
+        row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        # Icon
+        image = Gtk.Image.new_from_icon_name("text-x-generic", Gtk.IconSize.BUTTON)
+        image.set_halign(Gtk.Align.START)
+
+        # Text
+        text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+        text_box.set_halign(Gtk.Align.CENTER)
+        label_name = Gtk.Label(label=os.path.basename(fullpath))
+        label_name.set_xalign(0)
+
+        # the file path text is being shortened
+        short_path = fullpath[:50] + "..." if len(fullpath) > 50 else fullpath
+        label_path = Gtk.Label(label=short_path)
+        label_path.set_xalign(0)
+
+        # Button Box and buttons
+        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        button_box.set_halign(Gtk.Align.END)
+        button_box.set_valign(Gtk.Align.CENTER)
+
+        button_open = Gtk.Button()
+        button_open.set_image(Gtk.Image.new_from_icon_name("document-open-symbolic", Gtk.IconSize.BUTTON))
+        button_open.set_tooltip_text(_("Open"))
+        button_open.set_relief(Gtk.ReliefStyle.NONE)
+
+        button_opndir = Gtk.Button()
+        button_opndir.set_image(Gtk.Image.new_from_icon_name("folder-open-symbolic", Gtk.IconSize.BUTTON))
+        button_opndir.set_tooltip_text(_("Open in directory"))
+        button_opndir.set_relief(Gtk.ReliefStyle.NONE)
+
+        # Signals
+        button_open.connect("clicked", self.on_open_file, fullpath)
+        button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
+
+        text_box.pack_start(label_name, False, False, 0)
+        text_box.pack_start(label_path, False, False, 0)
+
+        button_box.pack_start(button_open, False, False, 0)
+        button_box.pack_start(button_opndir, False, False, 0)
+
+        # ROW placement (efforts were made to minimize gaps)
+        row_box.pack_start(image, False, False, 3)
+        row_box.pack_start(text_box, False, False, 3)
+        row_box.pack_end(button_box, False, False, 3)
+
+        return row_box
+
+
+    # file open
+    def on_open_file(self, button, fullpath):
+        subprocess.run(["xdg-open", fullpath])
+
+
+    # file open in directory
+    def on_open_in_directory(self, button, fullpath):
+        subprocess.run(["thunar", fullpath])
+
