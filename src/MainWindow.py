@@ -74,6 +74,9 @@ class MainWindow:
 
         # self.set_system_settings_section()
 
+        # quick access panel listing
+        self.quickaccess_list()
+
         cssProvider = Gtk.CssProvider()
         cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../css/style.css")
         screen = Gdk.Screen.get_default()
@@ -228,6 +231,12 @@ class MainWindow:
 
         self.mount_inprogress = False
 
+        # Quick Access
+        self.stack_quickaccess = UI("stack_quickaccess")
+        self.quickaccess_listbox = UI("quickaccess_listbox")
+        self.quickaccess_addbtn = UI("quickaccess_addbtn")
+        self.quickaccess_addnew_btn = UI("quickaccess_addnew_btn")
+
         # About dialog
         self.dialog_about = UI("dialog_about")
         self.dialog_about.set_program_name(_("Pardus My Computer"))
@@ -258,6 +267,9 @@ class MainWindow:
         self.place_remove_name = None
         # self.selected_mount_uri = ""
         # self.selected_mount_name = ""
+        self.quickaccess_jsondata = None
+        self.pardusmycomputer_cache = None
+        self.quickaccess_file = None
 
         # VolumeMonitor
         self.vm = Gio.VolumeMonitor.get()
@@ -267,6 +279,10 @@ class MainWindow:
         self.vm.connect('volume-removed', self.on_mount_removed)
         self.vm.connect('drive-connected', self.on_mount_added)
         self.vm.connect('drive-disconnected', self.on_mount_removed)
+
+        # Quick Access
+        self.quickaccess_addbtn.connect('clicked', self.on_quickaccess_add)
+        self.quickaccess_addnew_btn.connect('clicked', self.on_quickaccess_add)
 
     def add_to_desktop(self):
         # Copy app's desktop file to user's desktop path on first run
@@ -2651,3 +2667,55 @@ class MainWindow:
             notification.show()
         except Exception as e:
             print("{}".format(e))
+
+
+    # Quick Access Panel
+    def quickaccess_list(self):
+        homefolder = Path.home()
+        self.pardusmycomputer_cache = homefolder / ".cache" / "pardus-mycomputer"
+        self.quickaccess_file = self.pardusmycomputer_cache / "quickaccess_data.json"
+        if not os.path.exists(self.pardusmycomputer_cache):
+            os.makedirs(self.pardusmycomputer_cache)
+            dbfile = open(self.quickaccess_file, "w")
+            jsondata = """{
+    "quickaccess": []
+}"""
+            dbfile.write(jsondata)
+            dbfile.close()
+
+
+        # loading json
+        with open(self.quickaccess_file, "r") as jsdata:
+            self.quickaccess_jsondata = json.load(jsdata)
+            quickaccesslist = self.quickaccess_jsondata["quickaccess"]
+        if len(quickaccesslist) == 0:
+            self.stack_quickaccess.set_visible_child_name("page2")
+        else:
+            self.stack_quickaccess.set_visible_child_name("page1")
+
+
+    def on_quickaccess_add(self, button):
+        dialog = Gtk.FileChooserDialog(
+            title="Please choose a file",
+            action=Gtk.FileChooserAction.OPEN,
+        )
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                       Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+
+        filter_any = Gtk.FileFilter()
+        filter_any.set_name("All files")
+        filter_any.add_pattern("*")
+        dialog.add_filter(filter_any)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            filepath = dialog.get_filename()
+            print("Selected file:", filepath)
+
+            self.quickaccess_jsondata["quickaccess"].append(filepath)
+            with open(self.quickaccess_file, "w", encoding="utf-8") as f:  # writing to metadata file
+                json.dump(self.quickaccess_jsondata, f, indent=4, ensure_ascii=False)
+            self.stack_quickaccess.set_visible_child_name("page1")
+        else:
+            print("No file selected (cancelled).")
+        dialog.destroy()

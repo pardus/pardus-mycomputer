@@ -3165,7 +3165,7 @@ Fatih Altun &lt;fatih.altun@pardus.org.tr&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <child>
-                                  <object class="GtkBox" id="listing">
+                                  <object class="GtkBox" id="page0">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="orientation">vertical</property>
@@ -3201,9 +3201,36 @@ Fatih Altun &lt;fatih.altun@pardus.org.tr&gt;</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkListBox" id="quickaccess_listbox">
+                                  <object class="GtkBox" id="page1">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="homogeneous">True</property>
+                                    <child>
+                                      <object class="GtkListBox" id="quickaccess_listbox">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="quickaccess_addnew_btn">
+                                        <property name="label">gtk-add</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">True</property>
+                                        <property name="use-stock">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="name">page1</property>
@@ -3212,7 +3239,7 @@ Fatih Altun &lt;fatih.altun@pardus.org.tr&gt;</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox">
+                                  <object class="GtkBox" id="page2">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="orientation">vertical</property>
