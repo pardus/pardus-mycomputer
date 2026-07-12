@@ -2716,7 +2716,7 @@ class MainWindow:
 
     def on_quickaccess_add(self, button):
         dialog = Gtk.FileChooserDialog(
-            title="Please choose a file",
+            title=_("Please choose a file"),
             action=Gtk.FileChooserAction.OPEN,
         )
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
