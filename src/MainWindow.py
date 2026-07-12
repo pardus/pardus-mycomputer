@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 import urllib.parse
 from pathlib import Path
@@ -2738,14 +2739,16 @@ class MainWindow:
 
     def quickaccess_create_row(self, fullpath):
         row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        row_box.set_tooltip_text(_("Full path: ")+fullpath)
+        row_box.set_margin_bottom(8)
         # Icon
-        image = Gtk.Image.new_from_icon_name("text-x-generic", Gtk.IconSize.BUTTON)
+        image = Gtk.Image()
         image.set_halign(Gtk.Align.START)
 
         # Text
         text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
         text_box.set_halign(Gtk.Align.CENTER)
-        label_name = Gtk.Label(label=os.path.basename(fullpath))
+        label_name = Gtk.Label()
         label_name.set_xalign(0)
 
         # the file path text is being shortened
@@ -2768,9 +2771,39 @@ class MainWindow:
         button_opndir.set_tooltip_text(_("Open in directory"))
         button_opndir.set_relief(Gtk.ReliefStyle.NONE)
 
-        # Signals
-        button_open.connect("clicked", self.on_open_file, fullpath)
-        button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
+        # Controls
+        if "/gvfs/" in fullpath:
+            output = self.check_remoteserver(fullpath)
+            image.set_from_icon_name("folder-remote", Gtk.IconSize.BUTTON)
+            print("remoteserver: ", output)
+            m = re.search(r'host=([^,/]+)', fullpath)
+            serverip = m.group(1)
+            if output == True:
+                label_name.set_label(os.path.basename(fullpath)+_("\tServer: (")+serverip+")")
+                # Signals
+                button_open.connect("clicked", self.on_open_file, fullpath)
+                button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
+            elif output == "1":  # if the server is not connected
+                label_name.set_label(os.path.basename(fullpath) + _("  (Server not connect)"))
+                button_open.set_sensitive(False)
+                button_opndir.set_sensitive(False)
+            elif output == "2":  # if the file cannot be found even though the server is connected
+                label_name.set_label(os.path.basename(fullpath) + _("  (Deleted)"))
+                button_open.set_sensitive(False)
+                button_opndir.set_sensitive(False)
+
+        elif os.path.exists(fullpath):
+            label_name.set_label(os.path.basename(fullpath))
+            image.set_from_icon_name("text-x-generic-template", Gtk.IconSize.BUTTON)
+            # Signals
+            button_open.connect("clicked", self.on_open_file, fullpath)
+            button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
+
+        elif not os.path.exists(fullpath):
+            label_name.set_label(os.path.basename(fullpath) + _("  (Deleted)"))
+            image.set_from_icon_name("text-x-generic-template", Gtk.IconSize.BUTTON)
+            button_open.set_sensitive(False)
+            button_opndir.set_sensitive(False)
 
         text_box.pack_start(label_name, False, False, 0)
         text_box.pack_start(label_path, False, False, 0)
@@ -2794,4 +2827,25 @@ class MainWindow:
     # file open in directory
     def on_open_in_directory(self, button, fullpath):
         subprocess.run(["thunar", fullpath])
+
+
+    # function that checks for file existence on a remote server
+    def check_remoteserver(self, path):
+        marker = "/gvfs/"
+        idx = path.find(marker) + len(marker)
+        slash = path.find("/", idx)
+
+        if slash == -1:
+            mount_dir = path
+        else:
+            mount_dir = path[:slash]
+
+        # connection status check
+        if not os.path.isdir(mount_dir):
+            return "1"
+
+        # file existence check
+        if not os.path.exists(path):
+            return "2"
+        return True
 
