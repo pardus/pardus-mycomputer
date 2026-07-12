@@ -2782,6 +2782,7 @@ class MainWindow:
         button_remove.set_image(Gtk.Image.new_from_icon_name("user-trash-symbolic", Gtk.IconSize.BUTTON))
         button_remove.set_tooltip_text(_("Remove file"))
         button_remove.set_relief(Gtk.ReliefStyle.NONE)
+        button_remove.connect("clicked", self.on_quickaccess_fileremove, fullpath)
 
         # Controls
         if "/gvfs/" in fullpath:
@@ -2795,7 +2796,6 @@ class MainWindow:
                 # Signals
                 button_open.connect("clicked", self.on_open_file, fullpath)
                 button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
-                button_remove.connect("clicked", self.on_quickaccess_fileremove, fullpath)
             elif output == "1":  # if the server is not connected
                 label_name.set_label(os.path.basename(fullpath) + _("  (Server not connect)"))
                 button_open.set_sensitive(False)
@@ -2811,7 +2811,6 @@ class MainWindow:
             # Signals
             button_open.connect("clicked", self.on_open_file, fullpath)
             button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
-            button_remove.connect("clicked", self.on_quickaccess_fileremove, fullpath)
 
         elif not os.path.exists(fullpath):
             label_name.set_label(os.path.basename(fullpath) + _("  (Deleted)"))
