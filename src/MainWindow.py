@@ -1905,6 +1905,7 @@ class MainWindow:
         print("Manually refreshing disks")
         self.addDisksToGUI()
         self.set_places()
+        self.reload_quickaccess_listbox()
 
     def on_sw_closeapp_main_state_set(self, switch, state):
         user_config_closeapp_main = self.UserSettings.config_closeapp_main
@@ -2699,6 +2700,20 @@ class MainWindow:
             self.stack_quickaccess.set_visible_child_name("page1")
 
 
+    # reload quickaccess listbox
+    def reload_quickaccess_listbox(self):
+        # clear listbox
+        for row in self.quickaccess_listbox.get_children():
+            self.quickaccess_listbox.remove(row)
+        # reload json
+        with open(self.quickaccess_file, "r") as jsdata:
+            self.quickaccess_jsondata = json.load(jsdata)
+        for fileslist in self.quickaccess_jsondata["quickaccess"]:  # rewriting listbox
+            self.quickaccess_listbox.add(self.quickaccess_create_row(fileslist))
+        self.quickaccess_listbox.show_all()
+        print("Reloaded quickaccess listbox")
+
+
     def on_quickaccess_add(self, button):
         dialog = Gtk.FileChooserDialog(
             title="Please choose a file",
@@ -2721,16 +2736,8 @@ class MainWindow:
             with open(self.quickaccess_file, "w", encoding="utf-8") as f:  # writing to metadata file
                 json.dump(self.quickaccess_jsondata, f, indent=4, ensure_ascii=False)
 
-            # clear listbox
-            for row in self.quickaccess_listbox.get_children():
-                self.quickaccess_listbox.remove(row)
-
-            # reload json
-            with open(self.quickaccess_file, "r") as jsdata:
-                self.quickaccess_jsondata = json.load(jsdata)
-            for fileslist in self.quickaccess_jsondata["quickaccess"]:  # rewriting listbox
-                self.quickaccess_listbox.add(self.quickaccess_create_row(fileslist))
-            self.quickaccess_listbox.show_all()
+            self.reload_quickaccess_listbox()
+            self.quickaccess_scrolled_window.set_min_content_height(200)  # the height of the list window is being adjusted in pixels
             self.stack_quickaccess.set_visible_child_name("page1")
         else:
             print("No file selected (cancelled)")
@@ -2771,6 +2778,11 @@ class MainWindow:
         button_opndir.set_tooltip_text(_("Open in directory"))
         button_opndir.set_relief(Gtk.ReliefStyle.NONE)
 
+        button_remove = Gtk.Button()
+        button_remove.set_image(Gtk.Image.new_from_icon_name("user-trash-symbolic", Gtk.IconSize.BUTTON))
+        button_remove.set_tooltip_text(_("Remove file"))
+        button_remove.set_relief(Gtk.ReliefStyle.NONE)
+
         # Controls
         if "/gvfs/" in fullpath:
             output = self.check_remoteserver(fullpath)
@@ -2783,6 +2795,7 @@ class MainWindow:
                 # Signals
                 button_open.connect("clicked", self.on_open_file, fullpath)
                 button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
+                button_remove.connect("clicked", self.on_quickaccess_fileremove, fullpath)
             elif output == "1":  # if the server is not connected
                 label_name.set_label(os.path.basename(fullpath) + _("  (Server not connect)"))
                 button_open.set_sensitive(False)
@@ -2798,6 +2811,7 @@ class MainWindow:
             # Signals
             button_open.connect("clicked", self.on_open_file, fullpath)
             button_opndir.connect("clicked", self.on_open_in_directory, fullpath)
+            button_remove.connect("clicked", self.on_quickaccess_fileremove, fullpath)
 
         elif not os.path.exists(fullpath):
             label_name.set_label(os.path.basename(fullpath) + _("  (Deleted)"))
@@ -2810,6 +2824,7 @@ class MainWindow:
 
         button_box.pack_start(button_open, False, False, 0)
         button_box.pack_start(button_opndir, False, False, 0)
+        button_box.pack_start(button_remove, False, False, 0)
 
         # ROW placement (efforts were made to minimize gaps)
         row_box.pack_start(image, False, False, 3)
@@ -2827,6 +2842,19 @@ class MainWindow:
     # file open in directory
     def on_open_in_directory(self, button, fullpath):
         subprocess.run(["thunar", fullpath])
+
+
+    # remove selected file in quick access metadata
+    def on_quickaccess_fileremove(self, button, fullpath):
+        # reload json
+        with open(self.quickaccess_file, "r") as f:
+            self.quickaccess_jsondata = json.load(f)
+        self.quickaccess_jsondata["quickaccess"].remove(fullpath)
+        print("removed file: ", fullpath)
+        # rewriting json
+        with open(self.quickaccess_file, "w") as f:
+            json.dump(self.quickaccess_jsondata, f, indent=4, ensure_ascii=False)
+        self.reload_quickaccess_listbox()  # reload listbox
 
 
     # function that checks for file existence on a remote server
