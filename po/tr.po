@@ -513,6 +513,9 @@ msgstr "# not: görünmesini sağlamak için kare işareti kaldırın"
 #~ msgid "Website"
 #~ msgstr "Website"
 
+msgid "Quick Access"
+msgstr "Hızlı Erişim"
+
 msgid "No attached file was found for quick access"
 msgstr "Hızlı erişim için ekli dosya bulunamadı"
 
