@@ -1,5 +1,9 @@
 import subprocess
+import os
 
+import gi
+gi.require_version("GioUnix", "2.0")
+from gi.repository import GioUnix
 
 def get_file_info(file, network=False):
     values = None
@@ -59,40 +63,88 @@ def get_uuid_from_dev(dev_path):
     return ""
 
 
+def resolve_device(source):
+    if source.startswith("UUID="):
+        source = f"/dev/disk/by-uuid/{source[5:]}"
+    elif source.startswith("LABEL="):
+        source = f"/dev/disk/by-label/{source[6:]}"
+    elif source.startswith("PARTUUID="):
+        source = f"/dev/disk/by-partuuid/{source[9:]}"
+    elif source.startswith("PARTLABEL="):
+        source = f"/dev/disk/by-partlabel/{source[10:]}"
+
+    return os.path.realpath(source)
+
+
+def get_matching_fstab_sources(dev_path):
+    target_real_path = resolve_device(dev_path)
+    matching_sources = set()
+
+    mount_points, _ = GioUnix.mount_points_get()
+
+    for mount_point in mount_points:
+        source = mount_point.get_device_path()
+
+        if source and resolve_device(source) == target_real_path:
+            matching_sources.add(source)
+
+    return matching_sources
+
+
 def is_drive_automounted(dev_path):
-    uuid = get_uuid_from_dev(dev_path)
     try:
-        with open("/etc/fstab", "r") as f:
-            for line in f:
-                if line.strip().startswith('#'):
-                    continue
-                if dev_path in line or (uuid and uuid in line):
-                    return True
-    except Exception:
+        return bool(get_matching_fstab_sources(dev_path))
+    except OSError:
         return False
-    return False
 
 
-def set_automounted(dev_path, value):
-    if value and not is_drive_automounted(dev_path):
-        partition = dev_path.split("/")[-1] # /dev/sda1 -> sda1
-        fstab_string = f"{dev_path} /mnt/{partition} auto nosuid,nodev,nofail,x-gvfs-show 0 0\n"
+def set_automounted(dev_path, state):
+    partition = os.path.basename(dev_path)
+    mount_point = f"/mnt/{partition}"
+    writer = os.path.join(os.path.dirname(os.path.abspath(__file__)), "FstabWriter.py",)
 
-        subprocess.run(["pkexec", "tee", "-a", "/etc/fstab"], input=fstab_string, text=True)
+    try:
+        matching_sources = get_matching_fstab_sources(dev_path)
 
-    elif not value and is_drive_automounted(dev_path):
-        uuid = get_uuid_from_dev(dev_path)
+        if state:
+            if matching_sources:
+                return
 
-        try:
+            uuid = get_uuid_from_dev(dev_path)
+            identifier = f"UUID={uuid}" if uuid else dev_path
+
             with open("/etc/fstab", "r") as f:
-                lines = [l for l in f if dev_path not in l and (not uuid or uuid not in l)]
-            tmpfile = "/tmp/fstab.tmp"
-            with open(tmpfile, "w") as tf:
-                tf.writelines(lines)
-            subprocess.run(["pkexec", "mv", tmpfile, "/etc/fstab"])
-        except Exception:
-            pass
+                fstab_content = f.read()
 
+            fstab_content += f"{identifier} {mount_point} auto nosuid,nodev,nofail,x-gvfs-show 0 0\n"
+
+        else:
+            if not matching_sources:
+                return
+
+            with open("/etc/fstab", "r") as f:
+                lines = []
+
+                for line in f:
+                    stripped = line.strip()
+
+                    if not stripped or stripped.startswith("#"):
+                        lines.append(line)
+                        continue
+
+                    parts = stripped.split()
+
+                    if parts and parts[0] in matching_sources:
+                        continue
+
+                    lines.append(line)
+
+            fstab_content = "".join(lines)
+
+        subprocess.run(["/usr/bin/pkexec", writer], input=fstab_content, text=True, stdout=subprocess.DEVNULL, check=True)
+
+    except (OSError, subprocess.CalledProcessError) as e:
+        print(f"Error updating fstab: {e}")
 
 def get_filesystem_of_partition(partition_path):
 
