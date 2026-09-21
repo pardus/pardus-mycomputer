@@ -1,3 +1,12 @@
+pardus-mycomputer (0.8.1) unstable; urgency=medium
+
+  * Fix race condition vulnerability in set_automounted and harden fstab updates
+  * Add policy file
+  * Add FstabWriter and policy to setup.py
+  * Fix fstab automount state handling on ui
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Tue, 22 Sep 2026 01:14:37 +0300
+
 pardus-mycomputer (0.8.0) unstable; urgency=medium
 
   [ wraith4081 ]
