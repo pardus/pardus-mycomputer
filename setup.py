@@ -43,6 +43,7 @@ data_files = [
                      "src/Main.py",
                      "src/MainWindow.py",
                      "src/DiskManager.py",
+                     "src/FstabWriter.py",
                      "src/Unmount.py",
                      "src/UserSettings.py",
                      "src/__version__"
@@ -60,7 +61,9 @@ data_files = [
                  ("/usr/share/icons/hicolor/scalable/apps/", [
                      "pardus-mycomputer.svg",
                      "pardus-mycomputer-emblem-pardus-symbolic.svg"
-                 ])
+                 ]),
+                 ("/usr/share/polkit-1/actions",
+                  ["tr.org.pardus.pkexec.pardus-mycomputer.policy"])
              ] + create_mo_files()
 
 setup(
