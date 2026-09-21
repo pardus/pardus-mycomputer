@@ -1989,6 +1989,8 @@ class MainWindow:
     def on_button_mount_on_startup_clicked(self, button):
         DiskManager.set_automounted(button._device, button.get_active())
 
+        button.set_active(DiskManager.is_drive_automounted(button._device))
+
     # def on_cb_mount_on_startup_released(self, cb):
     #     DiskManager.set_automounted(self.selected_volume_info["device"], cb.get_active())
 
