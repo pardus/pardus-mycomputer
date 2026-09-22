@@ -512,3 +512,33 @@ msgstr "# not: görünmesini sağlamak için kare işareti kaldırın"
 
 #~ msgid "Website"
 #~ msgstr "Website"
+
+msgid "Quick Access"
+msgstr "Hızlı Erişim"
+
+msgid "No attached file was found for quick access"
+msgstr "Hızlı erişim için ekli dosya bulunamadı"
+
+msgid "Please choose a file"
+msgstr "Lütfen dosya seçiniz"
+
+msgid "Full path: "
+msgstr "Klasör: "
+
+msgid "Open"
+msgstr "Aç"
+
+msgid "Open in directory"
+msgstr "Klasörde aç"
+
+msgid "Remove file"
+msgstr "Dosyayı sil"
+
+msgid "\tServer: ("
+msgstr "\tSunucu: ("
+
+msgid "  (Server not connect)"
+msgstr "  (Sunucu bağlı değil)"
+
+msgid "  (Deleted)"
+msgstr "  (Silinmiş)"
