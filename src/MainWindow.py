@@ -1618,12 +1618,12 @@ class MainWindow:
 
     # SIGNALS:
     def on_lb_home_row_activated(self, listbox, row):
-        subprocess.run(["xdg-open", GLib.get_home_dir()])
+        self.open_uri(GLib.get_home_dir())
         if self.UserSettings.config_closeapp_main:
             self.on_window_delete_event(self.window)
 
     def on_lb_root_row_activated(self, listbox, row):
-        subprocess.run(["xdg-open", "/"])
+        self.open_uri("/")
         if self.UserSettings.config_closeapp_main:
             self.on_window_delete_event(self.window)
 
@@ -1640,7 +1640,7 @@ class MainWindow:
                 self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=mount)
             else:
 
-                subprocess.Popen(["xdg-open", mount.get_root().get_path()])
+                self.open_uri(mount.get_root().get_path())
 
     def on_btn_unmount_clicked(self, button):
         self.actioned_volume = button
@@ -1789,7 +1789,7 @@ class MainWindow:
                 self.on_btn_mount_connect_clicked(button=None, from_saved=True, saved_uri=mount)
             else:
 
-                subprocess.Popen(["xdg-open", mount.get_root().get_path()])
+                self.open_uri(mount.get_root().get_path())
 
                 # some times phone's disk usage infos not showing on first mount,
                 # we can update this values on phone row clicked
@@ -2054,6 +2054,45 @@ class MainWindow:
         else:
             button._stack_bookmark.set_visible_child_name("add")
 
+    def open_uri(self, uri):
+        if not uri:
+            return
+
+        target_uri = str(uri)
+        if "://" not in target_uri:
+            try:
+                target_uri = Gio.File.new_for_path(target_uri).get_uri()
+            except Exception:
+                target_uri = str(uri)
+
+        # 1. Try native Gtk.show_uri_on_window
+        try:
+            if Gtk.show_uri_on_window(self.window, target_uri, Gdk.CURRENT_TIME):
+                return
+        except Exception as e:
+            print("Gtk.show_uri_on_window failed for {}: {}".format(target_uri, e))
+
+        # 2. Try Gio.AppInfo.launch_default_for_uri
+        try:
+            if Gio.AppInfo.launch_default_for_uri(target_uri, None):
+                return
+        except Exception as e:
+            print("Gio.AppInfo.launch_default_for_uri failed for {}: {}".format(target_uri, e))
+
+        # 3. Try gio open (handles recent:///, computer:///, trash:///)
+        try:
+            res = subprocess.run(["gio", "open", target_uri], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            if res.returncode == 0:
+                return
+        except Exception as e:
+            print("gio open failed for {}: {}".format(target_uri, e))
+
+        # 4. Fallback to xdg-open
+        try:
+            subprocess.Popen(["xdg-open", str(uri)])
+        except Exception as e:
+            print("xdg-open failed for {}: {}".format(uri, e))
+
     def network_mount_success(self, uri, name, from_places=False):
         if not from_places:
             in_list = False
@@ -2068,7 +2107,7 @@ class MainWindow:
             self.listbox_recent_servers.show_all()
             self.entry_addr.set_text("")
 
-        subprocess.run(["xdg-open", uri])
+        self.open_uri(uri)
         if from_places:
             if self.UserSettings.config_closeapp_main:
                 self.window.get_application().quit()
@@ -2146,7 +2185,7 @@ class MainWindow:
                 else:
                     if from_places:
 
-                        subprocess.Popen(["xdg-open", saved_uri])
+                        self.open_uri(saved_uri)
                         if self.UserSettings.config_closeapp_main:
                             self.on_window_delete_event(self.window)
                     else:
