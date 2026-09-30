@@ -2,8 +2,15 @@ import subprocess
 import os
 
 import gi
-gi.require_version("GioUnix", "2.0")
-from gi.repository import GioUnix
+
+try:
+    gi.require_version("GioUnix", "2.0")
+    from gi.repository import GioUnix
+except (ValueError, ImportError):
+    gi.require_version("Gio", "2.0")
+    from gi.repository import Gio
+    GioUnix = None
+
 
 def get_file_info(file, network=False):
     values = None
@@ -80,7 +87,10 @@ def get_matching_fstab_sources(dev_path):
     target_real_path = resolve_device(dev_path)
     matching_sources = set()
 
-    mount_points, _ = GioUnix.mount_points_get()
+    if GioUnix is not None:
+        mount_points, _ = GioUnix.mount_points_get()
+    else:
+        mount_points, _ = Gio.unix_mount_points_get()
 
     for mount_point in mount_points:
         source = mount_point.get_device_path()
