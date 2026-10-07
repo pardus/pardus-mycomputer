@@ -46,6 +46,7 @@ data_files = [
                      "src/FstabWriter.py",
                      "src/Unmount.py",
                      "src/UserSettings.py",
+                     "src/Scansftp.py",
                      "src/__version__"
                  ]),
                  ("/usr/share/pardus/pardus-mycomputer/ui",
