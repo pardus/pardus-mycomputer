@@ -913,7 +913,7 @@ class MainWindow:
                                                        self.autorefresh_disks)
 
     def autorefresh_disks(self):
-        self.addDisksToGUI()
+        self.addDisksToGUI(refresh_home=False)
         self.set_places()
         print("auto refreshing disks on every {} seconds with glib id: {}".format(
             self.UserSettings.config_autorefresh_time, self.autorefresh_glibid))
@@ -1290,11 +1290,12 @@ class MainWindow:
     def get_home_directory_size(self, size_kb):
         self.lbl_home_size.set_label("{} {}".format(GLib.format_size(size_kb*1000), _("used")))
 
-    def addDisksToGUI(self):
+    def addDisksToGUI(self, refresh_home=True):
         # Home:
-        self.lbl_home_size.set_label(_("Calculating..."))
-        self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.get_home_dir()))
-        self.get_home_directory_size_async(GLib.get_home_dir(), self.get_home_directory_size)
+        if refresh_home:
+            self.lbl_home_size.set_label(_("Calculating..."))
+            self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.get_home_dir()))
+            self.get_home_directory_size_async(GLib.get_home_dir(), self.get_home_directory_size)
 
         # Root:
         root_info = DiskManager.get_file_info("/")
@@ -1345,6 +1346,8 @@ class MainWindow:
 
     def addRemovableDevicesToList(self):
         self.box_removables.foreach(lambda child: self.box_removables.remove(child))
+        self.mount_paths.clear()
+        self.net_mounts.clear()
 
         connected_drives = self.vm.get_connected_drives()
 
