@@ -126,6 +126,9 @@ def set_automounted(dev_path, state):
             with open("/etc/fstab", "r") as f:
                 fstab_content = f.read()
 
+            if fstab_content and not fstab_content.endswith("\n"):
+                fstab_content += "\n"
+
             fstab_content += f"{identifier} {mount_point} auto nosuid,nodev,nofail,x-gvfs-show 0 0\n"
 
         else:
