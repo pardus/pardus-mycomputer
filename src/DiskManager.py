@@ -1,5 +1,6 @@
 import subprocess
 import os
+import re
 
 import gi
 
@@ -14,7 +15,7 @@ except (ValueError, ImportError):
 
 def get_file_info(file, network=False):
     values = None
-    command = ["df", file, "--block-size=1000", "-T"]
+    command = ["df", file, "--block-size=1000", "--output=source,fstype,size,used,avail,target"]
 
     if network:
         try:
@@ -35,9 +36,10 @@ def get_file_info(file, network=False):
     lines = process.decode().splitlines()
 
     if len(lines) > 1:
-        data = lines[1].split()
-        if len(data) > 6:
-            values = data[0], data[1], data[2], data[3], data[4], data[6]
+        # source and target can have spaces, the columns between them can't
+        data = re.fullmatch(r"(.*?)\s+(\S+)\s+(\d+|-)\s+(\d+|-)\s+(\d+|-)\s+(.*)", lines[1])
+        if data:
+            values = [value if value != "-" else "0" for value in data.groups()]
         else:
             values = None
 
