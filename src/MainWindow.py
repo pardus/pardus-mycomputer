@@ -2224,14 +2224,23 @@ class MainWindow:
                 mount_operation.reply(Gio.MountOperationResult.ABORTED)
 
         def ask_question_cb(mount_operation, message, choices):
-            print("in ask_question_cb")
-            print(message)
-            print(choices)
-            # set as 0 for now
-            # FIXME
-            # add dialog for this too
-            mount_operation.set_choice(0)
-            mount_operation.reply(Gio.MountOperationResult.HANDLED)
+            # gvfs asks this before it trusts an unknown ssh host or a bad
+            # certificate, choice 0 means go on and only the user can decide that
+            primary, separator, secondary = message.partition("\n")
+            dialog = Gtk.MessageDialog(transient_for=self.window, modal=True,
+                                       message_type=Gtk.MessageType.QUESTION,
+                                       text=primary, secondary_text=secondary.strip())
+            for choice in reversed(range(len(choices))):
+                dialog.add_button(choices[choice], choice)
+            dialog.set_default_response(len(choices) - 1)
+            response = dialog.run()
+            dialog.destroy()
+
+            if response >= 0:
+                mount_operation.set_choice(response)
+                mount_operation.reply(Gio.MountOperationResult.HANDLED)
+            else:
+                mount_operation.reply(Gio.MountOperationResult.ABORTED)
 
         if not from_saved:
 
