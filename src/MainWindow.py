@@ -1294,7 +1294,7 @@ class MainWindow:
         # Home:
         if refresh_home:
             self.lbl_home_size.set_label(_("Calculating..."))
-            self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.get_home_dir()))
+            self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.markup_escape_text(GLib.get_home_dir(), -1)))
             self.get_home_directory_size_async(GLib.get_home_dir(), self.get_home_directory_size)
 
         # Root:
