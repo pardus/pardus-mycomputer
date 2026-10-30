@@ -304,7 +304,7 @@ class UserSettings(object):
         return places
 
     def addSavedPlaces(self, path, name, icon):
-        place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon + '"}'
+        place = json.dumps({"path": path, "name": name, "icon": icon}, ensure_ascii=False)
 
         def add():
             with open(self.user_saved_places_file, "r+") as savep:
@@ -348,7 +348,7 @@ class UserSettings(object):
                         f.write(line)
                     else:
                         # edit line to be changed
-                        place = '{"path": "' + path + '", "name": "' + name + '", "icon": "' + icon + '"}'
+                        place = json.dumps({"path": path, "name": name, "icon": icon}, ensure_ascii=False)
                         f.write("{}\n".format(place))
 
     def set_hide_desktopicon(self, state):

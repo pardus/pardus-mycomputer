@@ -416,7 +416,7 @@ class MainWindow:
                         #     licon, 16, Gtk.IconLookupFlags(16)))
                         icon = Gtk.Image.new_from_icon_name(licon, Gtk.IconSize.BUTTON)
                         label = Gtk.Label.new()
-                        label.set_markup("{}".format(licon))
+                        label.set_text(licon)
                         label.set_ellipsize(Pango.EllipsizeMode.END)
                         box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
                         box.name = licon
@@ -551,7 +551,7 @@ class MainWindow:
         for loc in locs:
             icon = Gtk.Image.new_from_icon_name(loc["icon"], Gtk.IconSize.BUTTON)
             label = Gtk.Label.new()
-            label.set_markup("{}".format(loc["name"]))
+            label.set_text(loc["name"])
             box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
             box.name = loc
             box.pack_start(icon, False, True, 0)
@@ -608,7 +608,7 @@ class MainWindow:
         for dir in dirs:
             icon = Gtk.Image.new_from_icon_name(dir["icon"], Gtk.IconSize.BUTTON)
             label = Gtk.Label.new()
-            label.set_markup("{}".format(dir["name"]))
+            label.set_text(dir["name"])
             box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
             box.name = dir
             box.pack_start(icon, False, True, 0)
@@ -635,7 +635,7 @@ class MainWindow:
         for saved in saved_places:
             icon = Gtk.Image.new_from_icon_name(saved["icon"], Gtk.IconSize.BUTTON)
             label = Gtk.Label.new()
-            label.set_markup("{}".format(saved["name"]))
+            label.set_text(saved["name"])
             label.set_ellipsize(Pango.EllipsizeMode.END)
             box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
             box.name = saved
@@ -676,7 +676,7 @@ class MainWindow:
         if dirs:
             icon = Gtk.Image.new_from_icon_name("bookmark-new-symbolic", Gtk.IconSize.BUTTON)
             label = Gtk.Label.new()
-            label.set_markup("{}".format(_("Add new")))
+            label.set_text(_("Add new"))
             box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 
             box.pack_start(icon, False, True, 0)
@@ -1293,7 +1293,7 @@ class MainWindow:
     def addDisksToGUI(self):
         # Home:
         self.lbl_home_size.set_label(_("Calculating..."))
-        self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.get_home_dir()))
+        self.lbl_home_path.set_markup("<small>( {} )</small>".format(GLib.markup_escape_text(GLib.get_home_dir(), -1)))
         self.get_home_directory_size_async(GLib.get_home_dir(), self.get_home_directory_size)
 
         # Root:
@@ -2151,7 +2151,7 @@ class MainWindow:
                             self.on_window_delete_event(self.window)
                     else:
                         self.dialog_mount_error.set_markup("<big><b>{}</b></big>".format(_("Error")))
-                        self.dialog_mount_error.format_secondary_markup("{}".format(_(err.message)))
+                        self.dialog_mount_error.format_secondary_text(_(err.message))
                         self.dialog_mount_error.run()
                         self.dialog_mount_error.hide()
                         print("{}".format(err.message))
@@ -2190,7 +2190,7 @@ class MainWindow:
                 self.box_password_options.set_visible(False)
 
             passwd_option = 1
-            self.lbl_mount_message.set_markup("<b>{}</b>".format(_(message)))
+            self.lbl_mount_message.set_markup("<b>{}</b>".format(GLib.markup_escape_text(_(message), -1)))
             self.entry_mount_username.set_text(default_user)
             self.entry_mount_password.set_text("")
             self.entry_mount_domain.set_text(default_domain)
