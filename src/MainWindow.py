@@ -396,9 +396,13 @@ class MainWindow:
 
         print("window w:{} h:{} | monitor w:{} h:{} s:{}".format(width, height, w, h, s))
 
+    def search_key(self, text):
+        fold = str.maketrans({"ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u", "\u0307": None})
+        return text.strip().casefold().translate(fold)
+
     def icons_filter_func(self, row):
-        name = row.get_children()[0].name.lower()
-        search = self.search_icons.get_text().lower()
+        name = self.search_key(row.get_children()[0].name)
+        search = self.search_key(self.search_icons.get_text())
         if search in name:
             return True
 
@@ -496,8 +500,8 @@ class MainWindow:
             print("error opening " + appid)
 
     def systemapps_filter_func(self, model, iteration, data):
-        appname = model[iteration][1].lower().strip()
-        search_entry_text = self.search_systemapps.get_text().lower().strip()
+        appname = self.search_key(model[iteration][1])
+        search_entry_text = self.search_key(self.search_systemapps.get_text())
         if search_entry_text in appname:
             return True
 
